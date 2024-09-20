@@ -12,3 +12,67 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  GUEST
+  RECEPTIONIST
+  ADMIN
+}
+
+model user {
+  id       String    @id @default(uuid())
+  name     String
+  email    String    @unique
+  password String
+  role     Role      @default(GUEST)
+  booking  booking[]
+
+  @@map("users")
+}
+
+model room_type {
+  id            String @id @default(uuid())
+  type_name     String @unique
+  pricePerNight Float
+  description   String @db.Text
+  photo         String
+  rooms         room[]
+
+  @@map("room_types")
+}
+
+model room {
+  id           String  @id @default(uuid())
+  room_number  Int
+  is_available Boolean @default(true)
+
+  bookings    booking[]
+  room_type   room_type @relation(fields: [room_typeId], references: [id])
+  room_typeId String
+
+  @@map("rooms")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model booking {
+  id             String        @id @default(uuid())
+  number         BigInt        @default(autoincrement())
+  guest_name     String
+  guest_email    String
+  check_in_at    DateTime
+  check_out_at   DateTime
+  booking_status BookingStatus @default(PENDING)
+  booked_at      DateTime      @default(now())
+
+  user   user    @relation(fields: [userId], references: [id])
+  userId String
+  room   room?   @relation(fields: [roomId], references: [id])
+  roomId String?
+
+  @@map("bookings")
+}
