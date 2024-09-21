@@ -12,6 +12,12 @@ declare global {
       GOOGLE_CLIENT_ID: string;
       NEXTAUTH_SECRET: string;
       APP_URL: string;
+      SMTP_HOST: string;
+      SMTP_PORT: string;
+      SMTP_SECURE: string;
+      SMTP_USER: string;
+      SMTP_PASS: string;
+      EMAIL_FROM: string;
     }
   }
 }
