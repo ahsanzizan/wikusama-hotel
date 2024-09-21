@@ -15,7 +15,7 @@ export async function registerUser(data: {
 
     const checkEmailExistence = await findUser({ email });
     if (checkEmailExistence)
-      return { success: false, message: "Email telah digunakan!" };
+      return { success: false, message: "Email has been used!" };
 
     const createdUser = await createUser({
       name,
@@ -26,7 +26,7 @@ export async function registerUser(data: {
 
     const emailService = new EmailService();
     await emailService.sendEmail({
-      subject: "Verify your email for Digifest",
+      subject: "Verify your email for Wikusama Hotel",
       to: createdUser.email,
       html: verifyTemplate(
         createdUser.name,
@@ -36,10 +36,10 @@ export async function registerUser(data: {
 
     return {
       success: true,
-      message: "Berhasil mendaftarkan user!",
+      message: "Successfully registered an account!",
     };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "Gagal mendaftarkan user!" };
+    return { success: false, message: "Something is wrong!" };
   }
 }
