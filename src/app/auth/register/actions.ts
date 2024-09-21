@@ -20,7 +20,7 @@ export async function registerUser(data: {
     const createdUser = await createUser({
       name,
       email,
-      password: generateHash(password as string),
+      password: generateHash(password),
       verificationToken: generateRandomString(14),
     });
 
