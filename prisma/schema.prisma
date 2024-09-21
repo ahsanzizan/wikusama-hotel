@@ -20,24 +20,28 @@ enum Role {
 }
 
 model user {
-  id       String    @id @default(uuid())
-  name     String
-  email    String    @unique
-  password String?
-  role     Role      @default(GUEST)
-  verified Boolean   @default(false)
-  booking  booking[]
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String?
+  role       Role     @default(GUEST)
+  verified   Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  booking booking[]
 
   @@map("users")
 }
 
 model room_type {
-  id            String @id @default(uuid())
-  type_name     String @unique
+  id            String   @id @default(uuid())
+  type_name     String   @unique
   pricePerNight Float
-  description   String @db.Text
+  description   String   @db.Text
   photo         String
-  rooms         room[]
+  created_at    DateTime @default(now())
+
+  rooms room[]
 
   @@map("room_types")
 }
@@ -50,6 +54,7 @@ model room {
   bookings    booking[]
   room_type   room_type @relation(fields: [room_typeId], references: [id])
   room_typeId String
+  created_at  DateTime  @default(now())
 
   @@map("rooms")
 }
@@ -62,18 +67,15 @@ enum BookingStatus {
 
 model booking {
   id             String        @id @default(uuid())
-  number         BigInt        @default(autoincrement())
-  guest_name     String
-  guest_email    String
   check_in_at    DateTime
   check_out_at   DateTime
   booking_status BookingStatus @default(PENDING)
   booked_at      DateTime      @default(now())
 
-  user   user    @relation(fields: [userId], references: [id])
-  userId String
-  room   room?   @relation(fields: [roomId], references: [id])
-  roomId String?
+  guest   user    @relation(fields: [guestId], references: [id])
+  guestId String
+  room    room?   @relation(fields: [roomId], references: [id])
+  roomId  String?
 
   @@map("bookings")
 }
