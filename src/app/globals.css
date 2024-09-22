@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #ededed;
   --foreground: #171717;
 }
 
@@ -88,4 +88,16 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1 {
+  @apply text-[26px] font-semibold leading-[32px] lg:text-[36px] lg:leading-[44px] 2xl:text-[42px] 2xl:leading-[52px];
+}
+
+h1 .display {
+  @apply text-[32px] font-bold leading-[39px] lg:text-[46px] lg:leading-[57px] 2xl:text-[54px] 2xl:leading-[66px];
+}
+
+p {
+  @apply text-[15px] font-medium leading-[18px];
 }

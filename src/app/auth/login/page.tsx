@@ -1,9 +1,10 @@
 import PageContainer from "@/components/layout/PageContainer";
+import LoginForm from "./components/form";
 
-export default function Home() {
+export default function Login() {
   return (
     <PageContainer>
-      <p>Landing Page</p>
+      <LoginForm />
     </PageContainer>
   );
 }
