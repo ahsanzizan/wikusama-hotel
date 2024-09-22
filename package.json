@@ -2,6 +2,11 @@
   "name": "ukk-wikusama-hotel",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "email": "contact@ahsanzizan.xyz",
+    "name": "Ahsan Azizan",
+    "url": "https://www.ahsanzizan.xyz"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
