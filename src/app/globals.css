@@ -98,6 +98,18 @@ h1 .display {
   @apply text-[32px] font-bold leading-[39px] lg:text-[46px] lg:leading-[57px] 2xl:text-[54px] 2xl:leading-[66px];
 }
 
+h2 {
+  @apply text-[24px] font-semibold leading-[39px] 2xl:text-[32px];
+}
+
+h3 {
+  @apply text-[22px] font-semibold leading-[27px];
+}
+
+h4 {
+  @apply text-xl font-semibold leading-[25px];
+}
+
 p {
   @apply text-[15px] font-medium leading-[18px];
 }

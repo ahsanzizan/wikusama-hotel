@@ -20,14 +20,14 @@ enum Role {
 }
 
 model user {
-  id                String   @id @default(uuid())
-  name              String
-  email             String   @unique
-  password          String?
-  role              Role     @default(GUEST)
-  verified          Boolean  @default(false)
-  created_at        DateTime @default(now())
-  verificationToken String?
+  id                 String   @id @default(uuid())
+  name               String
+  email              String   @unique
+  password           String?
+  role               Role     @default(GUEST)
+  verified           Boolean  @default(false)
+  created_at         DateTime @default(now())
+  verification_token String?  @unique
 
   booking booking[]
 
@@ -35,12 +35,12 @@ model user {
 }
 
 model room_type {
-  id            String   @id @default(uuid())
-  type_name     String   @unique
-  pricePerNight Float
-  description   String   @db.Text
-  photo         String
-  created_at    DateTime @default(now())
+  id              String   @id @default(uuid())
+  type_name       String   @unique
+  price_per_night Float
+  description     String   @db.Text
+  photo           String
+  created_at      DateTime @default(now())
 
   rooms room[]
 

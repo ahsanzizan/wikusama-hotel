@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { buttonVariants } from "../ui/button";
-import Image from "next/image";
 
 export default function PageContainer({
   className,
@@ -54,20 +53,15 @@ export default function PageContainer({
               />
             </svg>
           </Link>
-          <div
-            className="flex w-full max-w-[160px] items-center justify-between"
-            style={{ justifyContent: session?.user ? "end" : "space-between" }}
+          <Link
+            href={session?.user!.role == "ADMIN" ? "/admin" : "/rooms"}
+            className={buttonVariants({ variant: "secondary" })}
           >
-            <Link
-              href={session?.user!.role == "ADMIN" ? "/admin" : "/auth/login"}
-              className={buttonVariants({ variant: "secondary" })}
-            >
-              {session?.user!.role === "ADMIN" ||
-              session?.user!.role === "RECEPTIONIST"
-                ? "Dashboard"
-                : "Book now"}
-            </Link>
-          </div>
+            {session?.user!.role === "ADMIN" ||
+            session?.user!.role === "RECEPTIONIST"
+              ? "Dashboard"
+              : "Book now"}
+          </Link>
         </div>
       </nav>
       <main

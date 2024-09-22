@@ -18,9 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useZodForm } from "@/hooks/useZodForm";
 import { cn } from "@/lib/utils";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next-nprogress-bar";
 import Link from "next/link";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
 import { registerUser } from "../actions";
@@ -38,9 +40,10 @@ export default function RegisterForm() {
   const router = useRouter();
 
   const onSubmit = form.handleSubmit(async (values) => {
+    setLoading(true);
+
     const toastId = toast.loading("Loading...");
     const registerUserResult = await registerUser(values);
-    setLoading(true);
 
     if (!registerUserResult.success) {
       setLoading(false);
@@ -130,6 +133,15 @@ export default function RegisterForm() {
                 >
                   Login
                 </Link>
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    signIn("google", { callbackUrl: "/" });
+                  }}
+                  className="w-full"
+                >
+                  <FaGoogle className="mr-2" /> Register with Google
+                </Button>
               </div>
             </div>
           </form>

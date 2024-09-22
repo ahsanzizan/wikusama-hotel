@@ -22,6 +22,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next-nprogress-bar";
 import Link from "next/link";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
 import { checkVerifiedStatus } from "../actions";
@@ -38,9 +39,10 @@ export default function LoginForm() {
   const router = useRouter();
 
   const onSubmit = form.handleSubmit(async (values) => {
+    setLoading(true);
+
     const toastId = toast.loading("Loading...");
     const checkVerificationStatus = await checkVerifiedStatus(values);
-    setLoading(true);
 
     if (!checkVerificationStatus.success) {
       setLoading(false);
@@ -134,6 +136,15 @@ export default function LoginForm() {
                 >
                   Register
                 </Link>
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    signIn("google", { callbackUrl: "/" });
+                  }}
+                  className="w-full"
+                >
+                  <FaGoogle className="mr-2" /> Login with Google
+                </Button>
               </div>
             </div>
           </form>

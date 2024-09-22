@@ -21,7 +21,7 @@ export async function registerUser(data: {
       name,
       email,
       password: generateHash(password),
-      verificationToken: generateRandomString(14),
+      verification_token: generateRandomString(24),
     });
 
     const emailService = new EmailService();
@@ -30,7 +30,7 @@ export async function registerUser(data: {
       to: createdUser.email,
       html: verifyTemplate(
         createdUser.name,
-        `${process.env.APP_URL}/auth/verify?token=${createdUser.verificationToken}`,
+        `${process.env.APP_URL}/auth/verify?token=${createdUser.verification_token}`,
       ),
     });
 
