@@ -21,6 +21,7 @@ import {
   FaUser,
   FaWifi,
 } from "react-icons/fa6";
+
 function Hero() {
   return (
     <SectionContainer id="hero">
