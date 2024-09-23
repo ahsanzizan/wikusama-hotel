@@ -1,7 +1,9 @@
 import PageContainer from "@/components/layout/PageContainer";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { buttonVariants } from "@/components/ui/button";
+import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
+import { RoomTypesWithRoomsCount } from "@/types/relations";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -19,7 +21,6 @@ import {
   FaUser,
   FaWifi,
 } from "react-icons/fa6";
-
 function Hero() {
   return (
     <SectionContainer id="hero">
@@ -139,11 +140,73 @@ function Facilities() {
   );
 }
 
-export default function Home() {
+function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
+  function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
+    return (
+      <div className="rounded-md border border-neutral-300 p-7">
+        <div className="relative mb-4">
+          <Image
+            src={roomType.photo}
+            alt={roomType.type_name}
+            width={330}
+            height={285}
+            className="h-full max-h-[285px] w-full"
+            unoptimized
+          />
+          <p className="absolute right-3 top-3 rounded-md bg-white px-4 py-2 text-black">
+            {roomType.rooms.filter((room) =>
+              room.bookings.find(
+                (booking) =>
+                  new Date().getTime() > booking.check_out_at.getTime(),
+              ),
+            ).length > 0
+              ? "Available"
+              : "Unavailable"}
+          </p>
+        </div>
+        <div className="text-center">
+          <h3 className="mb-3">{roomType.type_name}</h3>
+          <p>{roomType.description}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <SectionContainer id="rooms">
+      <div className="w-full bg-white px-5 py-16 text-black">
+        <div className="mb-12 w-full text-center">
+          <h1 className="mb-3">Luxurious Rooms</h1>
+          <p className="mb-5">
+            All rooms are designed to make your stay as comfortable as possible.
+          </p>
+          <Link
+            href={"/rooms"}
+            className={buttonVariants({ variant: "default" })}
+          >
+            See more
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-10">
+          {roomTypes.map((roomType) => (
+            <RoomCard key={roomType.id} roomType={roomType} />
+          ))}
+        </div>
+      </div>
+    </SectionContainer>
+  );
+}
+
+export default async function Home() {
+  const roomTypes = await prisma.room_type.findMany({
+    include: { rooms: { select: { id: true, bookings: true }, take: 3 } },
+  });
+
   return (
     <PageContainer>
       <Hero />
       <Facilities />
+      <Rooms roomTypes={roomTypes} />
     </PageContainer>
   );
 }
