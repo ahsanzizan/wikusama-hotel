@@ -94,7 +94,7 @@ h1 {
   @apply text-[26px] font-semibold leading-[32px] lg:text-[36px] lg:leading-[44px] 2xl:text-[42px] 2xl:leading-[52px];
 }
 
-h1 .display {
+.display {
   @apply text-[32px] font-bold leading-[39px] lg:text-[46px] lg:leading-[57px] 2xl:text-[54px] 2xl:leading-[66px];
 }
 
@@ -111,5 +111,5 @@ h4 {
 }
 
 p {
-  @apply text-[15px] font-medium leading-[18px];
+  @apply text-[15px] font-medium leading-[18px] text-neutral-400;
 }
