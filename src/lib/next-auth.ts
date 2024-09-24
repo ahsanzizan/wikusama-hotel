@@ -1,6 +1,5 @@
 import { Role } from "@prisma/client";
 import {
-  type DefaultSession,
   AuthOptions,
   getServerSession as nextAuthGetServerSession,
 } from "next-auth";
@@ -22,7 +21,7 @@ declare module "next-auth" {
       role: Role;
       name: string;
       email: string;
-    } & DefaultSession["user"];
+    };
   }
 }
 
@@ -38,7 +37,7 @@ declare module "next-auth/jwt" {
 
 export const authOptions: AuthOptions = {
   theme: {
-    colorScheme: "light",
+    colorScheme: "dark",
     brandColor: "#E04E4E",
     logo: "/logo.png",
   },

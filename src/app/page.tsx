@@ -197,7 +197,7 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
             ))}
           </div>
         ) : (
-          <p className="text-center">There's no room to view...</p>
+          <p className="text-center">There&apos;s no room to view...</p>
         )}
       </div>
     </SectionContainer>
