@@ -31,14 +31,20 @@ function Sidebar({ isActive }: { isActive: boolean }) {
       <div className="relative flex min-h-0 flex-1 flex-col bg-white px-4 pt-0">
         <div className="flex flex-1 flex-col overflow-y-auto pb-4 pt-5">
           <div className="flex-1 space-y-1 bg-white px-3">
-            <Link href={"/"} className="block w-full">
-              <Image
-                src={"/logo.png"}
-                alt="Logo Digifest"
-                width={120}
-                height={50}
-                className="pointer-events-none mx-auto mb-10 h-[50px] w-[130px]"
-              />
+            <Link
+              href={"/"}
+              className="mb-10 flex w-full items-center gap-3 text-black"
+            >
+              <div>
+                <Image
+                  src={"/logo.png"}
+                  alt="Logo Digifest"
+                  width={120}
+                  height={50}
+                  className="pointer-events-none h-[50px] w-[90px]"
+                />
+              </div>
+              <p className="font-bold text-black">Wikusama Hotel</p>
             </Link>
             <ul className="space-y-4 pb-2">
               <li>
@@ -234,7 +240,7 @@ export default function AdminLayoutContainer({
             })}
           </ul>
         </nav>
-        <div className="overflow-y-auto px-4 pt-4">{children}</div>
+        <div className="overflow-y-auto px-2 pt-4">{children}</div>
       </div>
     </main>
   );
