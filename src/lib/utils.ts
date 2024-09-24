@@ -15,3 +15,29 @@ export function generateRandomString(length: number): string {
 
   return buffer.toString("base64").slice(0, length);
 }
+
+export function stringifyDate(date: Date, full?: boolean) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const year = date.getFullYear(),
+    month = ("0" + (date.getMonth() + 1)).slice(-2),
+    day = ("0" + date.getDate()).slice(-2),
+    hour = ("0" + date.getHours()).slice(-2),
+    minute = ("0" + date.getMinutes()).slice(-2);
+
+  return full
+    ? `${year}/${month}/${day} at ${hour}:${minute}`
+    : `${day} ${months[date.getMonth()]}, ${year}`;
+}
