@@ -106,7 +106,7 @@ function Facilities() {
     facilityTitle: string;
   }) {
     return (
-      <div className="flex flex-col items-center gap-5 px-16 py-10">
+      <div className="flex flex-col items-center gap-5 rounded-md px-16 py-10 transition-all duration-300 hover:bg-white hover:text-black">
         {icon}
         <p className="text-center">{facilityTitle}</p>
       </div>
