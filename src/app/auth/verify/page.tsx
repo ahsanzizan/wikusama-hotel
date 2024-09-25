@@ -1,5 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
-import { findUser, updateUser } from "@/database/user.query";
+import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -12,16 +12,18 @@ export default async function VerifyEmail({
 }) {
   if (!searchParams.token) return notFound();
 
-  const user = await findUser({ verification_token: searchParams.token });
+  const user = await prisma.user.findUnique({
+    where: { verification_token: searchParams.token },
+  });
 
   if (!user) return notFound();
   if (user.verified) return redirect("/dashboard");
 
   // Update the verified property of the user
-  await updateUser(
-    { id: user.id },
-    { verified: true, verification_token: null },
-  );
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { verified: true, verification_token: null },
+  });
 
   return (
     <main className="flex h-screen w-screen items-center justify-center">

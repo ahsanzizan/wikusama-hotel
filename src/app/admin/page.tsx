@@ -1,5 +1,6 @@
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
+import { toIDR } from "@/lib/utils";
 import { ReactNode } from "react";
 import { FaBook, FaHotel, FaMoneyBill } from "react-icons/fa6";
 
@@ -53,7 +54,7 @@ export default async function AdminRoot() {
         {icon}
         <div>
           <h3 className="mb-2">{title}</h3>
-          <p>{stats}</p>
+          <p className="text-lg">{stats}</p>
         </div>
       </div>
     );
@@ -75,7 +76,7 @@ export default async function AdminRoot() {
           <StatsCard
             icon={<FaMoneyBill className="size-10" />}
             title="Total Earnings"
-            stats={"Rp. " + totalRevenue.toLocaleString("id-ID")}
+            stats={toIDR(totalRevenue)}
           />
           <StatsCard
             icon={<FaBook className="size-10" />}

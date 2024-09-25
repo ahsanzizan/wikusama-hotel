@@ -8,7 +8,7 @@ export default function Forbidden() {
       <div className="flex flex-col items-center">
         <h1 className="mb-5 text-8xl">403</h1>
         <p className="mb-[34px]">
-          Sorry, we could not let you access the page you are looking for.
+          Sorry, we could not let the page you are looking for.
         </p>
         <Link href="/" className={buttonVariants({ variant: "secondary" })}>
           <FaArrowLeft className="mr-1 transition-transform duration-300 group-hover:-translate-x-1" />{" "}

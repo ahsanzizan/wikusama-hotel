@@ -6,10 +6,11 @@ import {
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-import { createUser, findUser } from "@/database/user.query";
 import { compareHash } from "@/lib/encryption";
 
 import type { DefaultJWT } from "next-auth/jwt";
+
+import prisma from "./prisma";
 
 declare module "next-auth" {
   /**
@@ -62,7 +63,9 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const user = await findUser({ email: credentials?.email });
+          const user = await prisma.user.findUnique({
+            where: { email: credentials?.email },
+          });
           if (!user?.password) return null;
 
           const isPasswordCorrect = compareHash(
@@ -101,12 +104,16 @@ export const authOptions: AuthOptions = {
     },
     async signIn({ user }) {
       if (user.email) {
-        const userdb = await findUser({ email: user.email });
+        const userdb = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
         if (!userdb) {
-          await createUser({
-            email: user.email,
-            name: user.name || "",
-            verified: true,
+          await prisma.user.create({
+            data: {
+              email: user.email,
+              name: user.name || "",
+              verified: true,
+            },
           });
         }
       }
@@ -115,7 +122,9 @@ export const authOptions: AuthOptions = {
     },
     async jwt({ token, user }) {
       if (user?.email) {
-        const userdb = await findUser({ email: user.email });
+        const userdb = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
         if (!userdb) return token;
         token.id = userdb?.id;
         token.role = userdb?.role;
@@ -124,7 +133,9 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       if (token.id && session.user) {
-        const userdb = await findUser({ id: token.id });
+        const userdb = await prisma.user.findUnique({
+          where: { id: token.id },
+        });
         session.user.role = userdb?.role || "GUEST";
         session.user.name = userdb?.name as string;
         session.user.email = userdb?.email as string;

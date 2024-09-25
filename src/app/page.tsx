@@ -1,6 +1,6 @@
 import PageContainer from "@/components/layout/PageContainer";
 import SectionContainer from "@/components/layout/SectionContainer";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { cn, stringifyDate } from "@/lib/utils";
 import { RoomTypesWithRoomsCount } from "@/types/relations";
@@ -145,9 +145,16 @@ function Facilities() {
 
 function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
   function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
+    const isAvailable =
+      roomType.rooms.filter((room) =>
+        room.bookings.find(
+          (booking) => new Date().getTime() > booking.check_out_at.getTime(),
+        ),
+      ).length > 0;
+
     return (
-      <div className="rounded-md border border-neutral-300 p-7">
-        <div className="relative mb-4">
+      <div className="overflow-hidden rounded-md border border-neutral-300">
+        <div className="relative">
           <Image
             src={roomType.photo}
             alt={roomType.type_name}
@@ -157,19 +164,24 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
             unoptimized
           />
           <p className="absolute right-3 top-3 rounded-md bg-white px-4 py-2 text-black">
-            {roomType.rooms.filter((room) =>
-              room.bookings.find(
-                (booking) =>
-                  new Date().getTime() > booking.check_out_at.getTime(),
-              ),
-            ).length > 0
-              ? "Available"
-              : "Unavailable"}
+            {isAvailable ? "Available" : "Unavailable"}
           </p>
         </div>
-        <div className="text-center">
+        <div className="p-5 text-center">
           <h3 className="mb-3">{roomType.type_name}</h3>
-          <p>{roomType.description}</p>
+          <p className="mb-8">{roomType.description}</p>
+          {isAvailable ? (
+            <Link
+              href="/rooms/book"
+              className={cn(buttonVariants({ variant: "default" }), "w-full")}
+            >
+              Book
+            </Link>
+          ) : (
+            <Button variant={"default"} className="w-full" disabled>
+              Unavailable
+            </Button>
+          )}
         </div>
       </div>
     );

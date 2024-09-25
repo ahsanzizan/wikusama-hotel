@@ -1,6 +1,6 @@
 "use server";
-import { findUser } from "@/database/user.query";
 import { ServerActionResponse } from "@/types/server-action";
+import prisma from "@/lib/prisma";
 
 export async function checkVerifiedStatus(data: {
   email: string;
@@ -9,7 +9,7 @@ export async function checkVerifiedStatus(data: {
   try {
     const { email } = data;
 
-    const user = await findUser({ email });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return { success: false, message: "Email is not registered!" };
 
     if (!user.verified)

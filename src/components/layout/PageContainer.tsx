@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { buttonVariants } from "../ui/button";
-import Image from "next/image";
 
 function Navbar({ session }: { session: Session | null }) {
   return (

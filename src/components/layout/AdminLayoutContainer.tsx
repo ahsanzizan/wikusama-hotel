@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, ReactNode, useRef, useState } from "react";
-import { FaBars, FaGauge, FaPersonBooth, FaX } from "react-icons/fa6";
+import { FaBars, FaGauge, FaPersonBooth, FaUser, FaX } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
 function Sidebar({ isActive }: { isActive: boolean }) {
@@ -17,6 +17,18 @@ function Sidebar({ isActive }: { isActive: boolean }) {
       path: "/admin/rooms",
       regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
       icon: <FaPersonBooth />,
+    },
+    {
+      title: "Room Types",
+      path: "/admin/room-types",
+      regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+      icon: <FaPersonBooth />,
+    },
+    {
+      title: "Recipients",
+      path: "/admin/recipients",
+      regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+      icon: <FaUser />,
     },
   ];
 
@@ -64,7 +76,7 @@ function Sidebar({ isActive }: { isActive: boolean }) {
                   <Link
                     href={item.path}
                     className={cn(
-                      (item.regex.test(pathname) ? "bg-neutral-700 " : "") +
+                      (item.regex.test(pathname) ? "bg-neutral-300 " : "") +
                         "text-primary-400 group flex items-center rounded-lg p-2 text-base font-normal text-black transition-all hover:bg-neutral-300",
                     )}
                   >
@@ -101,6 +113,18 @@ function Navbar() {
       regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
       icon: <FaPersonBooth />,
     },
+    {
+      title: "Room Types",
+      path: "/admin/room-types",
+      regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+      icon: <FaPersonBooth />,
+    },
+    {
+      title: "Recipients",
+      path: "/admin/recipients",
+      regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+      icon: <FaUser />,
+    },
   ];
 
   function MenuItem({
@@ -120,7 +144,7 @@ function Navbar() {
           href={href}
           onClick={() => setIsExpanded(false)}
           className={cn(
-            (regex.test(pathname) ? "bg-neutral-700" : "") +
+            (regex.test(pathname) ? "bg-neutral-300" : "") +
               "group flex items-center rounded-lg p-2 text-base font-normal text-black transition-all hover:bg-neutral-300",
           )}
         >

@@ -1,7 +1,7 @@
 "use server";
-import { createUser, findUser } from "@/database/user.query";
 import { EmailService } from "@/lib/email-service";
 import { generateHash } from "@/lib/encryption";
+import prisma from "@/lib/prisma";
 import { generateRandomString, verifyTemplate } from "@/lib/utils";
 import { ServerActionResponse } from "@/types/server-action";
 
@@ -13,15 +13,19 @@ export async function registerUser(data: {
   try {
     const { name, email, password } = data;
 
-    const checkEmailExistence = await findUser({ email });
+    const checkEmailExistence = await prisma.user.findUnique({
+      where: { email },
+    });
     if (checkEmailExistence)
       return { success: false, message: "Email has been used!" };
 
-    const createdUser = await createUser({
-      name,
-      email,
-      password: generateHash(password),
-      verification_token: generateRandomString(24),
+    const createdUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: generateHash(password),
+        verification_token: generateRandomString(24),
+      },
     });
 
     const emailService = new EmailService();

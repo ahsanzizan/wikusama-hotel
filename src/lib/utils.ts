@@ -1,6 +1,9 @@
+import { UploadApiResponse } from "cloudinary";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
 import { twMerge } from "tailwind-merge";
+import cloudinary from "./cloudinary";
+import { RoomTypesWithRoomsCount } from "@/types/relations";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -40,4 +43,26 @@ export function stringifyDate(date: Date, full?: boolean) {
   return full
     ? `${year}/${month}/${day} at ${hour}:${minute}`
     : `${day} ${months[date.getMonth()]}, ${year}`;
+}
+
+export const MAX_FILE_SIZE = 5_000_000;
+export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+export async function fileToBuffer(file: File) {
+  const fileBuffer = await file.arrayBuffer();
+  return Buffer.from(fileBuffer);
+}
+
+export function toIDR(amount: number) {
+  return `Rp. ${amount.toLocaleString("id-ID", { currency: "IDR" })}`;
+}
+
+export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
+  return (
+    roomType.rooms.filter((room) =>
+      room.bookings.find(
+        (booking) => new Date().getTime() > booking.check_out_at.getTime(),
+      ),
+    ).length > 0
+  );
 }

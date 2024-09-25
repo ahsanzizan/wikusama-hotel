@@ -29,7 +29,8 @@ model user {
   created_at         DateTime @default(now())
   verification_token String?  @unique
 
-  booking booking[]
+  booking   booking[]
+  room_type room_type[]
 
   @@map("users")
 }
@@ -41,8 +42,10 @@ model room_type {
   description     String   @db.Text
   photo           String
   created_at      DateTime @default(now())
+  created_by      user     @relation(fields: [userId], references: [id])
 
-  rooms room[]
+  rooms  room[]
+  userId String
 
   @@map("room_types")
 }
