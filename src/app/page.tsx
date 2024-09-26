@@ -187,15 +187,9 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
       <div className="w-full bg-white px-5 py-16 text-black">
         <div className="mb-12 w-full text-center">
           <h1 className="mb-3">Luxurious Rooms</h1>
-          <p className="mb-5">
+          <p>
             All rooms are designed to make your stay as comfortable as possible.
           </p>
-          <Link
-            href={"/rooms"}
-            className={buttonVariants({ variant: "default" })}
-          >
-            See more
-          </Link>
         </div>
         {roomTypes.length > 0 ? (
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-10">
@@ -300,7 +294,7 @@ function Testimonies() {
 
 export default async function Home() {
   const roomTypes = await prisma.room_type.findMany({
-    include: { rooms: { select: { id: true, bookings: true }, take: 3 } },
+    include: { rooms: { select: { id: true, bookings: true } } },
   });
 
   return (
