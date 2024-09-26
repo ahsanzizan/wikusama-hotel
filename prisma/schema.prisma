@@ -31,6 +31,7 @@ model user {
 
   booking   booking[]
   room_type room_type[]
+  room      room[]
 
   @@map("users")
 }
@@ -52,13 +53,16 @@ model room_type {
 
 model room {
   id           String  @id @default(uuid())
-  room_number  Int
+  room_number  Int     @unique
   is_available Boolean @default(true)
 
-  bookings    booking[]
   room_type   room_type @relation(fields: [room_typeId], references: [id])
   room_typeId String
+  created_by  user      @relation(fields: [userId], references: [id])
   created_at  DateTime  @default(now())
+
+  bookings booking[]
+  userId   String
 
   @@map("rooms")
 }

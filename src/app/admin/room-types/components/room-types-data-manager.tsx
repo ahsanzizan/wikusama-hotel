@@ -33,7 +33,7 @@ export default function RoomTypesDataManager({
   }
 
   async function deleteAction(id: string) {
-    if (!confirm("Anda yakin ingin menghapus Competition ini?")) return;
+    if (!confirm("Are you sure to delete this room type?")) return;
 
     const toastId = toast.loading("Loading...");
     const deleteResponse = await deleteRoomType(id);
