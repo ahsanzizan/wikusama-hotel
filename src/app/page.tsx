@@ -155,7 +155,7 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
             alt={roomType.type_name}
             width={330}
             height={285}
-            className="h-[285px] w-full"
+            className="h-[285px] w-full object-cover"
             unoptimized
           />
           <p className="absolute right-3 top-3 rounded-md bg-white px-4 py-2 text-black">
