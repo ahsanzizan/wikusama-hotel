@@ -10,7 +10,7 @@ export default async function Rooms() {
   ]);
 
   return (
-    <div>
+    <>
       <div className="mb-5 flex items-center justify-between">
         <div>
           <h2>Rooms List</h2>
@@ -18,6 +18,6 @@ export default async function Rooms() {
         </div>
       </div>
       <RoomsTable rooms={rooms} roomTypes={roomTypes} />
-    </div>
+    </>
   );
 }

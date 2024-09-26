@@ -1,30 +1,27 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { roomWithBookingsAndType } from "@/types/relations";
-import { room_type } from "@prisma/client";
+import { stringifyDate } from "@/lib/utils";
+import { user } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { FaPencilAlt, FaRegTrashAlt } from "react-icons/fa";
 import { toast } from "sonner";
-import { deleteRoom } from "../actions";
-import RoomModal from "./modal";
+import { deleteReceptionist } from "../actions";
+import ReceptionistModal from "./modal";
 
-export default function RoomsTable({
-  rooms,
-  roomTypes,
+export default function ReceptionistsTable({
+  receptionists,
 }: {
-  rooms: roomWithBookingsAndType[];
-  roomTypes: room_type[];
+  receptionists: user[];
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [editModalData, setEditModalData] =
-    useState<roomWithBookingsAndType | null>(null);
+  const [editModalData, setEditModalData] = useState<user | null>(null);
   const router = useRouter();
 
-  function edit(data: roomWithBookingsAndType) {
+  function edit(data: user) {
     setEditModalData(data);
     setIsCreateModalOpen(false);
     setIsEditModalOpen(true);
@@ -37,10 +34,10 @@ export default function RoomsTable({
   }
 
   async function deleteAction(id: string) {
-    if (!confirm("Are you sure to delete this room?")) return;
+    if (!confirm("Are you sure to delete this receptionist account?")) return;
 
     const toastId = toast.loading("Loading...");
-    const deleteResponse = await deleteRoom(id);
+    const deleteResponse = await deleteReceptionist(id);
 
     if (deleteResponse.success) {
       toast.success(deleteResponse.message, { id: toastId });
@@ -48,25 +45,25 @@ export default function RoomsTable({
     } else toast.error(deleteResponse.message, { id: toastId });
   }
 
-  const columns: TableColumn<roomWithBookingsAndType>[] = [
+  const columns: TableColumn<user>[] = [
     {
       name: "#",
       selector: (_, i) => i! + 1,
       sortable: true,
     },
     {
-      name: "Room Number",
-      selector: (row) => row.room_number,
+      name: "Name",
+      selector: (row) => row.name,
       sortable: true,
     },
     {
-      name: "Available",
-      selector: (row) => (row.is_available === true ? "YES" : "NO"),
+      name: "Email",
+      selector: (row) => row.email,
       sortable: false,
     },
     {
-      name: "Type",
-      selector: (row) => row.room_type.type_name,
+      name: "Created at",
+      selector: (row) => stringifyDate(row.created_at),
       sortable: false,
     },
     {
@@ -110,21 +107,21 @@ export default function RoomsTable({
         Create
       </Button>
       {isEditModalOpen && (
-        <RoomModal
-          roomTypes={roomTypes}
+        <ReceptionistModal
           setIsOpenModal={setIsEditModalOpen}
           data={editModalData}
         />
       )}
       {isCreateModalOpen && (
-        <RoomModal
-          roomTypes={roomTypes}
-          setIsOpenModal={setIsCreateModalOpen}
-          data={null}
-        />
+        <ReceptionistModal setIsOpenModal={setIsCreateModalOpen} data={null} />
       )}
 
-      <DataTable columns={columns} data={rooms} pagination highlightOnHover />
+      <DataTable
+        columns={columns}
+        data={receptionists}
+        pagination
+        highlightOnHover
+      />
     </div>
   );
 }

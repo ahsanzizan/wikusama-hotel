@@ -25,9 +25,9 @@ function Sidebar({ isActive }: { isActive: boolean }) {
       icon: <FaPersonBooth />,
     },
     {
-      title: "Recipients",
-      path: "/admin/recipients",
-      regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+      title: "Receptionists",
+      path: "/admin/receptionists",
+      regex: /^\/admin\/receptionists(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
       icon: <FaUser />,
     },
   ];
