@@ -63,6 +63,6 @@ export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
       room.bookings.find(
         (booking) => new Date().getTime() > booking.check_out_at.getTime(),
       ),
-    ).length > 0
+    ).length === 0
   );
 }

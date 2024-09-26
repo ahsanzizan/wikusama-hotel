@@ -2,7 +2,7 @@ import PageContainer from "@/components/layout/PageContainer";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { cn, stringifyDate } from "@/lib/utils";
+import { cn, roomTypeIsAvailable, stringifyDate } from "@/lib/utils";
 import { RoomTypesWithRoomsCount } from "@/types/relations";
 import Image from "next/image";
 import Link from "next/link";
@@ -145,12 +145,7 @@ function Facilities() {
 
 function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
   function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
-    const isAvailable =
-      roomType.rooms.filter((room) =>
-        room.bookings.find(
-          (booking) => new Date().getTime() > booking.check_out_at.getTime(),
-        ),
-      ).length > 0;
+    const isAvailable = roomTypeIsAvailable(roomType);
 
     return (
       <div className="overflow-hidden rounded-md border border-neutral-300">
@@ -160,7 +155,7 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
             alt={roomType.type_name}
             width={330}
             height={285}
-            className="h-full max-h-[285px] w-full"
+            className="h-[285px] w-full"
             unoptimized
           />
           <p className="absolute right-3 top-3 rounded-md bg-white px-4 py-2 text-black">
@@ -169,10 +164,10 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
         </div>
         <div className="p-5 text-center">
           <h3 className="mb-3">{roomType.type_name}</h3>
-          <p className="mb-8">{roomType.description}</p>
+          <p className="mb-8 text-neutral-500">{roomType.description}</p>
           {isAvailable ? (
             <Link
-              href="/rooms/book"
+              href={`/rooms/book?typeId=${roomType.id}`}
               className={cn(buttonVariants({ variant: "default" }), "w-full")}
             >
               Book
