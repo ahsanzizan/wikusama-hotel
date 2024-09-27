@@ -51,7 +51,12 @@ export default function BookingForm({
   rooms,
 }: {
   typeId: string;
-  bookings: { check_in_at: Date; check_out_at: Date; roomId: string }[];
+  bookings: {
+    check_in_at: Date;
+    check_out_at: Date;
+    roomId: string;
+    room: { room_typeId: string };
+  }[];
   rooms: roomsWithBookings[];
 }) {
   const [loading, setLoading] = useState(false);
@@ -59,8 +64,9 @@ export default function BookingForm({
     schema: createBookingSchema(),
   });
   const [availableRooms, setAvailableRooms] = useState<roomsWithBookings[]>();
+  const [bookedDates] = useState<Date[]>(getAllBookedDates(typeId, bookings));
+  const router = useRouter();
 
-  const bookedDates = getAllBookedDates(bookings);
   const checkInDate = form.watch("check_in_at");
   const checkOutDate = form.watch("check_out_at");
   const roomCount = form.watch("room_count");
@@ -105,7 +111,7 @@ export default function BookingForm({
 
     toast.success(result.message, { id: toastId });
     setLoading(false);
-    return redirect("/bookings");
+    return router.push("/bookings");
   });
 
   return (
@@ -156,7 +162,9 @@ export default function BookingForm({
                           disabled={(date) => {
                             return (
                               date < addDays(new Date(), -1) ||
-                              bookedDates.includes(date)
+                              bookedDates
+                                .map((bookedDate) => bookedDate.getTime())
+                                .includes(date.getTime())
                             );
                           }}
                           initialFocus
@@ -201,7 +209,9 @@ export default function BookingForm({
                             return (
                               date <= form.getValues("check_in_at") ||
                               date <= new Date() ||
-                              bookedDates.includes(date)
+                              bookedDates
+                                .map((bookedDate) => bookedDate.getTime())
+                                .includes(date.getTime())
                             );
                           }}
                           initialFocus

@@ -45,15 +45,32 @@ function Navbar({ session }: { session: Session | null }) {
             />
           </svg>
         </Link>
-        <Link
-          href={session?.user!.role == "ADMIN" ? "/admin" : "/rooms"}
-          className={buttonVariants({ variant: "secondary" })}
-        >
-          {session?.user!.role === "ADMIN" ||
-          session?.user!.role === "RECEPTIONIST"
-            ? "Dashboard"
-            : "Book now"}
-        </Link>
+        <div className="flex items-center gap-4">
+          {session?.user?.role !== "ADMIN" &&
+            session?.user?.role !== "RECEPTIONIST" && (
+              <Link
+                href={"/bookings"}
+                className={buttonVariants({ variant: "default" })}
+              >
+                Bookings history
+              </Link>
+            )}
+          <Link
+            href={
+              session?.user!.role === "ADMIN"
+                ? "/admin"
+                : session?.user?.role === "RECEPTIONIST"
+                  ? "/receptionist"
+                  : "#rooms"
+            }
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            {session?.user!.role === "ADMIN" ||
+            session?.user!.role === "RECEPTIONIST"
+              ? "Dashboard"
+              : "Book now"}
+          </Link>
+        </div>
       </div>
     </nav>
   );

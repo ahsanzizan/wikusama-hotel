@@ -15,7 +15,12 @@ export default async function BookRoom({
   const [roomType, bookings, rooms] = await prisma.$transaction([
     prisma.room_type.findUnique({ where: { id: typeId } }),
     prisma.booking.findMany({
-      select: { check_in_at: true, check_out_at: true, roomId: true },
+      select: {
+        check_in_at: true,
+        check_out_at: true,
+        roomId: true,
+        room: { select: { room_typeId: true } },
+      },
     }),
     prisma.room.findMany({ include: { bookings: true } }),
   ]);

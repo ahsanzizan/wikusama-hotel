@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${ralewayFont.className} antialiased`}>
+      <body className={`${ralewayFont.className} scroll-smooth antialiased`}>
         <NextAuthProvider>
           <ToasterProvider />
           <ProgressBarProvider />

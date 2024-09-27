@@ -67,11 +67,17 @@ export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
 }
 
 export function getAllBookedDates(
+  roomTypeId: string,
   bookings: {
     check_in_at: Date;
     check_out_at: Date;
+    room: { room_typeId: string };
   }[],
 ) {
+  const filteredBookings = bookings.filter(
+    (booking) => booking.room.room_typeId === roomTypeId,
+  );
+
   const getDateRange = (start: Date, end: Date): Date[] => {
     const dates: Date[] = [];
     let currentDate = start;
@@ -89,7 +95,7 @@ export function getAllBookedDates(
 
   let allBookedDates: Date[] = [];
 
-  bookings.forEach((booking) => {
+  filteredBookings.forEach((booking) => {
     const bookedDates = getDateRange(
       new Date(booking.check_in_at),
       new Date(booking.check_out_at),
@@ -100,6 +106,8 @@ export function getAllBookedDates(
   const uniqueBookedDates = Array.from(
     new Set(allBookedDates.map((date) => date)),
   );
+
+  console.log(uniqueBookedDates);
 
   return uniqueBookedDates;
 }

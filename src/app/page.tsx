@@ -34,7 +34,7 @@ function Hero() {
               Wikusama Hotel
             </h3>
             <h1 className="display mb-[14px]">
-              Hotel for every moment rich in emotion
+              Hotel For Every Moment Rich in Emotion
             </h1>
             <p>
               Every moment feels like the first time in Wikusama Hotel. Enjoy
@@ -43,7 +43,7 @@ function Hero() {
           </div>
           <div className="flex items-center gap-7">
             <Link
-              href={"/rooms"}
+              href={"#rooms"}
               className={buttonVariants({ variant: "secondary" })}
             >
               Book now
@@ -145,7 +145,8 @@ function Facilities() {
 
 function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
   function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
-    const isAvailable = roomTypeIsAvailable(roomType);
+    const isAvailable =
+      roomType.rooms.filter((room) => room.is_available).length > 0;
 
     return (
       <div className="overflow-hidden rounded-md border border-neutral-300">
@@ -187,9 +188,15 @@ function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
       <div className="w-full bg-white px-5 py-16 text-black">
         <div className="mb-12 w-full text-center">
           <h1 className="mb-3">Luxurious Rooms</h1>
-          <p>
+          <p className="mb-8">
             All rooms are designed to make your stay as comfortable as possible.
           </p>
+          <Link
+            href={"/rooms"}
+            className={buttonVariants({ variant: "default" })}
+          >
+            See more
+          </Link>
         </div>
         {roomTypes.length > 0 ? (
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-10">
@@ -294,7 +301,8 @@ function Testimonies() {
 
 export default async function Home() {
   const roomTypes = await prisma.room_type.findMany({
-    include: { rooms: { select: { id: true, bookings: true } } },
+    include: { rooms: { include: { bookings: true } } },
+    take: 3,
   });
 
   return (
