@@ -4,8 +4,8 @@ import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { Button, buttonVariants } from "../ui/button";
 import { FaDoorOpen } from "react-icons/fa6";
+import { Button, buttonVariants } from "../ui/button";
 
 function Navbar({ session }: { session: Session | null }) {
   return (
