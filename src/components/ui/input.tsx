@@ -3,6 +3,11 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { UseFormRegister } from "react-hook-form";
 import { FaEye, FaEyeSlash, FaFileUpload } from "react-icons/fa";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from "./button";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "./calendar";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -41,6 +46,7 @@ Input.displayName = "Input";
 
 interface FileInputProps {
   label: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;
   name: string;
   accept: string;
@@ -49,7 +55,8 @@ interface FileInputProps {
 }
 
 const FileField = React.forwardRef<HTMLInputElement, FileInputProps>(
-  ({ label, errorMessage, register, name, accept, description }, ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ({ label, errorMessage, register, name, accept, description }, _ref) => {
     const [fileName, setFileName] = React.useState<string>("");
     const { onChange } = register(name);
 
@@ -128,4 +135,30 @@ const FileField = React.forwardRef<HTMLInputElement, FileInputProps>(
 );
 FileField.displayName = "FileField";
 
-export { FileField, Input };
+const DateField = ({
+  date,
+  setDate,
+}: {
+  date: Date | undefined;
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}) => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button
+        variant={"outline"}
+        className={cn(
+          "w-full justify-start text-left font-normal",
+          !date && "text-muted-foreground",
+        )}
+      >
+        <CalendarIcon className="mr-2 h-4 w-4" />
+        {date ? format(date, "PPP") : <span>Pick a date</span>}
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className="w-auto p-0">
+      <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+    </PopoverContent>
+  </Popover>
+);
+
+export { FileField, Input, DateField };

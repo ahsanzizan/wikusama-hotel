@@ -151,7 +151,7 @@ export default function RoomModal({
                 name="room_typeId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Room Type</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}

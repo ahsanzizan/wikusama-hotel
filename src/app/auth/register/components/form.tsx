@@ -134,6 +134,7 @@ export default function RegisterForm() {
                   Login
                 </Link>
                 <Button
+                  type="button"
                   variant={"outline"}
                   onClick={() => {
                     signIn("google", { callbackUrl: "/" });

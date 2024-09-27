@@ -88,7 +88,7 @@ export default function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel htmlFor="name">Email</FormLabel>
+                    <FormLabel htmlFor="email">Email</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Your email" />
                     </FormControl>
@@ -101,7 +101,7 @@ export default function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="flex flex-col space-y-1.5">
-                    <FormLabel htmlFor="name">Password</FormLabel>
+                    <FormLabel htmlFor="password">Password</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -138,6 +138,7 @@ export default function LoginForm() {
                 </Link>
                 <Button
                   variant={"outline"}
+                  type="button"
                   onClick={() => {
                     signIn("google", { callbackUrl: "/" });
                   }}

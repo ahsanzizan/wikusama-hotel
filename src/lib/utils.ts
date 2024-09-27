@@ -1,9 +1,8 @@
-import { UploadApiResponse } from "cloudinary";
+import { roomsWithBookings, RoomTypesWithRoomsCount } from "@/types/relations";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
+import { addDays, isBefore } from "date-fns";
 import { twMerge } from "tailwind-merge";
-import cloudinary from "./cloudinary";
-import { RoomTypesWithRoomsCount } from "@/types/relations";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -65,4 +64,67 @@ export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
       ),
     ).length === 0
   );
+}
+
+export function getAllBookedDates(
+  bookings: {
+    check_in_at: Date;
+    check_out_at: Date;
+  }[],
+) {
+  const getDateRange = (start: Date, end: Date): Date[] => {
+    const dates: Date[] = [];
+    let currentDate = start;
+
+    while (
+      isBefore(currentDate, end) ||
+      currentDate.getTime() === end.getTime()
+    ) {
+      dates.push(new Date(currentDate));
+      currentDate = addDays(currentDate, 1);
+    }
+
+    return dates;
+  };
+
+  let allBookedDates: Date[] = [];
+
+  bookings.forEach((booking) => {
+    const bookedDates = getDateRange(
+      new Date(booking.check_in_at),
+      new Date(booking.check_out_at),
+    );
+    allBookedDates = [...allBookedDates, ...bookedDates];
+  });
+
+  const uniqueBookedDates = Array.from(
+    new Set(allBookedDates.map((date) => date)),
+  );
+
+  return uniqueBookedDates;
+}
+
+export function getAvailableRooms({
+  bookings,
+  rooms,
+  start,
+  end,
+  typeId,
+}: {
+  bookings: { check_in_at: Date; check_out_at: Date; roomId: string }[];
+  rooms: roomsWithBookings[];
+  start: Date;
+  end: Date;
+  typeId: string;
+}) {
+  const bookedRoomsBookings = bookings.filter(
+    (booking) => booking.check_in_at <= end && booking.check_out_at >= start,
+  );
+  const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
+
+  const availableRooms = rooms.filter(
+    (room) => !bookedRoomIds.includes(room.id) && room.room_typeId === typeId,
+  );
+
+  return availableRooms;
 }

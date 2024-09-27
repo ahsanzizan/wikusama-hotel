@@ -80,10 +80,10 @@ model booking {
   booking_status BookingStatus @default(PENDING)
   booked_at      DateTime      @default(now())
 
-  guest   user    @relation(fields: [guestId], references: [id])
+  guest   user   @relation(fields: [guestId], references: [id])
   guestId String
-  room    room?   @relation(fields: [roomId], references: [id])
-  roomId  String?
+  room    room   @relation(fields: [roomId], references: [id])
+  roomId  String
 
   @@map("bookings")
 }
