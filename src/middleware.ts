@@ -9,7 +9,8 @@ export default withAuth(function middleware(_) {}, {
       if (
         (pathname.startsWith("/rooms/book") ||
           pathname.startsWith("/admin") ||
-          pathname.startsWith("/receptionist")) &&
+          pathname.startsWith("/receptionist") ||
+          pathname.startsWith("/bookings")) &&
         !token
       ) {
         return false;

@@ -66,6 +66,34 @@ export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
   );
 }
 
+function fillOneDayGaps(dates: Date[]) {
+  const filledDates: Date[] = [];
+
+  dates.sort(
+    (a, b) =>
+      new Date(stringifyDate(a)).getTime() -
+      new Date(stringifyDate(b)).getTime(),
+  );
+
+  for (let i = 0; i < dates.length; i++) {
+    filledDates.push(new Date(stringifyDate(dates[i])));
+
+    if (i < dates.length - 1) {
+      let currentDate = new Date(stringifyDate(dates[i]));
+      let nextDate = new Date(stringifyDate(dates[i + 1]));
+
+      // Check if the gap is exactly one day (86400000 ms)
+      const dayInMs = 1000 * 60 * 60 * 24;
+      if (nextDate.getTime() - currentDate.getTime() === dayInMs * 2) {
+        currentDate = addDays(currentDate, 1);
+        filledDates.push(currentDate);
+      }
+    }
+  }
+
+  return filledDates;
+}
+
 export function getAllBookedDates(
   roomTypeId: string,
   bookings: {
@@ -77,7 +105,6 @@ export function getAllBookedDates(
   const filteredBookings = bookings.filter(
     (booking) => booking.room.room_typeId === roomTypeId,
   );
-
   const getDateRange = (start: Date, end: Date): Date[] => {
     const dates: Date[] = [];
     let currentDate = start;
@@ -106,10 +133,9 @@ export function getAllBookedDates(
   const uniqueBookedDates = Array.from(
     new Set(allBookedDates.map((date) => date)),
   );
+  const filledDateGaps = fillOneDayGaps(uniqueBookedDates);
 
-  console.log(uniqueBookedDates);
-
-  return uniqueBookedDates;
+  return filledDateGaps;
 }
 
 export function getAvailableRooms({
@@ -135,4 +161,15 @@ export function getAvailableRooms({
   );
 
   return availableRooms;
+}
+
+export function getStayTime(start: Date, end: Date) {
+  const msInDay = 1000 * 60 * 60 * 24; // Number of milliseconds in a day
+
+  // Calculate the difference in milliseconds
+  const differenceInMs = end.getTime() - start.getTime();
+
+  // Convert milliseconds to days and return the result
+  const stayTime = Math.ceil(differenceInMs / msInDay); // Use Math.ceil to include the last day
+  return stayTime;
 }

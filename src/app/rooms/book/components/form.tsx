@@ -24,7 +24,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useZodForm } from "@/hooks/useZodForm";
-import { cn, getAllBookedDates, getAvailableRooms } from "@/lib/utils";
+import {
+  cn,
+  getAllBookedDates,
+  getAvailableRooms,
+  stringifyDate,
+} from "@/lib/utils";
 import { roomsWithBookings } from "@/types/relations";
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -33,7 +38,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookRooms } from "../actions";
-import { redirect } from "next/navigation";
+
+// TODO: disable booked dates properly
 
 function createBookingSchema() {
   const bookingSchema = z.object({
@@ -163,8 +169,8 @@ export default function BookingForm({
                             return (
                               date < addDays(new Date(), -1) ||
                               bookedDates
-                                .map((bookedDate) => bookedDate.getTime())
-                                .includes(date.getTime())
+                                .map((bookedDate) => stringifyDate(bookedDate))
+                                .includes(stringifyDate(date))
                             );
                           }}
                           initialFocus
@@ -210,8 +216,8 @@ export default function BookingForm({
                               date <= form.getValues("check_in_at") ||
                               date <= new Date() ||
                               bookedDates
-                                .map((bookedDate) => bookedDate.getTime())
-                                .includes(date.getTime())
+                                .map((bookedDate) => stringifyDate(bookedDate))
+                                .includes(stringifyDate(date))
                             );
                           }}
                           initialFocus
