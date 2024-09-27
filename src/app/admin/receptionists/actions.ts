@@ -19,6 +19,7 @@ export async function upsertReciptionist(
     const payload: Prisma.userUpdateInput = {
       ...data,
       role: "RECEPTIONIST",
+      verified: true,
     };
 
     if (!id) {
