@@ -1,10 +1,11 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import { FaDoorOpen } from "react-icons/fa6";
 
 function Navbar({ session }: { session: Session | null }) {
   return (
@@ -46,29 +47,37 @@ function Navbar({ session }: { session: Session | null }) {
           </svg>
         </Link>
         <div className="flex items-center gap-4">
-          {session?.user?.role !== "ADMIN" &&
-            session?.user?.role !== "RECEPTIONIST" && (
-              <Link
-                href={"/bookings"}
-                className={buttonVariants({ variant: "default" })}
-              >
-                Bookings history
-              </Link>
-            )}
+          {session?.user && (
+            <Button
+              onClick={() => signOut({ callbackUrl: "/", redirect: true })}
+              variant={"destructive"}
+            >
+              <FaDoorOpen className="mr-1" />
+              Logout
+            </Button>
+          )}
+          {session?.user?.role === "GUEST" && (
+            <Link
+              href={"/bookings"}
+              className={buttonVariants({ variant: "default" })}
+            >
+              Bookings history
+            </Link>
+          )}
           <Link
             href={
               session?.user!.role === "ADMIN"
                 ? "/admin"
                 : session?.user?.role === "RECEPTIONIST"
                   ? "/receptionist"
-                  : "#rooms"
+                  : "/auth/login"
             }
             className={buttonVariants({ variant: "secondary" })}
           >
             {session?.user!.role === "ADMIN" ||
             session?.user!.role === "RECEPTIONIST"
               ? "Dashboard"
-              : "Book now"}
+              : "Login"}
           </Link>
         </div>
       </div>
