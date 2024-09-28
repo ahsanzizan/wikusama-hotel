@@ -1,12 +1,19 @@
-FROM node:20-alpine3.20
 
-WORKDIR /app/wikusama-hotel
+FROM node:21-alpine
+
+ARG user=nextjs
+ARG group=nodejs
+ARG usergroup=${user}:${group}
+RUN adduser -u 1001 -S ${user}
+RUN addgroup -g 1001 -S ${group}
+USER ${user}
+
+WORKDIR /app/NextApp
 
 COPY package* .
 
-RUN npm install
+RUN npm ci
 COPY . .
-RUN npx prisma generate
 RUN npm run build
 
 EXPOSE 3000

@@ -43,7 +43,7 @@ model room_type {
   description     String   @db.Text
   photo           String
   created_at      DateTime @default(now())
-  created_by      user     @relation(fields: [userId], references: [id])
+  created_by      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   rooms  room[]
   userId String
@@ -56,9 +56,9 @@ model room {
   room_number  Int     @unique
   is_available Boolean @default(true)
 
-  room_type   room_type @relation(fields: [room_typeId], references: [id])
+  room_type   room_type @relation(fields: [room_typeId], references: [id], onDelete: Cascade)
   room_typeId String
-  created_by  user      @relation(fields: [userId], references: [id])
+  created_by  user      @relation(fields: [userId], references: [id], onDelete: Cascade)
   created_at  DateTime  @default(now())
 
   bookings booking[]
@@ -80,9 +80,9 @@ model booking {
   booking_status BookingStatus @default(PENDING)
   booked_at      DateTime      @default(now())
 
-  guest   user   @relation(fields: [guestId], references: [id])
+  guest   user   @relation(fields: [guestId], references: [id], onDelete: Cascade)
   guestId String
-  room    room   @relation(fields: [roomId], references: [id])
+  room    room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId  String
 
   @@map("bookings")
