@@ -60,6 +60,7 @@ export async function bookRooms(data: {
       success: true,
       message: `Successfully booked ${availableRoomIds.length} rooms`,
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return {
       success: false,

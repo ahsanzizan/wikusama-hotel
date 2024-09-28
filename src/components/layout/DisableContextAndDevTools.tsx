@@ -7,9 +7,11 @@ export default function DisableContextAndDevTools({
   children: ReactNode;
 }) {
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleContextMenu: (this: Document, e: MouseEvent) => any = (e) => {
       e.preventDefault();
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleDevTools: (this: Document, ev: KeyboardEvent) => any = (e) => {
       if (e.key === "F12" || e.keyCode === 123) {
         e.preventDefault();

@@ -1,12 +1,11 @@
-import DownloadableReceipt from "@/components/utils/DownloadableReceipt";
-import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import ReceiptContainer from "./components/ReceiptContainer";
 import PageContainer from "@/components/layout/PageContainer";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import prisma from "@/lib/prisma";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa6";
+import ReceiptContainer from "./components/ReceiptContainer";
 
 export default async function ReceiptPrinting({
   searchParams,

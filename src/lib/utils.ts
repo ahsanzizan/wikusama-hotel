@@ -1,4 +1,4 @@
-import { roomsWithBookings, RoomTypesWithRoomsCount } from "@/types/relations";
+import { roomsWithBookings, roomTypesWithRoomsCount } from "@/types/relations";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
 import { addDays, isBefore } from "date-fns";
@@ -56,7 +56,7 @@ export function toIDR(amount: number) {
   return `Rp. ${amount.toLocaleString("id-ID", { currency: "IDR" })}`;
 }
 
-export function roomTypeIsAvailable(roomType: RoomTypesWithRoomsCount) {
+export function roomTypeIsAvailable(roomType: roomTypesWithRoomsCount) {
   return (
     roomType.rooms.filter((room) =>
       room.bookings.find(
@@ -80,7 +80,7 @@ function fillOneDayGaps(dates: Date[]) {
 
     if (i < dates.length - 1) {
       let currentDate = new Date(stringifyDate(dates[i]));
-      let nextDate = new Date(stringifyDate(dates[i + 1]));
+      const nextDate = new Date(stringifyDate(dates[i + 1]));
 
       // Check if the gap is exactly one day (86400000 ms)
       const dayInMs = 1000 * 60 * 60 * 24;

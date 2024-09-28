@@ -4,7 +4,7 @@ import RoomTypesDataManager from "./components/room-types-data-manager";
 export default async function RoomTypes() {
   const [roomTypes] = await prisma.$transaction([
     prisma.room_type.findMany({
-      include: { rooms: { select: { id: true, bookings: true } } },
+      include: { rooms: { include: { bookings: true } } },
     }),
   ]);
 

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { RoomTypesWithRoomsCount } from "@/types/relations";
+import { roomTypesWithRoomsCount } from "@/types/relations";
 import { room_type } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import { FaPencil, FaTrash } from "react-icons/fa6";
 export default function RoomTypesDataManager({
   roomTypes,
 }: {
-  roomTypes: RoomTypesWithRoomsCount[];
+  roomTypes: roomTypesWithRoomsCount[];
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -44,7 +44,7 @@ export default function RoomTypesDataManager({
     } else toast.error(deleteResponse.message, { id: toastId });
   }
 
-  function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
+  function RoomCard({ roomType }: { roomType: roomTypesWithRoomsCount }) {
     return (
       <div className="rounded-md border border-neutral-800">
         <div className="relative mb-4">

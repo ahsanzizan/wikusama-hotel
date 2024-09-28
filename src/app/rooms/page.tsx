@@ -6,14 +6,14 @@ import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
-import { RoomTypesWithRoomsCount } from "@/types/relations";
+import { roomTypesWithRoomsCount } from "@/types/relations";
 
 export default async function Rooms() {
   const roomTypes = await prisma.room_type.findMany({
     include: { rooms: { include: { bookings: true } } },
   });
 
-  function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
+  function RoomCard({ roomType }: { roomType: roomTypesWithRoomsCount }) {
     const isAvailable =
       roomType.rooms.filter((room) => room.is_available).length > 0;
 

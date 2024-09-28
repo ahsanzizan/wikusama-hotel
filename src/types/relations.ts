@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
-export type RoomTypesWithRoomsCount = Prisma.room_typeGetPayload<{
-  include: { rooms: { include: { bookings: true } } };
+export type roomTypesWithRoomsCount = Prisma.room_typeGetPayload<{
+  include: { rooms: { include: { id: true; bookings: true } } };
 }>;
 
 export type roomWithBookingsAndType = Prisma.roomGetPayload<{

@@ -2,8 +2,8 @@ import PageContainer from "@/components/layout/PageContainer";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { cn, roomTypeIsAvailable, stringifyDate } from "@/lib/utils";
-import { RoomTypesWithRoomsCount } from "@/types/relations";
+import { cn, stringifyDate } from "@/lib/utils";
+import { roomTypesWithRoomsCount } from "@/types/relations";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -143,8 +143,8 @@ function Facilities() {
   );
 }
 
-function Rooms({ roomTypes }: { roomTypes: RoomTypesWithRoomsCount[] }) {
-  function RoomCard({ roomType }: { roomType: RoomTypesWithRoomsCount }) {
+function Rooms({ roomTypes }: { roomTypes: roomTypesWithRoomsCount[] }) {
+  function RoomCard({ roomType }: { roomType: roomTypesWithRoomsCount }) {
     const isAvailable =
       roomType.rooms.filter((room) => room.is_available).length > 0;
 
