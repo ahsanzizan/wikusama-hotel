@@ -19,7 +19,7 @@ export default async function Receptionist() {
     <PageContainer>
       <div className="w-full">
         <div className="mb-12 w-full">
-          <h1 className="mb-3">Guest&apos;Bookings</h1>
+          <h1 className="mb-3">Guest&apos;s Bookings</h1>
           <p>
             You can view room bookings and change the booking status after the
             stay is confirmed by the guest.
