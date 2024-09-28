@@ -1,4 +1,5 @@
 "use server";
+import { generateHash } from "@/lib/encryption";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
@@ -19,6 +20,7 @@ export async function upsertReciptionist(
     const payload: Prisma.userUpdateInput = {
       ...data,
       role: "RECEPTIONIST",
+      password: generateHash(data.password as string),
       verified: true,
     };
 
