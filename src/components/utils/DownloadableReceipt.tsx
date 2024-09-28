@@ -20,7 +20,7 @@ const DownloadableReceipt = React.forwardRef(
     return (
       <div
         ref={ref}
-        className="mx-auto max-w-3xl rounded-lg border bg-white p-8 text-black shadow-lg"
+        className="mx-auto max-w-3xl rounded-lg border bg-[#fff] p-8 text-black shadow-lg"
       >
         <Image
           src={"/logo.png"}
