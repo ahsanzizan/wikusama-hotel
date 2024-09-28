@@ -88,7 +88,15 @@ export default function BookingsTable({
   const [tableLoading, setTableLoading] = useState(true);
   const [bookingDateFilter, setBookingDateFilter] = useState<Date>();
   const [stayTimeFilter, setStayTimeFilter] = useState<DateRange>();
+  const [filteredBookings, setFilteredBookings] =
+    useState<bookingWithRoomAndRoomType[]>(bookings);
   const router = useRouter();
+
+  useEffect(() => {
+    setFilteredBookings(
+      filterBookings(bookings, bookingDateFilter, stayTimeFilter),
+    );
+  }, [bookingDateFilter, stayTimeFilter]);
 
   const columns: TableColumn<bookingWithRoomAndRoomType>[] = [
     {
@@ -243,10 +251,32 @@ export default function BookingsTable({
             </PopoverContent>
           </Popover>
         </div>
+        <div className="block">
+          <p className="mb-2 text-white">
+            Total Revenue (
+            {bookingDateFilter ? stringifyDate(bookingDateFilter) : "All time"})
+          </p>
+          <p>
+            {toIDR(
+              filteredBookings.reduce((totalRevenue, booking) => {
+                const price = booking.room?.room_type.price_per_night as number;
+                const checkIn = new Date(booking.check_in_at);
+                const checkOut = new Date(booking.check_out_at);
+
+                const timeDiff = checkOut.getTime() - checkIn.getTime();
+                const daysStayed = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+                const bookingRevenue = daysStayed * price;
+
+                return totalRevenue + bookingRevenue;
+              }, 0),
+            )}
+          </p>
+        </div>
       </div>
       <DataTable
         columns={columns}
-        data={filterBookings(bookings, bookingDateFilter, stayTimeFilter)}
+        data={filteredBookings}
         pagination
         highlightOnHover
       />
