@@ -53,7 +53,7 @@ export default function RoomTypesDataManager({
             alt={roomType.type_name}
             width={330}
             height={285}
-            className="h-[285px] w-full"
+            className="h-[285px] w-full object-cover"
             unoptimized
           />
           <div className="absolute right-3 top-3 flex items-center gap-2 rounded-md bg-white">
