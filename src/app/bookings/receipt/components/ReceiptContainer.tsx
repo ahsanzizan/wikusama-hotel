@@ -1,10 +1,10 @@
 "use client";
-
 import DownloadableReceipt from "@/components/utils/DownloadableReceipt";
 import { Prisma } from "@prisma/client";
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
+import DisableContextAndDevTools from "@/components/layout/DisableContextAndDevTools";
 
 interface ReceiptContainerProps {
   booking: Prisma.bookingGetPayload<{
@@ -40,17 +40,19 @@ export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
   };
 
   return (
-    <div className="block">
-      <Button
-        onClick={() => {
-          downloadPdf();
-        }}
-        className="mb-8 w-full"
-        variant={"secondary"}
-      >
-        Download
-      </Button>
-      <DownloadableReceipt ref={receiptRef} booking={booking} />
-    </div>
+    <DisableContextAndDevTools>
+      <div className="block">
+        <Button
+          onClick={() => {
+            downloadPdf();
+          }}
+          className="mb-8 w-full"
+          variant={"secondary"}
+        >
+          Download
+        </Button>
+        <DownloadableReceipt ref={receiptRef} booking={booking} />
+      </div>
+    </DisableContextAndDevTools>
   );
 }
