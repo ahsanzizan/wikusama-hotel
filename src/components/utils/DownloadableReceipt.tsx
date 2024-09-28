@@ -31,6 +31,7 @@ const DownloadableReceipt = React.forwardRef(
           unoptimized
         />
         <h1 className="mb-4 text-center text-3xl font-bold">Wikusama Hotel</h1>
+        <p className="mb-4 text-center">Booking ID {booking.id}</p>
         <p className="mb-6 text-center text-sm text-gray-600">
           Date of Booking: {stringifyDate(booked_at)}
         </p>

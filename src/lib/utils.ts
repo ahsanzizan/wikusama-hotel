@@ -173,3 +173,20 @@ export function getStayTime(start: Date, end: Date) {
   const stayTime = Math.ceil(differenceInMs / msInDay); // Use Math.ceil to include the last day
   return stayTime;
 }
+
+export function groupBy<T>(
+  array: T[],
+  keyFn: (item: T) => string,
+): { [key: string]: T[] } {
+  return array.reduce(
+    (result, item) => {
+      const key = keyFn(item);
+      if (!result[key]) {
+        result[key] = [];
+      }
+      result[key].push(item);
+      return result;
+    },
+    {} as { [key: string]: T[] },
+  );
+}

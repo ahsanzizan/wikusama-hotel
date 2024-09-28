@@ -64,20 +64,28 @@ function Navbar({ session }: { session: Session | null }) {
               Bookings history
             </Link>
           )}
+          {!session?.user && (
+            <Link
+              href="/auth/login"
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              Login
+            </Link>
+          )}
           <Link
             href={
               session?.user!.role === "ADMIN"
                 ? "/admin"
                 : session?.user?.role === "RECEPTIONIST"
                   ? "/receptionist"
-                  : "/auth/login"
+                  : "/rooms"
             }
             className={buttonVariants({ variant: "secondary" })}
           >
             {session?.user!.role === "ADMIN" ||
             session?.user!.role === "RECEPTIONIST"
               ? "Dashboard"
-              : "Login"}
+              : "Book now"}
           </Link>
         </div>
       </div>

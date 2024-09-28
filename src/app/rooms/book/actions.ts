@@ -3,6 +3,7 @@ import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
 import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export async function bookRooms(data: {
   check_in_at: Date;
@@ -54,6 +55,7 @@ export async function bookRooms(data: {
       });
     });
 
+    revalidatePath("/", "layout");
     return {
       success: true,
       message: `Successfully booked ${availableRoomIds.length} rooms`,

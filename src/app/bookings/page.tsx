@@ -3,7 +3,7 @@ import SectionContainer from "@/components/layout/SectionContainer";
 import { buttonVariants } from "@/components/ui/button";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
-import { cn, getStayTime, stringifyDate } from "@/lib/utils";
+import { cn, getStayTime, groupBy, stringifyDate } from "@/lib/utils";
 import Link from "next/link";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaArrowLeft, FaCalendar, FaClock } from "react-icons/fa6";
@@ -22,6 +22,11 @@ export default async function Bookings() {
     },
     orderBy: { booked_at: "desc" },
   });
+
+  const bookingsGroupByBookedAt = groupBy(bookings, ({ booked_at }) =>
+    stringifyDate(booked_at),
+  );
+  const bookedAtKeys = Object.keys(bookingsGroupByBookedAt);
 
   function BookingCard({ booking }: { booking: (typeof bookings)[0] }) {
     return (
@@ -87,9 +92,21 @@ export default async function Bookings() {
             </div>
           </div>
           {bookings.length === 0 && <p>There&apos;s no bookings...</p>}
-          <div className="flex w-full flex-col gap-8 md:gap-4">
-            {bookings.map((booking) => (
-              <BookingCard key={booking.id} booking={booking} />
+          <div className="flex w-full flex-col gap-10 divide-y divide-white md:gap-6">
+            {bookedAtKeys.map((bookedAtKey) => (
+              <div className="py-8" key={bookedAtKey}>
+                <h1 className="mb-12">{bookedAtKey}</h1>
+                <div className="flex w-full flex-col gap-8 md:gap-4">
+                  {bookings
+                    .filter(
+                      (booking) =>
+                        stringifyDate(booking.booked_at) === bookedAtKey,
+                    )
+                    .map((booking) => (
+                      <BookingCard key={booking.id} booking={booking} />
+                    ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

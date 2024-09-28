@@ -81,6 +81,8 @@ export async function deleteRoomType(
       return { success: false, message: "Room type does not exist" };
 
     await prisma.room_type.delete({ where: { id } });
+
+    revalidatePath("/", "layout");
     return { success: false, message: "Deleted successfully" };
   } catch (error) {
     console.log(error);
