@@ -39,7 +39,7 @@ export default async function BookRoom({
           unoptimized
           className="h-[512px] w-full rounded-lg object-cover"
         />
-        <BookingForm typeId={typeId} bookings={bookings} rooms={rooms} />
+        <BookingForm roomType={roomType} bookings={bookings} rooms={rooms} />
       </div>
     </PageContainer>
   );

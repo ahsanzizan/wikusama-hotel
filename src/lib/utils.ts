@@ -101,10 +101,14 @@ export function getAllBookedDates(
     check_out_at: Date;
     room: { room_typeId: string };
   }[],
+  totalRooms: number, // Total rooms that is the same type
 ) {
+  // Filter bookings for the specific room type
   const filteredBookings = bookings.filter(
     (booking) => booking.room.room_typeId === roomTypeId,
   );
+
+  // Get the range of dates between check-in and check-out
   const getDateRange = (start: Date, end: Date): Date[] => {
     const dates: Date[] = [];
     let currentDate = start;
@@ -120,22 +124,28 @@ export function getAllBookedDates(
     return dates;
   };
 
-  let allBookedDates: Date[] = [];
+  // Create a map to count how many rooms are booked per day
+  const bookingCountMap: Record<string, number> = {};
 
   filteredBookings.forEach((booking) => {
     const bookedDates = getDateRange(
       new Date(booking.check_in_at),
       new Date(booking.check_out_at),
     );
-    allBookedDates = [...allBookedDates, ...bookedDates];
+
+    bookedDates.forEach((date) => {
+      const dateKey = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      bookingCountMap[dateKey] = (bookingCountMap[dateKey] || 0) + 1;
+    });
   });
 
-  const uniqueBookedDates = Array.from(
-    new Set(allBookedDates.map((date) => date)),
-  );
-  const filledDateGaps = fillOneDayGaps(uniqueBookedDates);
+  // Find dates where the number of booked rooms equals the total rooms available
+  const unavailableDates: Date[] = Object.entries(bookingCountMap)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(([_, count]) => count === totalRooms)
+    .map(([date]) => new Date(date));
 
-  return filledDateGaps;
+  return fillOneDayGaps(unavailableDates);
 }
 
 export function getAvailableRooms({
@@ -152,13 +162,16 @@ export function getAvailableRooms({
   typeId: string;
 }) {
   const bookedRoomsBookings = bookings.filter(
-    (booking) => booking.check_in_at <= end && booking.check_out_at >= start,
+    (booking) => booking.check_in_at <= end || booking.check_out_at >= start,
   );
   const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
 
   const availableRooms = rooms.filter(
     (room) => !bookedRoomIds.includes(room.id) && room.room_typeId === typeId,
   );
+
+  console.log(bookedRoomsBookings);
+  console.log(availableRooms);
 
   return availableRooms;
 }

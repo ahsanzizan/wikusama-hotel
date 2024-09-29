@@ -47,7 +47,7 @@ export async function bookRooms(data: {
 
       if (conflictingBookings.length > 0)
         throw new Error(
-          `${conflictingBookings.length} rooms are already booked during the selected dates.`,
+          `${conflictingBookings.length} room(s) are already booked during the selected dates.`,
         );
 
       await prisma.booking.createMany({

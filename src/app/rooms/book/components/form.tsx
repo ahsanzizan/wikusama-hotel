@@ -28,7 +28,9 @@ import {
   cn,
   getAllBookedDates,
   getAvailableRooms,
+  getStayTime,
   stringifyDate,
+  toIDR,
 } from "@/lib/utils";
 import { roomsWithBookings } from "@/types/relations";
 import { addDays, format } from "date-fns";
@@ -52,11 +54,11 @@ function createBookingSchema() {
 }
 
 export default function BookingForm({
-  typeId,
+  roomType,
   bookings,
   rooms,
 }: {
-  typeId: string;
+  roomType: { id: string; price_per_night: number };
   bookings: {
     check_in_at: Date;
     check_out_at: Date;
@@ -70,7 +72,13 @@ export default function BookingForm({
     schema: createBookingSchema(),
   });
   const [availableRooms, setAvailableRooms] = useState<roomsWithBookings[]>();
-  const [bookedDates] = useState<Date[]>(getAllBookedDates(typeId, bookings));
+  const [bookedDates] = useState<Date[]>(
+    getAllBookedDates(
+      roomType.id,
+      bookings,
+      rooms.filter((room) => room.room_typeId === roomType.id).length,
+    ),
+  );
   const router = useRouter();
 
   const checkInDate = form.watch("check_in_at");
@@ -84,11 +92,11 @@ export default function BookingForm({
         rooms,
         start: checkInDate,
         end: checkOutDate,
-        typeId,
+        typeId: roomType.id,
       });
       setAvailableRooms(availableRooms);
     }
-  }, [bookings, checkInDate, checkOutDate, rooms, typeId]);
+  }, [bookings, checkInDate, checkOutDate, rooms, roomType]);
 
   useEffect(() => {
     if (availableRooms) {
@@ -123,6 +131,7 @@ export default function BookingForm({
   return (
     <Card className="absolute bottom-0 left-1/2 w-full max-w-lg -translate-x-1/2 border-none">
       <CardHeader>
+        <h1 className="mb-4">{toIDR(roomType.price_per_night)} / night</h1>
         <CardTitle className="mb-3">
           You&apos;re on your way to book the Queen&apos;s Room
         </CardTitle>
@@ -249,7 +258,23 @@ export default function BookingForm({
                         placeholder="Room count"
                       />
                     </FormControl>
-                    {!availableRooms && (
+                    {availableRooms ? (
+                      <FormDescription>
+                        Total:{" "}
+                        <span className="font-bold">
+                          {toIDR(
+                            form.getValues("room_count")
+                              ? roomType.price_per_night *
+                                  getStayTime(
+                                    form.getValues("check_in_at"),
+                                    form.getValues("check_out_at"),
+                                  ) *
+                                  Number(form.getValues("room_count"))
+                              : 0,
+                          )}
+                        </span>
+                      </FormDescription>
+                    ) : (
                       <FormDescription>
                         Pick a check-in and check-out date first!
                       </FormDescription>
