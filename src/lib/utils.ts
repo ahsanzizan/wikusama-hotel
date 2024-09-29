@@ -68,6 +68,7 @@ export function roomTypeIsAvailable(roomType: roomTypesWithRoomsCount) {
 
 function fillOneDayGaps(dates: Date[]) {
   const filledDates: Date[] = [];
+  const dayInMs = 1000 * 60 * 60 * 24;
 
   dates.sort(
     (a, b) =>
@@ -83,12 +84,19 @@ function fillOneDayGaps(dates: Date[]) {
       const nextDate = new Date(stringifyDate(dates[i + 1]));
 
       // Check if the gap is exactly one day (86400000 ms)
-      const dayInMs = 1000 * 60 * 60 * 24;
       if (nextDate.getTime() - currentDate.getTime() === dayInMs * 2) {
         currentDate = addDays(currentDate, 1);
         filledDates.push(currentDate);
       }
     }
+  }
+
+  const currentDate = new Date();
+  if (
+    currentDate.getTime() !== filledDates[0].getTime() &&
+    currentDate.getTime() - filledDates[0].getTime() < dayInMs * 3
+  ) {
+    filledDates.push(currentDate);
   }
 
   return filledDates;
@@ -162,16 +170,13 @@ export function getAvailableRooms({
   typeId: string;
 }) {
   const bookedRoomsBookings = bookings.filter(
-    (booking) => booking.check_in_at <= end || booking.check_out_at >= start,
+    (booking) => booking.check_in_at <= end && booking.check_out_at >= start,
   );
   const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
 
   const availableRooms = rooms.filter(
     (room) => !bookedRoomIds.includes(room.id) && room.room_typeId === typeId,
   );
-
-  console.log(bookedRoomsBookings);
-  console.log(availableRooms);
 
   return availableRooms;
 }
