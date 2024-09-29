@@ -1,4 +1,4 @@
-import { roomsWithBookings, roomTypesWithRoomsCount } from "@/types/relations";
+import { roomsWithBookings } from "@/types/relations";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
 import { addDays, isBefore } from "date-fns";
@@ -54,16 +54,6 @@ export async function fileToBuffer(file: File) {
 
 export function toIDR(amount: number) {
   return `Rp. ${amount.toLocaleString("id-ID", { currency: "IDR" })}`;
-}
-
-export function roomTypeIsAvailable(roomType: roomTypesWithRoomsCount) {
-  return (
-    roomType.rooms.filter((room) =>
-      room.bookings.find(
-        (booking) => new Date().getTime() > booking.check_out_at.getTime(),
-      ),
-    ).length === 0
-  );
 }
 
 function fillOneDayGaps(dates: Date[]) {
