@@ -20,6 +20,7 @@ declare global {
       EMAIL_FROM: string;
       ADMIN_EMAIL: string;
       ADMIN_PASSWORD: string;
+      ADMIN_CREATION_PASSWORD: string;
     }
   }
 }
