@@ -18,8 +18,6 @@ declare global {
       SMTP_USER: string;
       SMTP_PASS: string;
       EMAIL_FROM: string;
-      ADMIN_EMAIL: string;
-      ADMIN_PASSWORD: string;
       ADMIN_CREATION_PASSWORD: string;
     }
   }

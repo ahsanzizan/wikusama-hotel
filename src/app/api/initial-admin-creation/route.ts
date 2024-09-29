@@ -1,15 +1,34 @@
 import { generateHash } from "@/lib/encryption";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const adminCreationSchema = z.object({
+  name: z.string().min(1, "name must be provided!"),
+  email: z.string().email().min(1, "email must be provided!"),
+  password: z.string().min(8, "password must be at least 8 characters!"),
+  adminCreationPassword: z
+    .string()
+    .min(1, "admin_creation_password must be provided!"),
+});
 
 // This route is only used once to create an
 // admin-privilleged user at the initial stage of the application
 export async function POST(req: Request) {
   try {
-    const data = await req.formData();
-    const adminCreationPassword = data.get("admin_creation_password") as
-      | string
-      | undefined;
+    const formData = await req.formData();
+    const admin = {
+      name: formData.get("name") as string | undefined,
+      email: formData.get("email") as string | undefined,
+      password: formData.get("password") as string | undefined,
+      adminCreationPassword: formData.get("admin_creation_password") as
+        | string
+        | undefined,
+    };
+
+    const { name, email, password, adminCreationPassword } =
+      adminCreationSchema.parse(admin);
+
     if (!adminCreationPassword)
       return NextResponse.json(
         {
@@ -26,16 +45,11 @@ export async function POST(req: Request) {
           "Admin creation password does not match the one provided in the environment variables.",
       });
 
-    const admin = {
-      name: "Admin",
-      email: process.env.ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD,
-    };
     await prisma.user.create({
       data: {
-        name: admin.name,
-        email: admin.email,
-        password: generateHash(admin.password),
+        name,
+        email,
+        password: generateHash(password),
         verified: true,
         role: "ADMIN",
       },
