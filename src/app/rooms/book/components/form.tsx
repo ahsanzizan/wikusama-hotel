@@ -40,6 +40,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookRooms } from "../actions";
+import { BookingStatus } from "@prisma/client";
 
 // TODO: disable booked dates properly
 
@@ -64,6 +65,7 @@ export default function BookingForm({
     check_out_at: Date;
     roomId: string;
     room: { room_typeId: string };
+    booking_status: BookingStatus;
   }[];
   rooms: roomsWithBookings[];
 }) {

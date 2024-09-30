@@ -20,6 +20,7 @@ export default async function BookRoom({
         check_out_at: true,
         roomId: true,
         room: { select: { room_typeId: true } },
+        booking_status: true,
       },
     }),
     prisma.room.findMany({ include: { bookings: true } }),
