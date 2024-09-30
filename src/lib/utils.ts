@@ -1,4 +1,5 @@
 import { roomsWithBookings } from "@/types/relations";
+import { BookingStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
 import { addDays, isBefore } from "date-fns";
@@ -97,13 +98,16 @@ export function getAllBookedDates(
   bookings: {
     check_in_at: Date;
     check_out_at: Date;
+    booking_status: BookingStatus;
     room: { room_typeId: string };
   }[],
   totalRooms: number, // Total rooms that is the same type
 ) {
-  // Filter bookings for the specific room type
+  // Filter bookings that is not cancelled for the specific room type
   const filteredBookings = bookings.filter(
-    (booking) => booking.room.room_typeId === roomTypeId,
+    (booking) =>
+      booking.room.room_typeId === roomTypeId &&
+      booking.booking_status !== "CANCELLED",
   );
 
   // Get the range of dates between check-in and check-out
@@ -153,14 +157,22 @@ export function getAvailableRooms({
   end,
   typeId,
 }: {
-  bookings: { check_in_at: Date; check_out_at: Date; roomId: string }[];
+  bookings: {
+    check_in_at: Date;
+    check_out_at: Date;
+    roomId: string;
+    booking_status: BookingStatus;
+  }[];
   rooms: roomsWithBookings[];
   start: Date;
   end: Date;
   typeId: string;
 }) {
   const bookedRoomsBookings = bookings.filter(
-    (booking) => booking.check_in_at <= end && booking.check_out_at >= start,
+    (booking) =>
+      booking.check_in_at <= end &&
+      booking.check_out_at >= start &&
+      booking.booking_status !== "CANCELLED",
   );
   const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
 
