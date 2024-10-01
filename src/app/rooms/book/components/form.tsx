@@ -75,11 +75,13 @@ export default function BookingForm({
   });
   const [availableRooms, setAvailableRooms] = useState<roomsWithBookings[]>();
   const [bookedDates] = useState<Date[]>(
-    getAllBookedDates(
-      roomType.id,
-      bookings,
-      rooms.filter((room) => room.room_typeId === roomType.id).length,
-    ),
+    bookings.length !== 0
+      ? getAllBookedDates(
+          roomType.id,
+          bookings,
+          rooms.filter((room) => room.room_typeId === roomType.id).length,
+        )
+      : [],
   );
   const router = useRouter();
 

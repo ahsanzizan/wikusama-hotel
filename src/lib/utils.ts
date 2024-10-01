@@ -109,6 +109,7 @@ export function getAllBookedDates(
       booking.room.room_typeId === roomTypeId &&
       booking.booking_status !== "CANCELLED",
   );
+  if (filteredBookings.length === 0) return [];
 
   // Get the range of dates between check-in and check-out
   const getDateRange = (start: Date, end: Date): Date[] => {
