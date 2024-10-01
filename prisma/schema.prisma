@@ -19,15 +19,24 @@ enum Role {
   ADMIN
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model user {
-  id                 String   @id @default(uuid())
+  id                 String    @id @default(uuid())
   name               String
-  email              String   @unique
+  email              String    @unique
   password           String?
-  role               Role     @default(GUEST)
-  verified           Boolean  @default(false)
-  created_at         DateTime @default(now())
-  verification_token String?  @unique
+  role               Role      @default(GUEST)
+  verified           Boolean   @default(false)
+  created_at         DateTime  @default(now())
+  verification_token String?   @unique
+  gender             Gender?
+  birth_date         DateTime?
+  city_of_residence  String?
+  mobile_number      String?
 
   booking   booking[]
   room_type room_type[]

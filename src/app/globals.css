@@ -114,3 +114,7 @@ h4 {
 p {
   @apply text-[15px] font-medium leading-[18px] text-neutral-400;
 }
+
+.rdp-vhidden {
+  @apply hidden;
+}

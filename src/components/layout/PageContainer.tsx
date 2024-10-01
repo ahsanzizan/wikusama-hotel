@@ -4,8 +4,9 @@ import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FaDoorOpen } from "react-icons/fa6";
+import { FaDoorOpen, FaUser } from "react-icons/fa6";
 import { Button, buttonVariants } from "../ui/button";
+import { FaHistory } from "react-icons/fa";
 
 function Navbar({ session }: { session: Session | null }) {
   return (
@@ -57,12 +58,22 @@ function Navbar({ session }: { session: Session | null }) {
             </Button>
           )}
           {session?.user?.role === "GUEST" && (
-            <Link
-              href={"/bookings"}
-              className={buttonVariants({ variant: "default" })}
-            >
-              Bookings history
-            </Link>
+            <>
+              <Link
+                href={"/bookings"}
+                className={buttonVariants({ variant: "default" })}
+              >
+                <FaHistory className="mr-1" />
+                Bookings
+              </Link>
+              <Link
+                href={"/profile"}
+                className={buttonVariants({ variant: "default" })}
+              >
+                <FaUser className="mr-1" />
+                Profile
+              </Link>
+            </>
           )}
           {!session?.user && (
             <Link

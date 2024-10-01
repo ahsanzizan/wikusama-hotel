@@ -20,10 +20,12 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-radio-group": "^1.2.0",
+    "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@types/nodemailer": "^6.4.16",
     "@types/react-icons": "^3.0.0",
+    "@types/validator": "^13.12.2",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.5.0",
@@ -46,6 +48,7 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "validator": "^13.12.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
