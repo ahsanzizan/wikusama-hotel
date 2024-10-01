@@ -59,7 +59,7 @@ export default function BookingForm({
   bookings,
   rooms,
 }: {
-  roomType: { id: string; price_per_night: number };
+  roomType: { id: string; type_name: string; price_per_night: number };
   bookings: {
     check_in_at: Date;
     check_out_at: Date;
@@ -137,7 +137,7 @@ export default function BookingForm({
       <CardHeader>
         <h1 className="mb-4">{toIDR(roomType.price_per_night)} / night</h1>
         <CardTitle className="mb-3">
-          You&apos;re on your way to book the Queen&apos;s Room
+          You&apos;re on your way to book the {roomType.type_name}
         </CardTitle>
         <CardDescription>
           Please pick a check in and check out date for us to check this

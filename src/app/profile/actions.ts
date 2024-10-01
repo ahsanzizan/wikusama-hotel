@@ -4,6 +4,7 @@ import { getServerSession } from "@/lib/next-auth";
 import { Gender, Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
+import { revalidatePath } from "next/cache";
 
 export async function updateProfile(data: {
   name?: string;
@@ -24,6 +25,7 @@ export async function updateProfile(data: {
       data: payload,
     });
 
+    revalidatePath("/", "layout");
     return { success: true, message: "Successfully updated profile!" };
   } catch (error) {
     console.log(error);
@@ -38,6 +40,7 @@ export async function deleteAccount(): Promise<ServerActionResponse> {
       where: { id: session?.user?.id },
     });
 
+    revalidatePath("/", "layout");
     return {
       success: true,
       message: `Your account (${deletedAccount.email}) has been deleted. You've been logged out.`,

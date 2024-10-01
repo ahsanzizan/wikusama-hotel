@@ -264,7 +264,7 @@ export default function UpdateProfileForm({
                     render={({ field }) => (
                       <FormItem className="flex flex-col space-y-1.5">
                         <FormLabel htmlFor="mobile_number">
-                          Mobile Number
+                          Mobile Number (08xxxxxxxxxx)
                         </FormLabel>
                         <FormControl>
                           <Input
