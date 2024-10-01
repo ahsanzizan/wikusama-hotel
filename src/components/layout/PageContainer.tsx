@@ -1,12 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FaDoorOpen, FaUser } from "react-icons/fa6";
-import { Button, buttonVariants } from "../ui/button";
 import { FaHistory } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
+import { buttonVariants } from "../ui/button";
 
 function Navbar({ session }: { session: Session | null }) {
   return (
@@ -48,15 +48,6 @@ function Navbar({ session }: { session: Session | null }) {
           </svg>
         </Link>
         <div className="flex items-center gap-4">
-          {session?.user && (
-            <Button
-              onClick={() => signOut({ callbackUrl: "/", redirect: true })}
-              variant={"destructive"}
-            >
-              <FaDoorOpen className="mr-1" />
-              Logout
-            </Button>
-          )}
           {session?.user?.role === "GUEST" && (
             <>
               <Link
@@ -68,7 +59,7 @@ function Navbar({ session }: { session: Session | null }) {
               </Link>
               <Link
                 href={"/profile"}
-                className={buttonVariants({ variant: "default" })}
+                className={buttonVariants({ variant: "secondary" })}
               >
                 <FaUser className="mr-1" />
                 Profile
@@ -83,21 +74,15 @@ function Navbar({ session }: { session: Session | null }) {
               Login
             </Link>
           )}
-          <Link
-            href={
-              session?.user!.role === "ADMIN"
-                ? "/admin"
-                : session?.user?.role === "RECEPTIONIST"
-                  ? "/receptionist"
-                  : "/rooms"
-            }
-            className={buttonVariants({ variant: "secondary" })}
-          >
-            {session?.user!.role === "ADMIN" ||
-            session?.user!.role === "RECEPTIONIST"
-              ? "Dashboard"
-              : "Book now"}
-          </Link>
+          {(session?.user?.role === "ADMIN" ||
+            session?.user?.role === "RECEPTIONIST") && (
+            <Link
+              href={session.user.role === "ADMIN" ? "/admin" : "/receptionist"}
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
       </div>
     </nav>

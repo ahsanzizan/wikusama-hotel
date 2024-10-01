@@ -280,7 +280,7 @@ export default function UpdateProfileForm({
                       </FormItem>
                     )}
                   />
-                  <div className="mt-4 flex w-full flex-col items-center gap-4">
+                  <div className="mb-8 mt-4 flex w-full flex-col items-center gap-4">
                     <Button
                       type="submit"
                       variant={"default"}
@@ -291,35 +291,51 @@ export default function UpdateProfileForm({
                     </Button>
                     <Button
                       type="button"
-                      onClick={async () => {
-                        setLoading(true);
-
-                        const toastId = toast.loading("Loading...");
-                        const result = await deleteAccount();
-
-                        if (!result.success) {
-                          setLoading(false);
-                          return toast.error(result.message, { id: toastId });
-                        }
-
-                        toast.success(result.message, {
-                          id: toastId,
-                        });
-
-                        await signOut({
-                          callbackUrl: "/",
-                        });
-
-                        setLoading(false);
-                        return router.push(`/`);
-                      }}
+                      onClick={() =>
+                        signOut({ callbackUrl: "/", redirect: true })
+                      }
                       variant={"destructive"}
                       className="w-full"
                       disabled={loading}
                     >
-                      Delete account
+                      Logout
                     </Button>
                   </div>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="h-[1px] w-full max-w-[45%] bg-neutral-300" />
+                    <p className="text-xs">OR</p>
+                    <div className="h-[1px] w-full max-w-[45%] bg-neutral-300" />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      setLoading(true);
+
+                      const toastId = toast.loading("Loading...");
+                      const result = await deleteAccount();
+
+                      if (!result.success) {
+                        setLoading(false);
+                        return toast.error(result.message, { id: toastId });
+                      }
+
+                      toast.success(result.message, {
+                        id: toastId,
+                      });
+
+                      await signOut({
+                        callbackUrl: "/",
+                      });
+
+                      setLoading(false);
+                      return router.push(`/`);
+                    }}
+                    variant={"destructive"}
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    Delete account
+                  </Button>
                 </div>
               </form>
             </Form>
