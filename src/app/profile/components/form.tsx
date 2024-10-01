@@ -29,12 +29,14 @@ import { cn } from "@/lib/utils";
 import { Gender } from "@prisma/client";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
-import { z } from "zod";
-import validator from "validator";
-import { toast } from "sonner";
-import { updateProfile } from "../actions";
 import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+import { toast } from "sonner";
+import validator from "validator";
+import { z } from "zod";
+import { deleteAccount, updateProfile } from "../actions";
+import { FaGoogle } from "react-icons/fa6";
+import { signOut } from "next-auth/react";
 
 const createUpdateProfileSchema = () => {
   const updateProfileSchema = z.object({
@@ -59,6 +61,8 @@ type UpdateProfileFormProps = {
   birthDate: Date | null;
   cityOfResidence: string | null;
   mobileNumber: string | null;
+  email: string;
+  usingGoogle: boolean;
 };
 
 export default function UpdateProfileForm({
@@ -67,6 +71,8 @@ export default function UpdateProfileForm({
   birthDate,
   cityOfResidence,
   mobileNumber,
+  email,
+  usingGoogle,
 }: UpdateProfileFormProps) {
   const form = useZodForm({
     schema: createUpdateProfileSchema(),
@@ -97,7 +103,7 @@ export default function UpdateProfileForm({
       return toast.error(result.message, { id: toastId });
     }
 
-    toast.success("Successfully updated your profile!", { id: toastId });
+    toast.success(result.message, { id: toastId });
     setLoading(false);
     return router.push(`/`);
   });
@@ -111,6 +117,11 @@ export default function UpdateProfileForm({
             <CardDescription>
               Update your profile to help us improve our customer experience.
             </CardDescription>
+            {usingGoogle && (
+              <div className="flex w-full items-center gap-1.5 text-sm font-semibold text-black">
+                <FaGoogle /> Using Google
+              </div>
+            )}
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -136,6 +147,13 @@ export default function UpdateProfileForm({
                       </FormItem>
                     )}
                   />
+                  <FormItem className="flex flex-col space-y-1.5">
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <FormControl>
+                      <Input defaultValue={email} disabled />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                   <FormField
                     control={form.control}
                     name="gender"
@@ -270,6 +288,36 @@ export default function UpdateProfileForm({
                       disabled={loading || isButtonDisabled}
                     >
                       Update
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={async () => {
+                        setLoading(true);
+
+                        const toastId = toast.loading("Loading...");
+                        const result = await deleteAccount();
+
+                        if (!result.success) {
+                          setLoading(false);
+                          return toast.error(result.message, { id: toastId });
+                        }
+
+                        toast.success(result.message, {
+                          id: toastId,
+                        });
+
+                        await signOut({
+                          callbackUrl: "/",
+                        });
+
+                        setLoading(false);
+                        return router.push(`/`);
+                      }}
+                      variant={"destructive"}
+                      className="w-full"
+                      disabled={loading}
+                    >
+                      Delete account
                     </Button>
                   </div>
                 </div>

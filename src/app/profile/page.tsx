@@ -11,6 +11,7 @@ export default async function Profile() {
   });
 
   if (!user) return notFound();
+  const usingGoogle = user.password === null;
 
   return (
     <PageContainer>
@@ -20,6 +21,8 @@ export default async function Profile() {
         birthDate={user.birth_date}
         cityOfResidence={user.city_of_residence}
         mobileNumber={user.mobile_number}
+        email={user.email}
+        usingGoogle={usingGoogle}
       />
     </PageContainer>
   );

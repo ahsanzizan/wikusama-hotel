@@ -30,3 +30,23 @@ export async function updateProfile(data: {
     return { success: false, message: "Something went wrong!" };
   }
 }
+
+export async function deleteAccount(): Promise<ServerActionResponse> {
+  try {
+    const session = await getServerSession();
+    const deletedAccount = await prisma.user.delete({
+      where: { id: session?.user?.id },
+    });
+
+    return {
+      success: true,
+      message: `Your account (${deletedAccount.email}) has been deleted. You've been logged out.`,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Something went wrong!",
+    };
+  }
+}
