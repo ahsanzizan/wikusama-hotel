@@ -16,7 +16,7 @@ export default withAuth(function middleware(_) {}, {
         return false;
       }
 
-      if (pathname.startsWith("/auth")) {
+      if (pathname.startsWith("/auth") && token) {
         return false;
       }
 
