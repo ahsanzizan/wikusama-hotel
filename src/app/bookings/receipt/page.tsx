@@ -1,10 +1,7 @@
 import PageContainer from "@/components/layout/PageContainer";
-import { buttonVariants } from "@/components/ui/button";
+import PageHeading from "@/components/layout/PageHeading";
 import prisma from "@/lib/prisma";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa6";
 import ReceiptContainer from "./components/ReceiptContainer";
 
 export default async function ReceiptPrinting({
@@ -26,25 +23,12 @@ export default async function ReceiptPrinting({
 
   return (
     <PageContainer>
-      <div className="mb-12 flex items-center gap-8">
-        <Link
-          href={"/bookings"}
-          className={cn(
-            buttonVariants({ variant: "secondary" }),
-            "group w-fit",
-          )}
-        >
-          <FaArrowLeft className="mr-1 transition-transform duration-300 group-hover:-translate-x-1" />{" "}
-          Back
-        </Link>
-        <div className="block text-white">
-          <h1 className="mb-3">Download Receipt</h1>
-          <p>
-            You can download your booking receipt that you got from your
-            bookings.
-          </p>
-        </div>
-      </div>
+      <PageHeading
+        title="Download Receipt"
+        description="You can download your booking receipt that you got from your
+            bookings."
+        backHref="/bookings"
+      />
       <ReceiptContainer booking={booking} />
     </PageContainer>
   );

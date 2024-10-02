@@ -1,4 +1,5 @@
 import PageContainer from "@/components/layout/PageContainer";
+import PageHeading from "@/components/layout/PageHeading";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { buttonVariants } from "@/components/ui/button";
 import { getServerSession } from "@/lib/next-auth";
@@ -6,7 +7,7 @@ import prisma from "@/lib/prisma";
 import { cn, getStayTime, groupBy, stringifyDate } from "@/lib/utils";
 import Link from "next/link";
 import { FaCalendarAlt } from "react-icons/fa";
-import { FaArrowLeft, FaCalendar, FaClock } from "react-icons/fa6";
+import { FaCalendar, FaClock } from "react-icons/fa6";
 
 export default async function Bookings() {
   const session = await getServerSession();
@@ -42,8 +43,8 @@ export default async function Bookings() {
               <div className="flex items-center gap-2">
                 <FaCalendarAlt />
                 <p className="text-black">
-                  {stringifyDate(booking.check_in_at)} -{" "}
-                  {stringifyDate(booking.check_out_at)}
+                  {stringifyDate(booking.check_in_at)} at 12:00 PM -{" "}
+                  {stringifyDate(booking.check_out_at)} at 12:00 PM
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -58,7 +59,10 @@ export default async function Bookings() {
         </div>
         <Link
           href={`/bookings/receipt?bookingId=${booking.id}`}
-          className={buttonVariants({ variant: "default" })}
+          className={cn(
+            buttonVariants({ variant: "default" }),
+            "w-full md:w-fit",
+          )}
         >
           Download receipt
         </Link>
@@ -70,27 +74,12 @@ export default async function Bookings() {
     <PageContainer>
       <SectionContainer id="bookings" className="pt-0">
         <div className="w-full text-white">
-          <div className="mb-12 flex items-center gap-8">
-            <Link
-              href={"/"}
-              className={cn(
-                buttonVariants({ variant: "secondary" }),
-                "group w-fit",
-              )}
-            >
-              <FaArrowLeft className="mr-1 transition-transform duration-300 group-hover:-translate-x-1" />{" "}
-              Back
-            </Link>
-            <div className="block text-white">
-              <h1 className="mb-3">
-                Bookings History of {session?.user?.name}
-              </h1>
-              <p>
-                You can view the booking details that you got from booking rooms
-                in Wikusama Hotel.
-              </p>
-            </div>
-          </div>
+          <PageHeading
+            title={`Bookings History of ${session?.user?.name}`}
+            description="You can view the booking details that you got from booking rooms
+                in Wikusama Hotel."
+            backHref="/"
+          />
           {bookings.length === 0 && <p>There&apos;s no bookings...</p>}
           <div className="flex w-full flex-col gap-10 divide-y divide-white md:gap-6">
             {bookedAtKeys.map((bookedAtKey) => (

@@ -1,9 +1,6 @@
 import PageContainer from "@/components/layout/PageContainer";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import PageHeading from "@/components/layout/PageHeading";
 import Image from "next/image";
-import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa6";
 
 export default function Tour() {
   function FacilityCard({
@@ -55,19 +52,7 @@ export default function Tour() {
 
   return (
     <PageContainer className="pb-28">
-      <div className="mb-12 flex w-full items-center gap-8">
-        <Link
-          href={"/"}
-          className={cn(
-            buttonVariants({ variant: "secondary" }),
-            "group w-fit",
-          )}
-        >
-          <FaArrowLeft className="mr-1 transition-transform duration-300 group-hover:-translate-x-1" />{" "}
-          Back
-        </Link>
-        <h1 className="text-center">Take a Tour</h1>
-      </div>
+      <PageHeading title="Take a Tour" description="" backHref="/" />
       <div className="flex w-full flex-col gap-[134px]">
         {facilities.map((facility, index) => (
           <FacilityCard key={index} {...facility} />

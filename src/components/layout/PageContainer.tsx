@@ -59,10 +59,11 @@ function Navbar({ session }: { session: Session | null }) {
               </Link>
               <Link
                 href={"/profile"}
-                className={buttonVariants({ variant: "secondary" })}
+                className={buttonVariants({
+                  variant: "secondary",
+                })}
               >
-                <FaUser className="mr-1" />
-                Profile
+                <FaUser className="" />
               </Link>
             </>
           )}

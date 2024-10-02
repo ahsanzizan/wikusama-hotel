@@ -110,8 +110,8 @@ export default function UpdateProfileForm({
 
   return (
     <>
-      <div className="p-5 shadow-md">
-        <Card className="w-full max-w-lg">
+      <div className="w-full p-5 shadow-md">
+        <Card className="w-full max-w-xl">
           <CardHeader>
             <CardTitle>Profile Settings</CardTitle>
             <CardDescription>
