@@ -8,29 +8,35 @@ import { Fragment, ReactNode, useRef, useState } from "react";
 import { FaBars, FaGauge, FaPersonBooth, FaUser, FaX } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
+const routes = [
+  {
+    title: "Rooms",
+    path: "/admin/rooms",
+    regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    icon: <FaPersonBooth />,
+  },
+  {
+    title: "Room Types",
+    path: "/admin/room-types",
+    regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    icon: <FaPersonBooth />,
+  },
+  {
+    title: "Recipients",
+    path: "/admin/recipients",
+    regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    icon: <FaUser />,
+  },
+  {
+    title: "Registered Users",
+    path: "/admin/users",
+    regex: /^\/admin\/users(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    icon: <FaUser />,
+  },
+];
+
 function Sidebar({ isActive }: { isActive: boolean }) {
   const pathname = usePathname();
-
-  const routes = [
-    {
-      title: "Rooms",
-      path: "/admin/rooms",
-      regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaPersonBooth />,
-    },
-    {
-      title: "Room Types",
-      path: "/admin/room-types",
-      regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaPersonBooth />,
-    },
-    {
-      title: "Receptionists",
-      path: "/admin/receptionists",
-      regex: /^\/admin\/receptionists(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaUser />,
-    },
-  ];
 
   return (
     <aside
@@ -105,27 +111,6 @@ function Sidebar({ isActive }: { isActive: boolean }) {
 function Navbar() {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const routes = [
-    {
-      title: "Rooms",
-      path: "/admin/rooms",
-      regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaPersonBooth />,
-    },
-    {
-      title: "Room Types",
-      path: "/admin/room-types",
-      regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaPersonBooth />,
-    },
-    {
-      title: "Recipients",
-      path: "/admin/recipients",
-      regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-      icon: <FaUser />,
-    },
-  ];
 
   function MenuItem({
     icon,

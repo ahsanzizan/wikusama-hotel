@@ -38,9 +38,9 @@ model user {
   city_of_residence  String?
   mobile_number      String?
 
-  booking   booking[]
-  room_type room_type[]
-  room      room[]
+  bookings   booking[]
+  room_types room_type[]
+  rooms      room[]
 
   @@map("users")
 }
