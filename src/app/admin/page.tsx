@@ -162,7 +162,7 @@ export default async function AdminRoot() {
           <BookingChart data={bookingData} />
         </div>
         <div className="w-full">
-          <h2 className="mb-2 w-full text-center">Revenue per-month</h2>
+          <h2 className="mb-2 w-full text-center">Revenue per-month Chart</h2>
           <RevenueChart data={revenueData} />
         </div>
       </div>
