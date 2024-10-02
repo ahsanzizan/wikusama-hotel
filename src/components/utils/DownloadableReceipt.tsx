@@ -62,13 +62,14 @@ const DownloadableReceipt = React.forwardRef(
         </div>
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-semibold">Room Details</h3>
-          <ul className="list-inside list-disc">
-            <li className="mb-1">
+          <div>
+            <p className="mb-1 font-semibold text-black">
               Room No. {booking.room.room_number} -{" "}
               {booking.room.room_type.type_name} (
               {toIDR(booking.room.room_type.price_per_night)} per night)
-            </li>
-          </ul>
+            </p>
+            <p>{booking.room.room_type.description}</p>
+          </div>
         </div>
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-semibold">Total Price</h3>
