@@ -1,8 +1,20 @@
+import BookingChart from "@/components/utils/BookingChart";
+import RevenueChart from "@/components/utils/RevenueChart";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
-import { toIDR } from "@/lib/utils";
+import { stringifyDate, toIDR } from "@/lib/utils";
 import { ReactNode } from "react";
 import { FaBook, FaHotel, FaMoneyBill } from "react-icons/fa6";
+
+type BookingData = {
+  date: string;
+  "Booking Count": number;
+};
+
+type RevenueData = {
+  month: string;
+  Revenue: number;
+};
 
 export default async function AdminRoot() {
   const session = await getServerSession();
@@ -12,6 +24,7 @@ export default async function AdminRoot() {
         room: { select: { room_type: { select: { price_per_night: true } } } },
         check_in_at: true,
         check_out_at: true,
+        booked_at: true,
       },
     }),
     prisma.room.findMany({
@@ -39,6 +52,59 @@ export default async function AdminRoot() {
 
     return laterBookings.length > 0 ? availableRooms : availableRooms + 1;
   }, 0);
+
+  const bookingCounts = bookings.reduce<Record<string, number>>(
+    (acc, booking) => {
+      // Extract the booking date (formatted as YYYY-MM-DD)
+      const bookingDate = stringifyDate(booking.booked_at);
+
+      // Initialize or increment the count for this booking date
+      acc[bookingDate] = (acc[bookingDate] || 0) + 1;
+
+      return acc;
+    },
+    {},
+  );
+
+  const bookingData: BookingData[] = Object.keys(bookingCounts).map((date) => ({
+    date,
+    "Booking Count": bookingCounts[date],
+  }));
+
+  const revenuePerMonth = bookings.reduce<Record<string, number>>(
+    (acc, booking) => {
+      // Calculate the number of nights for each booking
+      const nights =
+        (new Date(booking.check_out_at).getTime() -
+          new Date(booking.check_in_at).getTime()) /
+        (1000 * 60 * 60 * 24);
+
+      // Calculate the revenue for this booking
+      const bookingRevenue = nights * booking.room.room_type.price_per_night;
+
+      // Extract the booking month in the format 'YYYY-MM'
+      const bookingMonth = new Date(booking.booked_at)
+        .toISOString()
+        .slice(0, 7); // e.g., '2024-09'
+
+      // Sum the revenue per month
+      if (!acc[bookingMonth]) {
+        acc[bookingMonth] = bookingRevenue;
+      } else {
+        acc[bookingMonth] += bookingRevenue;
+      }
+
+      return acc;
+    },
+    {},
+  );
+
+  const revenueData: RevenueData[] = Object.keys(revenuePerMonth).map(
+    (month) => ({
+      month,
+      Revenue: revenuePerMonth[month],
+    }),
+  );
 
   function StatsCard({
     icon,
@@ -71,7 +137,7 @@ export default async function AdminRoot() {
           statistics, manage receptionist accounts, manage rooms, and more.
         </p>
       </div>
-      <div className="block">
+      <div className="mb-12 block">
         <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
           <StatsCard
             icon={<FaMoneyBill className="size-10" />}
@@ -88,6 +154,16 @@ export default async function AdminRoot() {
             title="Available Rooms"
             stats={availableRooms.toString()}
           />
+        </div>
+      </div>
+      <div className="flex flex-col gap-12">
+        <div className="w-full">
+          <h2 className="mb-2 w-full text-center">Bookings per-day Chart</h2>
+          <BookingChart data={bookingData} />
+        </div>
+        <div className="w-full">
+          <h2 className="mb-2 w-full text-center">Revenue per-month</h2>
+          <RevenueChart data={revenueData} />
         </div>
       </div>
     </>
