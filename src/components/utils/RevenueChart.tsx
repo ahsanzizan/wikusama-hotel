@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomTooltip({ active, payload }: any) {
   if (active && payload && payload.length) {
     const { month, Revenue } = payload[0].payload;
