@@ -16,6 +16,10 @@ export default withAuth(function middleware(_) {}, {
         return false;
       }
 
+      if (pathname.startsWith("/auth")) {
+        return false;
+      }
+
       return true;
     },
   },
