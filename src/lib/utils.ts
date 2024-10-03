@@ -1,4 +1,5 @@
 import { roomsWithBookings } from "@/types/relations";
+import { RevenueData } from "@/types/utils";
 import { BookingStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { randomFillSync } from "crypto";
@@ -19,21 +20,22 @@ export function generateRandomString(length: number): string {
   return buffer.toString("base64").slice(0, length);
 }
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export function stringifyDate(date: Date, full?: boolean) {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
   const year = date.getFullYear(),
     month = ("0" + (date.getMonth() + 1)).slice(-2),
     day = ("0" + date.getDate()).slice(-2),
@@ -210,4 +212,40 @@ export function groupBy<T>(
     },
     {} as { [key: string]: T[] },
   );
+}
+
+export function calculateRevenueGrowth(revenueData: RevenueData[]) {
+  const currentMonthIndex = new Date().getMonth();
+  const currentMonthRevenue = revenueData.find(
+    (revenue) => new Date(revenue.month).getMonth() === currentMonthIndex,
+  );
+  const previousMonthRevenue = revenueData.find(
+    (revenue) => new Date(revenue.month).getMonth() === currentMonthIndex - 1,
+  );
+
+  if (!previousMonthRevenue || !currentMonthRevenue) return 0;
+
+  const revenueGrowth =
+    (currentMonthRevenue.Revenue - previousMonthRevenue.Revenue) /
+    previousMonthRevenue.Revenue;
+
+  return revenueGrowth;
+}
+
+export function calculateUserGrowth(users: { created_at: Date }[]) {
+  const currentMonthIndex = new Date().getMonth();
+  const previousMonthIndex = currentMonthIndex - 1;
+
+  const currentMonthUsers = users.filter(
+    (user) => user.created_at.getMonth() === currentMonthIndex,
+  );
+  const previousMonthUsers = users.filter(
+    (user) => user.created_at.getMonth() === previousMonthIndex,
+  );
+
+  const usersGrowth =
+    (currentMonthUsers.length - previousMonthUsers.length) /
+    previousMonthUsers.length;
+
+  return usersGrowth;
 }

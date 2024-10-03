@@ -1,5 +1,6 @@
 "use client";
 import { toIDR } from "@/lib/utils";
+import { RevenueData } from "@/types/utils";
 import {
   CartesianGrid,
   Legend,
@@ -33,11 +34,7 @@ function CustomTooltip({ active, payload }: any) {
   return null;
 }
 
-export default function RevenueChart({
-  data,
-}: {
-  data: { month: string; Revenue: number }[];
-}) {
+export default function RevenueChart({ data }: { data: RevenueData[] }) {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart

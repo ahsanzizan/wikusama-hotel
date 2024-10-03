@@ -1,4 +1,5 @@
 "use client";
+import { BookingData } from "@/types/utils";
 import {
   CartesianGrid,
   Legend,
@@ -10,11 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-export default function BookingChart({
-  data,
-}: {
-  data: { date: string; "Booking Count": number }[];
-}) {
+export default function BookingChart({ data }: { data: BookingData[] }) {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart

@@ -2,23 +2,19 @@ import BookingChart from "@/components/utils/BookingChart";
 import RevenueChart from "@/components/utils/RevenueChart";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
-import { stringifyDate, toIDR } from "@/lib/utils";
+import {
+  calculateRevenueGrowth,
+  calculateUserGrowth,
+  stringifyDate,
+  toIDR,
+} from "@/lib/utils";
+import { BookingData, RevenueData } from "@/types/utils";
 import { ReactNode } from "react";
-import { FaBook, FaHotel, FaMoneyBill } from "react-icons/fa6";
-
-type BookingData = {
-  date: string;
-  "Booking Count": number;
-};
-
-type RevenueData = {
-  month: string;
-  Revenue: number;
-};
+import { FaBook, FaChartSimple, FaHotel, FaMoneyBill } from "react-icons/fa6";
 
 export default async function AdminRoot() {
   const session = await getServerSession();
-  const [bookings, rooms] = await prisma.$transaction([
+  const [bookings, rooms, users] = await prisma.$transaction([
     prisma.booking.findMany({
       select: {
         room: { select: { room_type: { select: { price_per_night: true } } } },
@@ -30,6 +26,7 @@ export default async function AdminRoot() {
     prisma.room.findMany({
       include: { bookings: { select: { check_out_at: true } } },
     }),
+    prisma.user.findMany({ select: { created_at: true } }),
   ]);
 
   const totalRevenue = bookings.reduce((totalRevenue, booking) => {
@@ -106,6 +103,9 @@ export default async function AdminRoot() {
     }),
   );
 
+  const revenueGrowth = calculateRevenueGrowth(revenueData) * 100;
+  const usersGrowth = calculateUserGrowth(users);
+
   function StatsCard({
     icon,
     title,
@@ -154,9 +154,19 @@ export default async function AdminRoot() {
             title="Available Rooms"
             stats={availableRooms.toString()}
           />
+          <StatsCard
+            icon={<FaChartSimple className="size-10" />}
+            title="Revenue Growth (/month)"
+            stats={`${revenueGrowth}%`}
+          />
+          <StatsCard
+            icon={<FaChartSimple className="size-10" />}
+            title="User Growth (/month)"
+            stats={`${usersGrowth}%`}
+          />
         </div>
       </div>
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col items-center lg:flex-row">
         <div className="w-full">
           <h2 className="mb-2 w-full text-center">Bookings per-day Chart</h2>
           <BookingChart data={bookingData} />
