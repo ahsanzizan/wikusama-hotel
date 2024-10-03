@@ -157,12 +157,12 @@ export default async function AdminRoot() {
           <StatsCard
             icon={<FaChartSimple className="size-10" />}
             title="Revenue Growth (/month)"
-            stats={`${revenueGrowth}%`}
+            stats={`${revenueGrowth * 100}%`}
           />
           <StatsCard
             icon={<FaChartSimple className="size-10" />}
             title="User Growth (/month)"
-            stats={`${usersGrowth}%`}
+            stats={`${usersGrowth * 100}%`}
           />
         </div>
       </div>
