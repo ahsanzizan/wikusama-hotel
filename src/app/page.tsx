@@ -4,6 +4,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { cn, stringifyDate } from "@/lib/utils";
 import { roomTypesWithRoomsCount } from "@/types/relations";
+import { review } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -212,44 +213,17 @@ function Rooms({ roomTypes }: { roomTypes: roomTypesWithRoomsCount[] }) {
   );
 }
 
-function Testimonies() {
-  const testimonies = [
-    {
-      testimony:
-        "My stay at Wikusama Hotel was nothing short of extraordinary. From the moment I arrived, the staff made me feel incredibly welcome. The room was impeccably clean and offered a stunning view of the city. Every detail, from the comfort of the bed to the quality of room service, was meticulously cared for. I will definitely be returning to Wikusama Hotel for my next trip!",
-      date: new Date("12 August 2023"),
-      name: "John Doe",
-      photo:
-        "https://plus.unsplash.com/premium_photo-1664536392896-cd1743f9c02c?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      testimony:
-        "Wikusama Hotel exceeded all of my expectations! The hospitality was world-class, and the facilities were top-notch. I particularly enjoyed the luxurious spa and the gourmet dining options available on-site. The hotel is located in a prime spot, making it easy to explore nearby attractions. This was the perfect retreat after a long day of sightseeing, and I can’t recommend it highly enough.",
-      date: new Date("15 August 2023"),
-      name: "Jane Smith",
-      photo:
-        "https://plus.unsplash.com/premium_photo-1664541336692-e931d407ba88?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      testimony:
-        "Staying at Wikusama Hotel was an unforgettable experience. The staff went above and beyond to make sure I had everything I needed. The rooms were spacious, beautifully decorated, and very comfortable. I loved the attention to detail, from the welcome drink to the personalized notes left in my room. It felt like a home away from home, and I would highly recommend it to anyone visiting the area.",
-      date: new Date("20 August 2023"),
-      name: "Michael Brown",
-      photo:
-        "https://plus.unsplash.com/premium_photo-1675130119373-61ada6685d63?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
-
+function Testimonies({ reviews }: { reviews: review[] }) {
   function TestimonyCard({
     testimony,
     date,
     name,
-    photo,
+    rate,
   }: {
     testimony: string;
     date: Date;
     name: string;
-    photo: string;
+    rate: number;
   }) {
     return (
       <div className="rounded-lg border border-neutral-500 px-8 py-7">
@@ -258,11 +232,9 @@ function Testimonies() {
             <time dateTime={date.toDateString()}>{stringifyDate(date)}</time>
           </p>
           <div className="flex items-center gap-1">
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
+            {Array.from({ length: rate }).map((_, index) => (
+              <FaStar key={index} />
+            ))}
           </div>
         </div>
         <p className="mb-7 leading-5">
@@ -270,15 +242,7 @@ function Testimonies() {
           {testimony}
         </p>
         <div className="flex items-center gap-4">
-          <Image
-            src={photo}
-            width={42}
-            height={42}
-            alt={`Photo of ${name}`}
-            className="size-11 rounded-full object-cover"
-            unoptimized
-          />
-          <p className="text-white">{name}</p>
+          <p className="text-lg font-medium text-white">{name}</p>
         </div>
       </div>
     );
@@ -291,8 +255,14 @@ function Testimonies() {
         <p>We made sure our clients satisfied with our service.</p>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-        {testimonies.map((testimony, index) => (
-          <TestimonyCard key={index} {...testimony} />
+        {reviews.map((review) => (
+          <TestimonyCard
+            key={review.id}
+            name={review.guest_name}
+            date={review.submitted_at}
+            testimony={review.testimony}
+            rate={review.rate}
+          />
         ))}
       </div>
     </SectionContainer>
@@ -300,17 +270,20 @@ function Testimonies() {
 }
 
 export default async function Home() {
-  const roomTypes = await prisma.room_type.findMany({
-    include: { rooms: { include: { bookings: true } } },
-    take: 3,
-  });
+  const [roomTypes, reviews] = await prisma.$transaction([
+    prisma.room_type.findMany({
+      include: { rooms: { include: { bookings: true } } },
+      take: 3,
+    }),
+    prisma.review.findMany({ take: 3 }),
+  ]);
 
   return (
     <PageContainer>
       <Hero />
       <Facilities />
       <Rooms roomTypes={roomTypes} />
-      <Testimonies />
+      <Testimonies reviews={reviews} />
     </PageContainer>
   );
 }
