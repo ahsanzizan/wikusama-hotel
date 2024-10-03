@@ -22,8 +22,8 @@ const routes = [
     icon: <FaPersonBooth />,
   },
   {
-    title: "Recipients",
-    path: "/admin/recipients",
+    title: "Receptionists",
+    path: "/admin/receptionists",
     regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
     icon: <FaUser />,
   },
