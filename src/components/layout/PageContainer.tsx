@@ -1,12 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { FaHistory } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 
 function Navbar({ session }: { session: Session | null }) {
   return (
@@ -74,6 +74,14 @@ function Navbar({ session }: { session: Session | null }) {
             >
               Login
             </Link>
+          )}
+          {session?.user?.role === "RECEPTIONIST" && (
+            <Button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className={buttonVariants({ variant: "destructive" })}
+            >
+              Logout
+            </Button>
           )}
           {(session?.user?.role === "ADMIN" ||
             session?.user?.role === "RECEPTIONIST") && (

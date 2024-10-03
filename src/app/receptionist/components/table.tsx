@@ -96,7 +96,7 @@ export default function BookingsTable({
     setFilteredBookings(
       filterBookings(bookings, bookingDateFilter, stayTimeFilter),
     );
-  }, [bookingDateFilter, stayTimeFilter]);
+  }, [bookingDateFilter, bookings, stayTimeFilter]);
 
   const columns: TableColumn<bookingWithRoomAndRoomType>[] = [
     {
@@ -122,12 +122,12 @@ export default function BookingsTable({
     {
       name: "Night(s) Count",
       selector: (row) => getStayTime(row.check_in_at, row.check_out_at),
-      sortable: false,
+      sortable: true,
     },
     {
       name: "Room No.",
       selector: (row) => row.room.room_number,
-      sortable: false,
+      sortable: true,
     },
     {
       name: "Room Type",

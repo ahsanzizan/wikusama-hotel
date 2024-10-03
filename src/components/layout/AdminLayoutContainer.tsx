@@ -24,7 +24,7 @@ const routes = [
   {
     title: "Receptionists",
     path: "/admin/receptionists",
-    regex: /^\/admin\/recipients(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    regex: /^\/admin\/receptionists(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
     icon: <FaUser />,
   },
   {

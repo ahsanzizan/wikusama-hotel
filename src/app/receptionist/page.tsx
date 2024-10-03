@@ -1,6 +1,7 @@
 import PageContainer from "@/components/layout/PageContainer";
 import prisma from "@/lib/prisma";
 import BookingsTable from "./components/table";
+import PageHeading from "@/components/layout/PageHeading";
 
 export default async function Receptionist() {
   const bookings = await prisma.booking.findMany({
@@ -18,13 +19,12 @@ export default async function Receptionist() {
   return (
     <PageContainer>
       <div className="w-full">
-        <div className="mb-12 w-full">
-          <h1 className="mb-3">Guest&apos;s Bookings</h1>
-          <p>
-            You can view room bookings and change the booking status after the
-            stay is confirmed by the guest.
-          </p>
-        </div>
+        <PageHeading
+          title="Guest's Bookings"
+          description="You can view room bookings and change the booking status after the
+            stay is confirmed by the guest."
+          backHref="/"
+        />
         <BookingsTable bookings={bookings} />
       </div>
     </PageContainer>
