@@ -57,15 +57,26 @@ export default async function Bookings() {
             </div>
           </div>
         </div>
-        <Link
-          href={`/bookings/receipt?bookingId=${booking.id}`}
-          className={cn(
-            buttonVariants({ variant: "default" }),
-            "w-full md:w-fit",
-          )}
-        >
-          Download receipt
-        </Link>
+        <div className="flex w-full flex-col gap-2 md:w-fit md:flex-row">
+          <Link
+            href={`/bookings/receipt?bookingId=${booking.id}`}
+            className={cn(
+              buttonVariants({ variant: "default" }),
+              "w-full md:w-fit",
+            )}
+          >
+            Download receipt
+          </Link>
+          <Link
+            href={`/bookings/review?bookingId=${booking.id}`}
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "w-full md:w-fit",
+            )}
+          >
+            Rate stay
+          </Link>
+        </div>
       </div>
     );
   }

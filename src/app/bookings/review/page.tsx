@@ -1,11 +1,12 @@
 import PageContainer from "@/components/layout/PageContainer";
 import PageHeading from "@/components/layout/PageHeading";
 import prisma from "@/lib/prisma";
+import { stringifyDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
-import ReceiptContainer from "./components/ReceiptContainer";
+import ReviewForm from "./components/form";
 import { getServerSession } from "@/lib/next-auth";
 
-export default async function ReceiptPrinting({
+export default async function RateStay({
   searchParams,
 }: {
   searchParams: { bookingId?: string };
@@ -27,12 +28,16 @@ export default async function ReceiptPrinting({
   return (
     <PageContainer>
       <PageHeading
-        title="Download Receipt"
-        description="You can download your booking receipt that you got from your
-            bookings."
+        title={`Rate Your Stay at Room No. ${booking.room.room_number}`}
+        description="Rate your stay at our hotel, please review your stay with honesty to help us improve our customer's experience."
         backHref="/bookings"
+        isSmall
       />
-      <ReceiptContainer booking={booking} />
+      {new Date().getTime() > booking.check_out_at.getTime() ? (
+        <ReviewForm bookingId={bookingId} />
+      ) : (
+        <p>You can rate this stay at {stringifyDate(booking.check_out_at)}</p>
+      )}
     </PageContainer>
   );
 }
