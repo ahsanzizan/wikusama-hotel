@@ -16,13 +16,16 @@ export default async function RateStay({
 
   const session = await getServerSession();
 
-  const booking = await prisma.booking.findUnique({
-    where: { id: bookingId },
-    include: {
-      room: { include: { room_type: true } },
-      guest: { select: { name: true, email: true } },
-    },
-  });
+  const [booking, review] = await prisma.$transaction([
+    prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        room: { include: { room_type: true } },
+        guest: { select: { name: true, email: true } },
+      },
+    }),
+    prisma.review.findFirst({ where: { bookingId } }),
+  ]);
   if (!booking || booking.guestId !== session?.user?.id) return notFound();
 
   return (
@@ -38,6 +41,7 @@ export default async function RateStay({
       ) : (
         <p>You can rate this stay at {stringifyDate(booking.check_out_at)}</p>
       )}
+      {!!review && <p>You have already reviewed this stay</p>}
     </PageContainer>
   );
 }
