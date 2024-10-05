@@ -33,4 +33,4 @@ You can head over to [the pull requests](https://github.com/ahsanzizan/wikusama-
 
 ## Deployment
 
-This app has been deployed at wikusama-hotel.ahsanziza.xyz
+This app has been deployed at [wikusama-hotel.ahsanzizan.xyz](https://wikusama-hotel.ahsanzizan.xyz)
