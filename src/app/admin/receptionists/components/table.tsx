@@ -2,10 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { stringifyDate } from "@/lib/utils";
 import { user } from "@prisma/client";
+import { Pencil, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { FaPencilAlt, FaRegTrashAlt } from "react-icons/fa";
 import { toast } from "sonner";
 import { deleteReceptionist } from "../actions";
 import ReceptionistModal from "./modal";
@@ -75,14 +75,14 @@ export default function ReceptionistsTable({
             title="Edit Competition"
             className="me-2 rounded bg-blue-100 p-2.5 text-xs font-medium text-blue-800 transition-all hover:bg-blue-700 hover:text-white"
           >
-            <FaPencilAlt />
+            <Pencil />
           </button>
           <button
             onClick={() => deleteAction(row.id)}
             title="Delete Competition"
             className="me-2 rounded bg-red-100 p-2.5 text-xs font-medium text-red-800 transition-all hover:bg-red-700 hover:text-white"
           >
-            <FaRegTrashAlt />
+            <Trash />
           </button>
         </div>
       ),

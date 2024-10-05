@@ -12,9 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { useZodForm } from "@/hooks/useZodForm";
 import { user } from "@prisma/client";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaX } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
 import { upsertReciptionist } from "../actions";
@@ -75,7 +75,7 @@ export default function ReceptionistModal({
             onClick={() => setIsOpenModal(false)}
             type="button"
           >
-            <FaX size={16} />
+            <X size={16} />
           </button>
         </div>
         <Form {...form}>

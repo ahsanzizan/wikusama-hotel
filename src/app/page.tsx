@@ -5,25 +5,27 @@ import prisma from "@/lib/prisma";
 import { cn, stringifyDate } from "@/lib/utils";
 import { roomTypesWithRoomsCount } from "@/types/relations";
 import { review } from "@prisma/client";
+import {
+  Building,
+  CalendarArrowDown,
+  CalendarArrowUp,
+  Dumbbell,
+  Gamepad,
+  Lightbulb,
+  LocateFixed,
+  ParkingCircle,
+  Play,
+  Quote,
+  Star,
+  User,
+  WashingMachine,
+  Wifi,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FaParking, FaSwimmer } from "react-icons/fa";
-import {
-  FaBowlFood,
-  FaBuilding,
-  FaCalendar,
-  FaDumbbell,
-  FaGamepad,
-  FaJugDetergent,
-  FaLightbulb,
-  FaLocationPin,
-  FaPlay,
-  FaQuoteLeft,
-  FaStar,
-  FaUser,
-  FaWifi,
-} from "react-icons/fa6";
+import { FaSwimmer } from "react-icons/fa";
+import { FaBowlFood } from "react-icons/fa6";
 
 function Hero() {
   return (
@@ -54,7 +56,7 @@ function Hero() {
               className={cn("group flex items-center gap-3")}
             >
               <span className={cn("rounded-full")}>
-                <FaPlay className="size-7" />
+                <Play className="size-7" />
               </span>
               Take a tour
             </Link>
@@ -72,23 +74,23 @@ function Hero() {
         <div className="absolute bottom-16 left-0 hidden w-full lg:block">
           <div className="flex w-full flex-col items-start justify-between gap-2 bg-black px-8 py-10 md:flex-row md:items-center md:gap-0">
             <div className="flex items-start gap-2">
-              <FaLocationPin />
+              <LocateFixed />
               <p>Various Locations</p>
             </div>
             <div className="flex items-start gap-2">
-              <FaBuilding />
+              <Building />
               <p>Various Rooms</p>
             </div>
             <div className="flex items-start gap-2">
-              <FaUser />
+              <User />
               <p>Various Bed Sizes</p>
             </div>
             <div className="flex items-start gap-2">
-              <FaCalendar />
+              <CalendarArrowUp />
               <p>Flexible Check-in</p>
             </div>
             <div className="flex items-start gap-2">
-              <FaCalendar />
+              <CalendarArrowDown />
               <p>Flexible Check-out</p>
             </div>
           </div>
@@ -116,13 +118,13 @@ function Facilities() {
 
   const facilities = [
     { icon: <FaSwimmer className="size-10" />, title: "Swimming Pool" },
-    { icon: <FaWifi className="size-10" />, title: "WiFi" },
+    { icon: <Wifi className="size-10" />, title: "WiFi" },
     { icon: <FaBowlFood className="size-10" />, title: "Breakfast and Lunch" },
-    { icon: <FaDumbbell className="size-10" />, title: "Gym Center" },
-    { icon: <FaGamepad className="size-10" />, title: "Game Center" },
-    { icon: <FaLightbulb className="size-10" />, title: "24/7 Light" },
-    { icon: <FaJugDetergent className="size-10" />, title: "Laundry" },
-    { icon: <FaParking className="size-10" />, title: "Parking Space" },
+    { icon: <Dumbbell className="size-10" />, title: "Gym Center" },
+    { icon: <Gamepad className="size-10" />, title: "Game Center" },
+    { icon: <Lightbulb className="size-10" />, title: "24/7 Light" },
+    { icon: <WashingMachine className="size-10" />, title: "Laundry" },
+    { icon: <ParkingCircle className="size-10" />, title: "Parking Space" },
   ];
 
   return (
@@ -233,12 +235,12 @@ function Testimonies({ reviews }: { reviews: review[] }) {
           </p>
           <div className="flex items-center gap-1">
             {Array.from({ length: rate }).map((_, index) => (
-              <FaStar key={index} />
+              <Star key={index} />
             ))}
           </div>
         </div>
         <p className="mb-7 leading-5">
-          <FaQuoteLeft className="mb-1" />
+          <Quote className="mb-1" />
           {testimony}
         </p>
         <div className="flex items-center gap-4">

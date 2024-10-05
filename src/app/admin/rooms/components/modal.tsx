@@ -11,15 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useZodForm } from "@/hooks/useZodForm";
-import { roomWithBookingsAndType } from "@/types/relations";
-import { room_type } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
-import { FaX } from "react-icons/fa6";
-import { toast } from "sonner";
-import { z } from "zod";
-import { upsertRoom } from "../actions";
 import {
   Select,
   SelectContent,
@@ -27,6 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useZodForm } from "@/hooks/useZodForm";
+import { roomWithBookingsAndType } from "@/types/relations";
+import { room_type } from "@prisma/client";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+import { upsertRoom } from "../actions";
 
 function createRoomSchema() {
   const roomSchema = z.object({
@@ -92,7 +92,7 @@ export default function RoomModal({
             onClick={() => setIsOpenModal(false)}
             type="button"
           >
-            <FaX size={16} />
+            <X size={16} />
           </button>
         </div>
         <Form {...form}>

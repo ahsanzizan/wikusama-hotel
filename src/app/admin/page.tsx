@@ -9,8 +9,9 @@ import {
   toIDR,
 } from "@/lib/utils";
 import { BookingData, RevenueData } from "@/types/utils";
+import { Book, ChartArea, Hotel } from "lucide-react";
 import { ReactNode } from "react";
-import { FaBook, FaChartSimple, FaHotel, FaMoneyBill } from "react-icons/fa6";
+import { FaMoneyBill } from "react-icons/fa6";
 
 export default async function AdminRoot() {
   const session = await getServerSession();
@@ -145,22 +146,22 @@ export default async function AdminRoot() {
             stats={toIDR(totalRevenue)}
           />
           <StatsCard
-            icon={<FaBook className="size-10" />}
+            icon={<Book className="size-10" />}
             title="Total Bookings"
             stats={bookings.length.toString()}
           />
           <StatsCard
-            icon={<FaHotel className="size-10" />}
+            icon={<Hotel className="size-10" />}
             title="Available Rooms"
             stats={availableRooms.toString()}
           />
           <StatsCard
-            icon={<FaChartSimple className="size-10" />}
+            icon={<ChartArea className="size-10" />}
             title="Revenue Growth (/month)"
             stats={`${revenueGrowth * 100}%`}
           />
           <StatsCard
-            icon={<FaChartSimple className="size-10" />}
+            icon={<ChartArea className="size-10" />}
             title="User Growth (/month)"
             stats={`${usersGrowth * 100}%`}
           />

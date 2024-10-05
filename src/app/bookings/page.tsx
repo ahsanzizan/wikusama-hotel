@@ -5,9 +5,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
 import { cn, getStayTime, groupBy, stringifyDate } from "@/lib/utils";
+import { Calendar, CalendarFold, Clock } from "lucide-react";
 import Link from "next/link";
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaCalendar, FaClock } from "react-icons/fa6";
 
 export default async function Bookings() {
   const session = await getServerSession();
@@ -33,7 +32,7 @@ export default async function Bookings() {
     return (
       <div className="flex w-full flex-col items-start justify-between gap-8 rounded-md bg-white px-7 py-5 text-black md:flex-row md:items-center md:gap-0">
         <div className="flex w-full items-center gap-5">
-          <FaCalendar className="size-12 text-neutral-500" />
+          <CalendarFold className="size-12 text-neutral-500" />
           <div className="block">
             <h2 className="mb-1">
               {booking.room.room_type.type_name} No. {booking.room.room_number}
@@ -41,14 +40,14 @@ export default async function Bookings() {
             <p className="mb-4">{booking.room.room_type.description}</p>
             <div className="flex flex-col gap-6 md:flex-row md:items-center">
               <div className="flex items-center gap-2">
-                <FaCalendarAlt />
+                <Calendar />
                 <p className="text-black">
                   {stringifyDate(booking.check_in_at)} at 12:00 PM -{" "}
                   {stringifyDate(booking.check_out_at)} at 12:00 PM
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <FaClock />
+                <Clock />
                 <p className="text-black">
                   {getStayTime(booking.check_in_at, booking.check_out_at)}{" "}
                   day(s) stay

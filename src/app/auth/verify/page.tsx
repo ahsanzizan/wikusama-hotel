@@ -1,9 +1,9 @@
 import { buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
+import { ArrowLeft, CheckCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 
 export default async function VerifyEmail({
   searchParams,
@@ -29,7 +29,7 @@ export default async function VerifyEmail({
     <main className="flex h-screen w-screen items-center justify-center">
       <div className="flex flex-col items-center">
         <div className="bg-primary-50 text-primary-400 mb-8 inline-block rounded-full p-[18px]">
-          <FaCheck className="size-20" />
+          <CheckCheck className="size-20" />
         </div>
         <h2 className="mb-3">Successfully Verified Your Account</h2>
         <p className="mb-[34px]">
@@ -39,7 +39,7 @@ export default async function VerifyEmail({
           href="/auth/login"
           className={cn(buttonVariants({ variant: "outline" }), "group")}
         >
-          <FaArrowLeft className="mr-2 transition-transform duration-300 group-hover:-translate-x-1" />{" "}
+          <ArrowLeft className="mr-2 transition-transform duration-300 group-hover:-translate-x-1" />{" "}
           Login to account
         </Link>
       </div>

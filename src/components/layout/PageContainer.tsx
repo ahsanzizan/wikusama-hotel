@@ -1,11 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { History, User } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FaHistory } from "react-icons/fa";
-import { FaUser } from "react-icons/fa6";
 import { Button, buttonVariants } from "../ui/button";
 
 function Navbar({ session }: { session: Session | null }) {
@@ -54,7 +53,7 @@ function Navbar({ session }: { session: Session | null }) {
                 href={"/bookings"}
                 className={buttonVariants({ variant: "default" })}
               >
-                <FaHistory className="mr-1" />
+                <History className="mr-1" />
                 Bookings
               </Link>
               <Link
@@ -63,7 +62,7 @@ function Navbar({ session }: { session: Session | null }) {
                   variant: "secondary",
                 })}
               >
-                <FaUser className="" />
+                <User />
               </Link>
             </>
           )}

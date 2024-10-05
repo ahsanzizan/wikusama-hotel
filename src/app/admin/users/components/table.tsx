@@ -2,10 +2,10 @@
 import { stringifyDate } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { differenceInYears } from "date-fns";
+import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { toast } from "sonner";
 import { deleteUser } from "../actions";
 
@@ -82,7 +82,7 @@ export default function GuestsTable({
           title="Delete Competition"
           className="me-2 rounded bg-red-100 p-2.5 text-xs font-medium text-red-800 transition-all hover:bg-red-700 hover:text-white"
         >
-          <FaRegTrashAlt />
+          <Trash />
         </button>
       ),
     },

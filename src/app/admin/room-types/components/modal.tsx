@@ -14,9 +14,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useZodForm } from "@/hooks/useZodForm";
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/utils";
 import { room_type } from "@prisma/client";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaX } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
 import { upsertRoomType } from "../actions";
@@ -102,7 +102,7 @@ export default function RoomTypeModal({
             onClick={() => setIsOpenModal(false)}
             type="button"
           >
-            <FaX size={16} />
+            <X size={16} />
           </button>
         </div>
         <Form {...form}>

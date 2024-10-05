@@ -1,11 +1,11 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { Bed, BedDouble, BookKey, Gauge, Menu, User, X } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, ReactNode, useRef, useState } from "react";
-import { FaBars, FaGauge, FaPersonBooth, FaUser, FaX } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
 const routes = [
@@ -13,25 +13,25 @@ const routes = [
     title: "Rooms",
     path: "/admin/rooms",
     regex: /^\/admin\/rooms(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-    icon: <FaPersonBooth />,
+    icon: <Bed />,
   },
   {
     title: "Room Types",
     path: "/admin/room-types",
     regex: /^\/admin\/room-types(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-    icon: <FaPersonBooth />,
+    icon: <BedDouble />,
   },
   {
     title: "Receptionists",
     path: "/admin/receptionists",
     regex: /^\/admin\/receptionists(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-    icon: <FaUser />,
+    icon: <BookKey />,
   },
   {
     title: "Registered Users",
     path: "/admin/users",
     regex: /^\/admin\/users(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
-    icon: <FaUser />,
+    icon: <User />,
   },
 ];
 
@@ -70,7 +70,7 @@ function Sidebar({ isActive }: { isActive: boolean }) {
                   href={"/admin"}
                   className="text-primary-400 group flex items-center rounded-lg p-2 text-base font-normal text-black transition-all hover:bg-neutral-300"
                 >
-                  <FaGauge />
+                  <Gauge />
                   <p className="ml-2 whitespace-nowrap font-semibold text-black">
                     Dashboard
                   </p>
@@ -159,9 +159,9 @@ function Navbar() {
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? (
-            <FaX className="text-black" />
+            <X className="text-black" />
           ) : (
-            <FaBars className="text-black" />
+            <Menu className="text-black" />
           )}
         </button>
       </div>
@@ -173,7 +173,7 @@ function Navbar() {
         <div className="mx-5 my-[21px] flex flex-col items-start justify-start gap-8 text-start">
           <ul className="w-full space-y-4 pb-2">
             <MenuItem
-              icon={<FaGauge />}
+              icon={<Gauge />}
               title="Dashboard"
               href="/admin"
               regex={/^\/admin(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/}

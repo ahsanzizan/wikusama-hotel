@@ -2,13 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { roomTypesWithRoomsCount } from "@/types/relations";
 import { room_type } from "@prisma/client";
+import { Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { deleteRoomType } from "../actions";
 import RoomTypeModal from "./modal";
-import { FaPencil, FaTrash } from "react-icons/fa6";
 
 export default function RoomTypesDataManager({
   roomTypes,
@@ -63,7 +63,7 @@ export default function RoomTypesDataManager({
               }}
               variant={"link"}
             >
-              <FaTrash />
+              <Trash />
             </Button>
             <Button
               onClick={() => {
@@ -71,7 +71,7 @@ export default function RoomTypesDataManager({
               }}
               variant={"link"}
             >
-              <FaPencil />
+              <Pencil />
             </Button>
           </div>
         </div>
