@@ -20,7 +20,7 @@ export default function GuestsTable({
   const router = useRouter();
 
   async function deleteAction(id: string) {
-    if (!confirm("Are you sure to delete this receptionist account?")) return;
+    if (!confirm("Are you sure to delete this guest account?")) return;
 
     const toastId = toast.loading("Loading...");
     const deleteResponse = await deleteUser(id);
