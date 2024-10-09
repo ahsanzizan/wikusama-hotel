@@ -25,7 +25,6 @@ import { useState } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
-import { checkVerifiedStatus } from "../actions";
 
 const loginFormSchema = z.object({
   email: z.string().min(1, "Email must be filled!").email("Email is invalid!"),
@@ -42,12 +41,6 @@ export default function LoginForm() {
     setLoading(true);
 
     const toastId = toast.loading("Loading...");
-    const checkVerificationStatus = await checkVerifiedStatus(values);
-
-    if (!checkVerificationStatus.success) {
-      setLoading(false);
-      return toast.error(checkVerificationStatus.message, { id: toastId });
-    }
 
     const loginResult = await signIn("credentials", {
       redirect: false,

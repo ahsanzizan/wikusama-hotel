@@ -19,8 +19,8 @@ export default async function Reviews() {
       <>
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2>Guest Accounts</h2>
-            <p>See all the registered user accounts</p>
+            <h2>Reviews</h2>
+            <p>See all the reviews for Wikusama Hotel.</p>
           </div>
         </div>
         <ReviewsTable reviews={reviews} />

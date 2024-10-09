@@ -90,23 +90,34 @@ export default async function Bookings() {
                 in Wikusama Hotel."
             backHref="/"
           />
-          {bookings.length === 0 && <p>There&apos;s no bookings...</p>}
-          <div className="flex w-full flex-col gap-10 divide-y divide-white md:gap-6">
-            {bookedAtKeys.map((bookedAtKey) => (
-              <div className="py-8" key={bookedAtKey}>
-                <h1 className="mb-12">{bookedAtKey}</h1>
-                <div className="flex w-full flex-col gap-8 md:gap-4">
-                  {bookings
-                    .filter(
-                      (booking) =>
-                        stringifyDate(booking.booked_at) === bookedAtKey,
-                    )
-                    .map((booking) => (
-                      <BookingCard key={booking.id} booking={booking} />
-                    ))}
+          <div className="block">
+            <Link
+              href={"/rooms"}
+              className={buttonVariants({
+                variant: "secondary",
+                className: "mb-8",
+              })}
+            >
+              Book now
+            </Link>
+            {bookings.length === 0 && <p>There&apos;s no bookings...</p>}
+            <div className="flex w-full flex-col gap-10 divide-y divide-white md:gap-6">
+              {bookedAtKeys.map((bookedAtKey) => (
+                <div className="py-8" key={bookedAtKey}>
+                  <h1 className="mb-12">{bookedAtKey}</h1>
+                  <div className="flex w-full flex-col gap-8 md:gap-4">
+                    {bookings
+                      .filter(
+                        (booking) =>
+                          stringifyDate(booking.booked_at) === bookedAtKey,
+                      )
+                      .map((booking) => (
+                        <BookingCard key={booking.id} booking={booking} />
+                      ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </SectionContainer>

@@ -11,7 +11,7 @@ export async function deleteUser(id: string): Promise<ServerActionResponse> {
     await prisma.user.delete({ where: { id } });
 
     revalidatePath("/", "layout");
-    return { success: false, message: "Deleted successfully" };
+    return { success: true, message: "Deleted successfully" };
   } catch (error) {
     console.log(error);
     return { success: false, message: "Something went wrong" };

@@ -1,6 +1,15 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Bed, BedDouble, BookKey, Gauge, Menu, User, X } from "lucide-react";
+import {
+  Bed,
+  BedDouble,
+  BookKey,
+  Gauge,
+  Menu,
+  MessageSquare,
+  User,
+  X,
+} from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,6 +41,12 @@ const routes = [
     path: "/admin/users",
     regex: /^\/admin\/users(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
     icon: <User />,
+  },
+  {
+    title: "Reviews",
+    path: "/admin/reviews",
+    regex: /^\/admin\/reviews(?:\/[A-Za-z0-9-]+)?(?:\?.*)?$/,
+    icon: <MessageSquare />,
   },
 ];
 

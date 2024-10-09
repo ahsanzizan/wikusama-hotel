@@ -17,7 +17,13 @@ export function generateRandomString(length: number): string {
   const buffer = Buffer.alloc(length);
   randomFillSync(buffer);
 
-  return buffer.toString("base64").slice(0, length);
+  // Convert to Base64 and replace unsafe characters
+  return buffer
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "")
+    .slice(0, length);
 }
 
 const months = [
@@ -245,7 +251,7 @@ export function calculateUserGrowth(users: { created_at: Date }[]) {
 
   const usersGrowth =
     (currentMonthUsers.length - previousMonthUsers.length) /
-    previousMonthUsers.length;
+    (previousMonthUsers.length === 0 ? 0 : previousMonthUsers.length);
 
   return usersGrowth;
 }
