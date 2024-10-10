@@ -33,7 +33,6 @@ import {
   toIDR,
 } from "@/lib/utils";
 import { roomsWithBookings } from "@/types/relations";
-import { InvoiceRequestBody } from "@/types/xendit";
 import { BookingStatus } from "@prisma/client";
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -41,7 +40,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookRooms, payBookings } from "../actions";
-import { Invoice } from "xendit-node/invoice/models";
 
 function createBookingSchema() {
   const bookingSchema = z.object({
