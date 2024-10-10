@@ -19,6 +19,7 @@ declare global {
       SMTP_PASS: string;
       EMAIL_FROM: string;
       ADMIN_CREATION_PASSWORD: string;
+      XENDIT_SECRET_KEY: string;
     }
   }
 }

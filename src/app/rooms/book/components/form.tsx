@@ -33,16 +33,15 @@ import {
   toIDR,
 } from "@/lib/utils";
 import { roomsWithBookings } from "@/types/relations";
+import { InvoiceRequestBody } from "@/types/xendit";
+import { BookingStatus } from "@prisma/client";
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useRouter } from "next-nprogress-bar";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { bookRooms } from "../actions";
-import { BookingStatus } from "@prisma/client";
-
-// TODO: disable booked dates properly
+import { Invoice } from "xendit-node/invoice/models";
 
 function createBookingSchema() {
   const bookingSchema = z.object({
@@ -83,7 +82,6 @@ export default function BookingForm({
         )
       : [],
   );
-  const router = useRouter();
 
   const checkInDate = form.watch("check_in_at");
   const checkOutDate = form.watch("check_out_at");
@@ -116,6 +114,27 @@ export default function BookingForm({
     setLoading(true);
 
     const toastId = toast.loading("Loading...");
+
+    // Request to API for payment gateway (Xendit)
+    const createInvoicePayload: InvoiceRequestBody = {
+      amount:
+        roomType.price_per_night *
+        getStayTime(values.check_in_at, values.check_out_at) *
+        Number(values.room_count),
+      description: `Payment for a booking at Wikusama Hotel. Details: ${values.room_count} rooms, ${getStayTime(values.check_in_at, values.check_out_at)} nights`,
+    };
+    const createInvoiceRequest = await fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(createInvoicePayload),
+    });
+    if (!createInvoiceRequest.ok) {
+      setLoading(false);
+      return toast.error("Error generating invoice", { id: toastId });
+    }
+
     const result = await bookRooms({
       availableRoomIds: availableRooms!.map((room) => room.id),
       check_in_at: values.check_in_at,
@@ -127,9 +146,16 @@ export default function BookingForm({
       return toast.error(result.message, { id: toastId });
     }
 
-    toast.success(result.message, { id: toastId });
     setLoading(false);
-    return router.push("/bookings");
+
+    const createInvoiceResponse: {
+      status: number;
+      message: string;
+      invoice: Invoice;
+    } = await createInvoiceRequest.json();
+    toast.success(result.message, { id: toastId });
+
+    window.location.href = createInvoiceResponse.invoice.invoiceUrl;
   });
 
   return (
