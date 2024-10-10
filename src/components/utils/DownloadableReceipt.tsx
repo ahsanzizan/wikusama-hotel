@@ -1,5 +1,5 @@
 "use client";
-import { getStayTime, stringifyDate, toIDR } from "@/lib/utils";
+import { getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
@@ -57,7 +57,7 @@ const DownloadableReceipt = React.forwardRef(
           </p>
           <p className="mb-1 text-gray-600">
             <span className="font-bold">Number of Nights:</span>{" "}
-            {getStayTime(check_in_at, check_out_at)} night(s)
+            {getStayTimeInDays(check_in_at, check_out_at)} night(s)
           </p>
         </div>
         <div className="mb-4">
@@ -76,7 +76,7 @@ const DownloadableReceipt = React.forwardRef(
           <p className="text-lg font-bold text-gray-600">
             {toIDR(
               booking.room.room_type.price_per_night *
-                getStayTime(booking.check_in_at, booking.check_out_at),
+                getStayTimeInDays(booking.check_in_at, booking.check_out_at),
             )}
           </p>
         </div>

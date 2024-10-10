@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export async function upsertRoom(
   data: { room_number?: number; is_available?: boolean; room_typeId?: string },
   id?: string,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<undefined>> {
   try {
     const session = await getServerSession();
     const currentUserRole = session?.user?.role;
@@ -61,7 +61,9 @@ export async function upsertRoom(
   }
 }
 
-export async function deleteRoom(id: string): Promise<ServerActionResponse> {
+export async function deleteRoom(
+  id: string,
+): Promise<ServerActionResponse<undefined>> {
   try {
     const room = await prisma.room.findUnique({ where: { id } });
     if (!room) return { success: false, message: "Room type does not exist" };

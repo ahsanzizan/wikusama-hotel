@@ -12,7 +12,7 @@ export async function updateProfile(data: {
   birth_date?: Date;
   city_of_residence?: string;
   mobile_number?: string;
-}): Promise<ServerActionResponse> {
+}): Promise<ServerActionResponse<undefined>> {
   try {
     const session = await getServerSession();
 
@@ -33,7 +33,9 @@ export async function updateProfile(data: {
   }
 }
 
-export async function deleteAccount(): Promise<ServerActionResponse> {
+export async function deleteAccount(): Promise<
+  ServerActionResponse<undefined>
+> {
   try {
     const session = await getServerSession();
     const deletedAccount = await prisma.user.delete({

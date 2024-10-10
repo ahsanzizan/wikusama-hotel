@@ -4,7 +4,7 @@ import SectionContainer from "@/components/layout/SectionContainer";
 import { buttonVariants } from "@/components/ui/button";
 import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
-import { cn, getStayTime, groupBy, stringifyDate } from "@/lib/utils";
+import { cn, getStayTimeInDays, groupBy, stringifyDate } from "@/lib/utils";
 import { Calendar, CalendarFold, Clock } from "lucide-react";
 import Link from "next/link";
 
@@ -49,7 +49,7 @@ export default async function Bookings() {
               <div className="flex items-center gap-2">
                 <Clock />
                 <p className="text-black">
-                  {getStayTime(booking.check_in_at, booking.check_out_at)}{" "}
+                  {getStayTimeInDays(booking.check_in_at, booking.check_out_at)}{" "}
                   day(s) stay
                 </p>
               </div>

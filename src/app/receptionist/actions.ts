@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 export async function updateBookingStatus(
   id: string,
   desiredBookingStatus: BookingStatus,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<undefined>> {
   try {
     const booking = await prisma.booking.findUnique({ where: { id } });
     if (!booking) return { success: false, message: "Booking is not found!" };

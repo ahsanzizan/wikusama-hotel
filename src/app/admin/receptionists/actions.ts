@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export async function upsertReciptionist(
   data: Prisma.userUpdateInput,
   id?: string,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<undefined>> {
   try {
     const session = await getServerSession();
     const currentUserRole = session?.user?.role;
@@ -56,7 +56,7 @@ export async function upsertReciptionist(
 
 export async function deleteReceptionist(
   id: string,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<undefined>> {
   try {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return { success: false, message: "User does not exist" };

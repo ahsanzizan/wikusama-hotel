@@ -7,7 +7,10 @@ import { ServerActionResponse } from "@/types/server-action";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export async function upsertRoomType(formData: FormData, id?: string) {
+export async function upsertRoomType(
+  formData: FormData,
+  id?: string,
+): Promise<ServerActionResponse<undefined>> {
   const data = {
     type_name: formData.get("type_name") as string,
     description: formData.get("description") as string,
@@ -74,7 +77,7 @@ export async function upsertRoomType(formData: FormData, id?: string) {
 
 export async function deleteRoomType(
   id: string,
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<undefined>> {
   try {
     const roomType = await prisma.room_type.findUnique({ where: { id } });
     if (!roomType)

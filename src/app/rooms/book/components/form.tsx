@@ -28,7 +28,7 @@ import {
   cn,
   getAllBookedDates,
   getAvailableRooms,
-  getStayTime,
+  getStayTimeInDays,
   stringifyDate,
   toIDR,
 } from "@/lib/utils";
@@ -40,7 +40,7 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { bookRooms } from "../actions";
+import { bookRooms, payBookings } from "../actions";
 import { Invoice } from "xendit-node/invoice/models";
 
 function createBookingSchema() {
@@ -115,28 +115,19 @@ export default function BookingForm({
 
     const toastId = toast.loading("Loading...");
 
-    // Request to API for payment gateway (Xendit)
-    const createInvoicePayload: InvoiceRequestBody = {
-      amount:
-        roomType.price_per_night *
-        getStayTime(values.check_in_at, values.check_out_at) *
-        Number(values.room_count),
-      description: `Payment for a booking at Wikusama Hotel. Details: ${values.room_count} rooms, ${getStayTime(values.check_in_at, values.check_out_at)} nights`,
-    };
-    const createInvoiceRequest = await fetch("/api/payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(createInvoicePayload),
-    });
-    if (!createInvoiceRequest.ok) {
+    const createdInvoice = await payBookings(
+      Number(values.room_count),
+      roomType,
+      getStayTimeInDays(values.check_in_at, values.check_out_at),
+    );
+
+    if (!createdInvoice.success) {
       setLoading(false);
-      return toast.error("Error generating invoice", { id: toastId });
+      return toast.error(createdInvoice.message, { id: toastId });
     }
 
     const result = await bookRooms({
-      availableRoomIds: availableRooms!.map((room) => room.id),
+      roomIds: availableRooms!.map((room) => room.id),
       check_in_at: values.check_in_at,
       check_out_at: values.check_out_at,
     });
@@ -147,15 +138,9 @@ export default function BookingForm({
     }
 
     setLoading(false);
-
-    const createInvoiceResponse: {
-      status: number;
-      message: string;
-      invoice: Invoice;
-    } = await createInvoiceRequest.json();
     toast.success(result.message, { id: toastId });
 
-    window.location.href = createInvoiceResponse.invoice.invoiceUrl;
+    window.location.href = createdInvoice.data as string;
   });
 
   return (
@@ -295,7 +280,7 @@ export default function BookingForm({
                           {toIDR(
                             form.getValues("room_count")
                               ? roomType.price_per_night *
-                                  getStayTime(
+                                  getStayTimeInDays(
                                     form.getValues("check_in_at"),
                                     form.getValues("check_out_at"),
                                   ) *

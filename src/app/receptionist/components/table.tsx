@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn, getStayTime, stringifyDate, toIDR } from "@/lib/utils";
+import { cn, getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
 import { BookingStatus, Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -121,7 +121,7 @@ export default function BookingsTable({
     },
     {
       name: "Night(s) Count",
-      selector: (row) => getStayTime(row.check_in_at, row.check_out_at),
+      selector: (row) => getStayTimeInDays(row.check_in_at, row.check_out_at),
       sortable: true,
     },
     {
@@ -143,7 +143,7 @@ export default function BookingsTable({
       name: "Pay",
       selector: (row) =>
         toIDR(
-          getStayTime(row.check_in_at, row.check_out_at) *
+          getStayTimeInDays(row.check_in_at, row.check_out_at) *
             row.room.room_type.price_per_night,
         ),
       sortable: true,

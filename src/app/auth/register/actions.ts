@@ -9,7 +9,7 @@ export async function registerUser(data: {
   name: string;
   email: string;
   password: string;
-}): Promise<ServerActionResponse> {
+}): Promise<ServerActionResponse<undefined>> {
   try {
     const { name, email, password } = data;
 

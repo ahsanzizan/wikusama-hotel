@@ -192,7 +192,7 @@ export function getAvailableRooms({
   return availableRooms;
 }
 
-export function getStayTime(start: Date, end: Date) {
+export function getStayTimeInDays(start: Date, end: Date) {
   const msInDay = 1000 * 60 * 60 * 24; // Number of milliseconds in a day
 
   // Calculate the difference in milliseconds

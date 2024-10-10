@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
 import { revalidatePath } from "next/cache";
 
-export async function deleteUser(id: string): Promise<ServerActionResponse> {
+export async function deleteUser(
+  id: string,
+): Promise<ServerActionResponse<undefined>> {
   try {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return { success: false, message: "User does not exist" };

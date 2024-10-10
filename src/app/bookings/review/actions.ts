@@ -9,7 +9,7 @@ export async function submitReview(data: {
   name: string;
   rate: number;
   testimony: string;
-}): Promise<ServerActionResponse> {
+}): Promise<ServerActionResponse<undefined>> {
   const { bookingId, name, rate, testimony } = data;
 
   if (rate > 5 || rate < 1)

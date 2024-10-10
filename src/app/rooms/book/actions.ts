@@ -4,16 +4,18 @@ import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { v4 as uuidv4 } from "uuid";
+import Xendit from "xendit-node";
 
 export async function bookRooms(data: {
   check_in_at: Date;
   check_out_at: Date;
-  availableRoomIds: string[];
-}): Promise<ServerActionResponse> {
+  roomIds: string[];
+}): Promise<ServerActionResponse<undefined>> {
   const {
     check_in_at: preset_checkInDate,
     check_out_at: preset_checkOutDate,
-    availableRoomIds,
+    roomIds: availableRoomIds,
   } = data;
 
   preset_checkInDate.setHours(12, 0, 0);
@@ -67,6 +69,42 @@ export async function bookRooms(data: {
       message: (error.message as string).includes("already booked")
         ? error.message
         : "Something went wrong!",
+    };
+  }
+}
+
+const xenditClient = new Xendit({ secretKey: process.env.XENDIT_SECRET_KEY });
+const { Invoice } = xenditClient;
+
+export async function payBookings(
+  roomCount: number,
+  roomType: { type_name: string; price_per_night: number },
+  stayTime: number,
+): Promise<ServerActionResponse<string>> {
+  try {
+    const session = await getServerSession();
+
+    const totalPrice = roomCount * (roomType.price_per_night * stayTime);
+    const createdInvoice = await Invoice.createInvoice({
+      data: {
+        externalId: uuidv4(),
+        amount: totalPrice,
+        payerEmail: session?.user?.email,
+        description: `Payment for bookings in Wikusama Hotel. ${roomType.type_name} (${roomCount} rooms, ${stayTime} nights).`,
+        successRedirectUrl: `${process.env.APP_URL}/bookings`,
+        failureRedirectUrl: `${process.env.APP_URL}/`,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Successfully created an invoice.",
+      data: createdInvoice.invoiceUrl,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Something went wrong!",
     };
   }
 }

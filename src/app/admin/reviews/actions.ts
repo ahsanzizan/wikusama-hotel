@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/server-action";
 import { revalidatePath } from "next/cache";
 
-export async function deleteReview(id: string): Promise<ServerActionResponse> {
+export async function deleteReview(
+  id: string,
+): Promise<ServerActionResponse<undefined>> {
   try {
     const review = await prisma.review.findUnique({ where: { id } });
     if (!review) return { success: false, message: "User does not exist" };
