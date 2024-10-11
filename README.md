@@ -41,7 +41,7 @@ Welcome to **Wikusama Hotel**! This web application is designed to manage and di
 4. Set up the Prisma schema and push it to the database:
 
    ```bash
-   npm run prisma:push
+   npx prisma db push
    ```
 
 5. Run the development server:
