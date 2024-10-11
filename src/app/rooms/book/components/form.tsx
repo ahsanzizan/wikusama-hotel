@@ -144,7 +144,7 @@ export default function BookingForm({
   return (
     <Card className="absolute bottom-0 left-1/2 w-full max-w-lg -translate-x-1/2 border-none">
       <CardHeader>
-        <h1 className="mb-4">{toIDR(roomType.price_per_night)} / night</h1>
+        <h1 className="mb-4">{toIDR(roomType.price_per_night)}/night</h1>
         <CardTitle className="mb-3">
           You&apos;re on your way to book the {roomType.type_name}
         </CardTitle>
@@ -200,6 +200,9 @@ export default function BookingForm({
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
+                    <FormDescription>
+                      Disabled dates are either already booked or unavailable
+                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -247,6 +250,9 @@ export default function BookingForm({
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
+                    <FormDescription>
+                      Disabled dates are either already booked or unavailable
+                    </FormDescription>
                   </FormItem>
                 )}
               />
