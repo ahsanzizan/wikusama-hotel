@@ -1,6 +1,6 @@
 # Wikusama Hotel
 
-Welcome to **Wikusama Hotel**! This web application is designed to manage and display information for Wikusama Hotel, built using the latest technologies to ensure high performance and a great user experience.
+Welcome to **Wikusama Hotel**! This web application is designed to manage and display information for Wikusama Hotel, built using the latest technologies to ensure high performance and a great user experience. Includes room bookings and payment gateway.
 
 - **Next.js 14**: The cutting-edge framework for fast, server-rendered React applications.
 - **Prisma**: An ORM for interacting with the MySQL database, enabling easy data access and management.
