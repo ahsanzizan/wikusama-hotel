@@ -62,6 +62,14 @@ export default function ReviewsTable({
       sortable: false,
     },
     {
+      name: "Testimony",
+      selector: (row) =>
+        row.testimony.length > 20
+          ? row.testimony.slice(0, 20) + "..."
+          : row.testimony,
+      sortable: false,
+    },
+    {
       name: "Submitted at",
       selector: (row) => stringifyDate(row.submitted_at),
       sortable: false,
