@@ -229,7 +229,7 @@ function Testimonies({ reviews }: { reviews: review[] }) {
   }) {
     return (
       <div className="rounded-lg border border-neutral-500 px-8 py-7">
-        <div className="mb-16 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between">
           <p>
             <time dateTime={date.toDateString()}>{stringifyDate(date)}</time>
           </p>
@@ -244,7 +244,9 @@ function Testimonies({ reviews }: { reviews: review[] }) {
           {testimony}
         </p>
         <div className="flex items-center gap-4">
-          <p className="text-lg font-medium text-white">{name}</p>
+          <p className="text-lg font-medium">
+            by <span className="text-white">{name}</span>
+          </p>
         </div>
       </div>
     );

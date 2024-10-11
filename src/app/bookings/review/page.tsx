@@ -35,6 +35,7 @@ export default async function RateStay({
         description="Rate your stay at our hotel, please review your stay with honesty to help us improve our customer's experience."
         backHref="/bookings"
         isSmall
+        center
       />
       {new Date().getTime() > booking.check_out_at.getTime() ? (
         <ReviewForm bookingId={bookingId} />
