@@ -6,6 +6,7 @@ Welcome to **Wikusama Hotel**! This web application is designed to manage and di
 - **Prisma**: An ORM for interacting with the MySQL database, enabling easy data access and management.
 - **PostgreSQL**: A robust relational database to store competition information.
 - **NextAuth.js**: Provides secure user authentication with built-in support for OAuth and JWT.
+- **Xendit**: Provides a secure payment gateway for the booking process of the application.
 
 ## Tech Stack
 
@@ -13,6 +14,7 @@ Welcome to **Wikusama Hotel**! This web application is designed to manage and di
 - **Backend**: Next.js Server Actions, Prisma ORM
 - **Database**: PostgreSQL
 - **Authentication**: NextAuth.js
+- **Payment Gateway**: Xendit
 
 ## Installation
 
