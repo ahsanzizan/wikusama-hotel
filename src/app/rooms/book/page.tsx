@@ -30,7 +30,7 @@ export default async function BookRoom({
 
   return (
     <PageContainer>
-      <h1 className="mb-8">Booking {roomType.type_name}</h1>
+      <h1 className="mb-12">Booking {roomType.type_name}</h1>
       <div className="relative w-full pb-20">
         <Image
           src={roomType.photo}
