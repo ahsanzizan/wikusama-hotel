@@ -31,6 +31,7 @@ export default async function ReceiptPrinting({
         description="You can download your booking receipt that you got from your
             bookings."
         backHref="/bookings"
+        center
       />
       <ReceiptContainer booking={booking} />
     </PageContainer>
