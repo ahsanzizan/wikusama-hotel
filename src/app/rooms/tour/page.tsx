@@ -52,7 +52,11 @@ export default function Tour() {
 
   return (
     <PageContainer className="pb-28">
-      <PageHeading title="Take a Tour" description="" backHref="/" />
+      <PageHeading
+        title="Take a Tour"
+        description="Our hotel provides everything to make sure your stay is as comfortable as it can be."
+        backHref="/"
+      />
       <div className="flex w-full flex-col gap-[134px]">
         {facilities.map((facility, index) => (
           <FacilityCard key={index} {...facility} />
