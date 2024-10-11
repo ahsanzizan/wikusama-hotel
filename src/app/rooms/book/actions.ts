@@ -97,13 +97,6 @@ export async function payBookings(
         description: `Payment for bookings in Wikusama Hotel. ${roomType.type_name} (${roomCount} rooms, ${stayTime} nights).`,
         successRedirectUrl: `${process.env.APP_URL}/bookings`,
         failureRedirectUrl: `${process.env.APP_URL}/`,
-        shouldSendEmail: true,
-        customer: {
-          email: user.email,
-          givenNames: user.name,
-          phoneNumber: user.mobile_number,
-          surname: user.name.split(" ")[0],
-        },
       },
     });
 
@@ -113,6 +106,7 @@ export async function payBookings(
       data: createdInvoice.invoiceUrl,
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: "Something went wrong!",
