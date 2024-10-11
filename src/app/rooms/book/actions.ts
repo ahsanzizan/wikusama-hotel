@@ -83,6 +83,10 @@ export async function payBookings(
 ): Promise<ServerActionResponse<string>> {
   try {
     const session = await getServerSession();
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user?.id },
+    });
+    if (!user) return { success: false, message: "User not authorized" };
 
     const totalPrice = roomCount * (roomType.price_per_night * stayTime);
     const createdInvoice = await Invoice.createInvoice({
@@ -93,6 +97,13 @@ export async function payBookings(
         description: `Payment for bookings in Wikusama Hotel. ${roomType.type_name} (${roomCount} rooms, ${stayTime} nights).`,
         successRedirectUrl: `${process.env.APP_URL}/bookings`,
         failureRedirectUrl: `${process.env.APP_URL}/`,
+        shouldSendEmail: true,
+        customer: {
+          email: user.email,
+          givenNames: user.name,
+          phoneNumber: user.mobile_number,
+          surname: user.name.split(" ")[0],
+        },
       },
     });
 
