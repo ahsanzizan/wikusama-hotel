@@ -96,7 +96,7 @@ h1 {
 }
 
 .display {
-  @apply text-[32px] font-bold leading-[39px] lg:text-[46px] lg:leading-[57px] 2xl:text-[54px] 2xl:leading-[66px];
+  @apply text-[32px] font-bold leading-[39px] lg:text-[46px] lg:leading-[57px];
 }
 
 h2 {

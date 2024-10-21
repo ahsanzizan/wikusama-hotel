@@ -204,7 +204,7 @@ export default function PageContainer({
       <Navbar session={session} />
       <main
         className={cn(
-          "mx-auto flex max-w-[1169px] flex-col items-center justify-center px-5 pb-8 pt-28",
+          "mx-auto flex max-w-[1169px] flex-col items-center justify-center px-5 pb-8 pt-24",
           className,
         )}
       >

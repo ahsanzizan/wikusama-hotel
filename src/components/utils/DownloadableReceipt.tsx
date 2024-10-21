@@ -14,8 +14,11 @@ interface DownloadableReceiptProps {
 }
 
 const DownloadableReceipt = React.forwardRef(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ({ booking }: DownloadableReceiptProps, ref: React.ForwardedRef<any>) => {
+  (
+    { booking }: DownloadableReceiptProps,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ref: React.ForwardedRef<any>,
+  ) => {
     const { check_in_at, check_out_at, booked_at } = booking;
 
     return (

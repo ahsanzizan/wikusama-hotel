@@ -91,15 +91,6 @@ export default async function Bookings() {
             backHref="/"
           />
           <div className="block">
-            <Link
-              href={"/rooms"}
-              className={buttonVariants({
-                variant: "secondary",
-                className: "mb-8",
-              })}
-            >
-              Book now
-            </Link>
             {bookings.length === 0 && <p>There&apos;s no bookings...</p>}
             <div className="flex w-full flex-col gap-10 divide-y divide-white md:gap-6">
               {bookedAtKeys.map((bookedAtKey) => (
