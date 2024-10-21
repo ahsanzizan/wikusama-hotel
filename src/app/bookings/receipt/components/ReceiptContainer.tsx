@@ -1,5 +1,4 @@
 "use client";
-import DisableContextAndDevTools from "@/components/layout/DisableContextAndDevTools";
 import DownloadableReceipt from "@/components/utils/DownloadableReceipt";
 import { Prisma } from "@prisma/client";
 import html2pdf from "html2pdf.js";
@@ -45,9 +44,5 @@ export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
     downloadPdf();
   }, [downloadPdf]);
 
-  return (
-    <DisableContextAndDevTools>
-      <DownloadableReceipt booking={booking} ref={receiptRef} />
-    </DisableContextAndDevTools>
-  );
+  return <DownloadableReceipt booking={booking} ref={receiptRef} />;
 }
