@@ -3,7 +3,7 @@ import PageHeading from "@/components/layout/PageHeading";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+import { cn, toIDR } from "@/lib/utils";
 import { roomTypesWithRoomsCount } from "@/types/relations";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,8 +33,13 @@ export default async function Rooms() {
           </p>
         </div>
         <div className="p-5 text-center text-white">
-          <h3 className="mb-3">{roomType.type_name}</h3>
-          <p className="mb-8 text-neutral-500">{roomType.description}</p>
+          <div className="mb-3 flex w-full flex-col items-start justify-between gap-1">
+            <h3>{roomType.type_name}</h3>
+            <p>{toIDR(roomType.price_per_night)}/night</p>
+          </div>
+          <p className="mb-8 text-justify text-neutral-500">
+            {roomType.description}
+          </p>
           {isAvailable ? (
             <Link
               href={`/rooms/book?typeId=${roomType.id}`}

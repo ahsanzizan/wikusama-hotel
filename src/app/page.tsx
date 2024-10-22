@@ -2,7 +2,7 @@ import PageContainer from "@/components/layout/PageContainer";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import { cn, stringifyDate } from "@/lib/utils";
+import { cn, stringifyDate, toIDR } from "@/lib/utils";
 import { roomTypesWithRoomsCount } from "@/types/relations";
 import { review } from "@prisma/client";
 import {
@@ -166,9 +166,14 @@ function Rooms({ roomTypes }: { roomTypes: roomTypesWithRoomsCount[] }) {
             {isAvailable ? "Available" : "Unavailable"}
           </p>
         </div>
-        <div className="p-5 text-center">
-          <h3 className="mb-3">{roomType.type_name}</h3>
-          <p className="mb-8 text-neutral-500">{roomType.description}</p>
+        <div className="p-5">
+          <div className="mb-3 flex w-full flex-col items-start justify-between gap-1">
+            <h3>{roomType.type_name}</h3>
+            <p>{toIDR(roomType.price_per_night)}/night</p>
+          </div>
+          <p className="mb-8 text-justify text-neutral-500">
+            {roomType.description}
+          </p>
           {isAvailable ? (
             <Link
               href={`/rooms/book?typeId=${roomType.id}`}
