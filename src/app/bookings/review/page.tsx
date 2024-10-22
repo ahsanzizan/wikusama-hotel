@@ -1,10 +1,10 @@
 import PageContainer from "@/components/layout/PageContainer";
 import PageHeading from "@/components/layout/PageHeading";
+import { getServerSession } from "@/lib/next-auth";
 import prisma from "@/lib/prisma";
-import { stringifyDate } from "@/lib/utils";
+import { getStayTimeInDays, stringifyDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import ReviewForm from "./components/form";
-import { getServerSession } from "@/lib/next-auth";
 
 export default async function RateStay({
   searchParams,
@@ -31,8 +31,8 @@ export default async function RateStay({
   return (
     <PageContainer>
       <PageHeading
-        title={`Rate Your Stay at Room No. ${booking.room.room_number}`}
-        description="Rate your stay at our hotel, please review your stay with honesty to help us improve our customer's experience."
+        title={`Rate Your Stay at ${booking.room.room_type.type_name} No. ${booking.room.room_number}`}
+        description={`Tell us how you feel about your ${getStayTimeInDays(booking.check_in_at, booking.check_out_at)} day(s) stay at our ${booking.room.room_type.type_name} from ${stringifyDate(booking.check_in_at)} - ${stringifyDate(booking.check_out_at)}. Rate your stay at our hotel, please review your stay with honesty to help us improve our customer's experience.`}
         backHref="/bookings"
         isSmall
         center
@@ -40,9 +40,13 @@ export default async function RateStay({
       {new Date().getTime() > booking.check_out_at.getTime() ? (
         <ReviewForm bookingId={bookingId} />
       ) : (
-        <p>You can rate this stay at {stringifyDate(booking.check_out_at)}</p>
+        <p className="text-center">
+          You can rate this stay at {stringifyDate(booking.check_out_at)}
+        </p>
       )}
-      {!!review && <p>You have already reviewed this stay</p>}
+      {!!review && (
+        <p className="text-center">You have already reviewed this stay</p>
+      )}
     </PageContainer>
   );
 }
