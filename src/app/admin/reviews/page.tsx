@@ -8,7 +8,7 @@ export default async function Reviews() {
         select: {
           check_in_at: true,
           check_out_at: true,
-          guest: { select: { name: true } },
+          user: { select: { name: true } },
         },
       },
     },

@@ -14,7 +14,7 @@ type reviewWithBooking = Prisma.reviewGetPayload<{
       select: {
         check_in_at: true;
         check_out_at: true;
-        guest: { select: { name: true } };
+        user: { select: { name: true } };
       };
     };
   };
@@ -53,7 +53,7 @@ export default function ReviewsTable({
     },
     {
       name: "Account",
-      selector: (row) => row.booking.guest.name,
+      selector: (row) => row.booking.user.name,
       sortable: false,
     },
     {
