@@ -16,6 +16,7 @@ export async function upsertRoomType(
     description: formData.get("description") as string,
     photo: formData.get("photo") as FileList[0],
     price_per_night: Number(formData.get("price_per_night") as string),
+    discount_percent: Number(formData.get("discount_percent") as string),
   };
 
   try {
@@ -31,6 +32,7 @@ export async function upsertRoomType(
       description: data.description,
       price_per_night: data.price_per_night,
       photo: undefined,
+      discount_percent: data.discount_percent,
       created_by: !id
         ? {
             connect: { id: currentUserId },
@@ -46,8 +48,20 @@ export async function upsertRoomType(
     }
 
     if (!id) {
-      const { type_name, description, photo, price_per_night } = payload;
-      if (!type_name || !description || !photo || !price_per_night) {
+      const {
+        type_name,
+        description,
+        photo,
+        price_per_night,
+        discount_percent,
+      } = payload;
+      if (
+        !type_name ||
+        !description ||
+        !photo ||
+        !price_per_night ||
+        !discount_percent
+      ) {
         return { success: false, message: "Bad request" };
       }
 

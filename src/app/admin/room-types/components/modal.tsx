@@ -21,27 +21,32 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { upsertRoomType } from "../actions";
 
-function createRoomTypeSchema(isUpdating?: boolean) {
+function createRoomTypeSchema(isUpdating: boolean) {
+  const photoSchema = z
+    .instanceof(FileList)
+    .refine((files) => {
+      return isUpdating ? true : files.length !== 0;
+    }, "Photo must be filled!")
+    .refine((files) => {
+      // Select only the first file
+      const file = files[0];
+      // If file size exceed the maximum limit, then throw error
+      if (!isUpdating) return file?.size <= MAX_FILE_SIZE;
+      return !file || file?.size <= MAX_FILE_SIZE;
+    }, `Maximum file size is 5MB`)
+    .refine((files: FileList) => {
+      // Select only the first file
+      const file = files[0];
+      // If file's extension is not allowed, then throw error
+      if (!isUpdating) return ACCEPTED_IMAGE_TYPES.includes(file?.type);
+      return !file || ACCEPTED_IMAGE_TYPES.includes(file?.type);
+    });
+
   const roomTypeSchema = z.object({
     type_name: z.string().min(1, "Type name must be filled!"),
     price_per_night: z.string().min(1, "Price per-night must be filled!"),
-    photo: z
-      .instanceof(FileList)
-      .refine((files) => files.length !== 0, "Photo must be filled!")
-      .refine((files) => {
-        // Select only the first file
-        const file = files[0];
-        // If file size exceed the maximum limit, then throw error
-        if (!isUpdating) return file?.size <= MAX_FILE_SIZE;
-        return file?.size <= MAX_FILE_SIZE || !file;
-      }, `Maximum file size is 5MB`)
-      .refine((files: FileList) => {
-        // Select only the first file
-        const file = files[0];
-        // If file's extension is not allowed, then throw error
-        if (!isUpdating) return ACCEPTED_IMAGE_TYPES.includes(file?.type);
-        return ACCEPTED_IMAGE_TYPES.includes(file?.type) || !file;
-      }, "File extension must be one of these: .jpg, .jpeg, .png."),
+    discount_percent: z.string().min(1, "Discount must be filled!"),
+    photo: photoSchema,
     description: z.string().min(1, "Description must be filled!"),
   });
 
@@ -60,24 +65,28 @@ export default function RoomTypeModal({
     defaultValues: {
       type_name: data?.type_name,
       description: data?.description,
+      discount_percent: data?.discount_percent.toString(),
       photo: undefined,
       price_per_night: data?.price_per_night.toString(),
     },
-    schema: createRoomTypeSchema(data === null),
+    schema: createRoomTypeSchema(data !== null),
   });
   const router = useRouter();
 
   const onSubmit = form.handleSubmit(async (values) => {
     setLoading(true);
 
-    const photoFile = values.photo[0];
+    const photoFile = values.photo ? values.photo[0] : undefined;
     const toastId = toast.loading("Loading...");
 
     const formData = new FormData();
     formData.append("type_name", values.type_name);
     formData.append("description", values.description);
     formData.append("price_per_night", values.price_per_night);
-    formData.append("photo", photoFile);
+    formData.append("discount_percent", values.discount_percent);
+    if (photoFile) {
+      formData.append("photo", photoFile);
+    }
 
     const result = await upsertRoomType(formData, data?.id);
 
@@ -155,6 +164,26 @@ export default function RoomTypeModal({
                         {...field}
                         type="number"
                         placeholder="Price per-night"
+                        className="border-neutral-300"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="discount_percent"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col space-y-1.5">
+                    <FormLabel htmlFor="discount_percent">
+                      Discount Percentage
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Discount percentage"
                         className="border-neutral-300"
                       />
                     </FormControl>
