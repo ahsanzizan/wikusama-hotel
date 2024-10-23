@@ -5,21 +5,23 @@ import html2pdf from "html2pdf.js";
 import { useCallback, useEffect, useRef } from "react";
 
 interface ReceiptContainerProps {
-  booking: Prisma.bookingGetPayload<{
+  bookingReceipt: Prisma.booking_receiptGetPayload<{
     include: {
-      room: { include: { room_type: true } };
+      booking: { include: { room: { include: { room_type: true } } } };
       user: { select: { name: true; email: true } };
     };
   }>;
 }
 
-export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
+export default function ReceiptContainer({
+  bookingReceipt,
+}: ReceiptContainerProps) {
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const downloadPdf = useCallback(() => {
     const options = {
       margin: 0,
-      filename: `Receipt_${booking.user.name}_Room${booking.room.room_number}.pdf`,
+      filename: `Receipt_${bookingReceipt.user.name}_Room${bookingReceipt.booking.room.room_number}.pdf`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -31,18 +33,20 @@ export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
         .from(element)
         .set(options)
         .save(
-          `Receipt_${booking.user.name}_Room${booking.room.room_number}.pdf`,
+          `Receipt_${bookingReceipt.user.name}_Room${bookingReceipt.booking.room.room_number}.pdf`,
         )
         .catch((err: string) => console.error(err))
         .then(() => {
           window.location.href = "/bookings";
         });
     }
-  }, [booking]);
+  }, [bookingReceipt]);
 
   useEffect(() => {
     downloadPdf();
   }, [downloadPdf]);
 
-  return <DownloadableReceipt booking={booking} ref={receiptRef} />;
+  return (
+    <DownloadableReceipt bookingReceipt={bookingReceipt} ref={receiptRef} />
+  );
 }

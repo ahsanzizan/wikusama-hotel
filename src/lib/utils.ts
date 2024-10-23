@@ -186,7 +186,7 @@ export function getAvailableRooms({
   const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
 
   const availableRooms = rooms.filter(
-    (room) => !bookedRoomIds.includes(room.id) && room.room_typeId === typeId,
+    (room) => room.room_typeId === typeId && !bookedRoomIds.includes(room.id),
   );
 
   return availableRooms;

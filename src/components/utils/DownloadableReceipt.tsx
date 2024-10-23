@@ -1,13 +1,13 @@
 "use client";
-import { getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
+import { cn, getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 
 interface DownloadableReceiptProps {
-  booking: Prisma.bookingGetPayload<{
+  bookingReceipt: Prisma.booking_receiptGetPayload<{
     include: {
-      room: { include: { room_type: true } };
+      booking: { include: { room: { include: { room_type: true } } } };
       user: { select: { name: true; email: true } };
     };
   }>;
@@ -15,11 +15,38 @@ interface DownloadableReceiptProps {
 
 const DownloadableReceipt = React.forwardRef(
   (
-    { booking }: DownloadableReceiptProps,
+    { bookingReceipt }: DownloadableReceiptProps,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref: React.ForwardedRef<any>,
   ) => {
-    const { check_in_at, check_out_at, booked_at } = booking;
+    const {
+      booking: {
+        check_in_at,
+        check_out_at,
+        booked_at,
+        room: { room_type },
+        guest_address,
+        guest_email,
+        guest_full_name,
+        guest_phone,
+      },
+      id,
+      discount,
+      price,
+      room_number,
+      room_type_name,
+      room_type_description,
+      user,
+    } = bookingReceipt;
+
+    const discountedPrice = useMemo(
+      () => price - price * (discount / 100),
+      [discount, price],
+    );
+    const totalPrice = useMemo(
+      () => discountedPrice * getStayTimeInDays(check_in_at, check_out_at),
+      [check_in_at, check_out_at, discountedPrice],
+    );
 
     return (
       <div
@@ -35,27 +62,26 @@ const DownloadableReceipt = React.forwardRef(
           unoptimized
         />
         <h1 className="mb-4 text-center text-3xl font-bold">Wikusama Hotel</h1>
-        <p className="mb-4 text-center"># {booking.id}</p>
+        <p className="mb-4 text-center"># {id}</p>
         <p className="mb-2 text-center text-sm text-gray-600">
           {stringifyDate(booked_at)}
         </p>
         <p className="mb-6 text-center text-sm text-gray-600">
-          {booking.user.name} ({booking.user.email})
+          {user.name} ({user.email})
         </p>
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-semibold">Guest Details</h3>
           <p className="mb-1 text-gray-600">
-            <span className="font-bold">Name:</span> {booking.guest_full_name}
+            <span className="font-bold">Name:</span> {guest_full_name}
           </p>
           <p className="mb-1 text-gray-600">
-            <span className="font-bold">Email:</span> {booking.guest_email}
+            <span className="font-bold">Email:</span> {guest_email}
           </p>
           <p className="mb-1 text-gray-600">
-            <span className="font-bold">Phone Number:</span>{" "}
-            {booking.guest_phone}
+            <span className="font-bold">Phone Number:</span> {guest_phone}
           </p>
           <p className="mb-1 text-gray-600">
-            <span className="font-bold">Address:</span> {booking.guest_address}
+            <span className="font-bold">Address:</span> {guest_address}
           </p>
         </div>
         <div className="mb-4">
@@ -77,31 +103,21 @@ const DownloadableReceipt = React.forwardRef(
           <h3 className="mb-2 text-xl font-semibold">Room Details</h3>
           <div>
             <p className="mb-1 font-semibold text-black">
-              Room No. {booking.room.room_number} -{" "}
-              {booking.room.room_type.type_name} (
-              {toIDR(booking.room.room_type.price_per_night)} per night)
+              Room No. {room_number} - {room_type_name} (
+              {toIDR(room_type.price_per_night)} per night)
             </p>
-            <p>{booking.room.room_type.description}</p>
+            <p>{room_type_description}</p>
           </div>
         </div>
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-semibold">Total Price</h3>
           <div className="flex w-full items-center justify-between border-b border-primary pb-2">
-            <p>
-              {booking.room.room_type.type_name}{" "}
-              {toIDR(booking.room.room_type.price_per_night)}
+            <p className={cn(discount > 0 && "line-through")}>
+              {toIDR(room_type.price_per_night)}
             </p>
-            <p>
-              x{getStayTimeInDays(booking.check_in_at, booking.check_out_at)}{" "}
-              day(s)
-            </p>
+            <p>x{getStayTimeInDays(check_in_at, check_out_at)} day(s)</p>
           </div>
-          <p className="text-lg font-bold text-gray-600">
-            {toIDR(
-              booking.room.room_type.price_per_night *
-                getStayTimeInDays(booking.check_in_at, booking.check_out_at),
-            )}
-          </p>
+          <p className="text-lg font-bold text-gray-600">{toIDR(totalPrice)}</p>
         </div>
 
         {/* Thank you message */}

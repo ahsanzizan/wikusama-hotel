@@ -15,6 +15,7 @@ export async function bookRooms(data: {
   guest_email: string;
   guest_phone_number: string;
   guest_address: string;
+  room_typeId: string;
 }): Promise<ServerActionResponse<undefined>> {
   const {
     check_in_at: preset_checkInDate,
@@ -24,6 +25,7 @@ export async function bookRooms(data: {
     guest_email,
     guest_full_name,
     guest_phone_number,
+    room_typeId,
   } = data;
 
   preset_checkInDate.setHours(12, 0, 0);
@@ -42,7 +44,7 @@ export async function bookRooms(data: {
       guest_phone: guest_phone_number,
       roomId,
       userId: currentUserId,
-    })) as unknown as Prisma.bookingCreateManyInput;
+    })) as unknown as Prisma.bookingCreateManyInput[];
 
     // Uses $transaction to resolve race condition
     await prisma.$transaction(async (prisma) => {
@@ -67,6 +69,27 @@ export async function bookRooms(data: {
       await prisma.booking.createMany({
         data: payload,
       });
+
+      const newlyCreatedBookings = await prisma.booking.findMany({
+        where: {
+          room: { room_typeId },
+          check_in_at: preset_checkInDate,
+          check_out_at: preset_checkOutDate,
+        },
+        include: { room: { include: { room_type: true } } },
+      });
+
+      await prisma.booking_receipt.createMany({
+        data: newlyCreatedBookings.map((booking) => ({
+          bookingId: booking.id,
+          discount: booking.room.room_type.discount_percent,
+          price: booking.room.room_type.price_per_night,
+          room_number: booking.room.room_number,
+          room_type_name: booking.room.room_type.type_name,
+          room_type_description: booking.room.room_type.description,
+          userId: currentUserId,
+        })) as Prisma.booking_receiptCreateManyInput[],
+      });
     });
 
     revalidatePath("/", "layout");
@@ -76,10 +99,12 @@ export async function bookRooms(data: {
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    const message = error.message as string;
+
     console.log(error);
     return {
       success: false,
-      message: (error.message as string).includes("already booked")
+      message: message.includes("already booked")
         ? error.message
         : "Something went wrong!",
     };
@@ -91,7 +116,7 @@ const { Invoice } = xenditClient;
 
 export async function payBookings(
   roomCount: number,
-  roomType: { type_name: string; price_per_night: number },
+  roomTypeId: string,
   stayTime: number,
 ): Promise<ServerActionResponse<string>> {
   try {
@@ -101,7 +126,15 @@ export async function payBookings(
     });
     if (!user) return { success: false, message: "User not authorized" };
 
-    const totalPrice = roomCount * (roomType.price_per_night * stayTime);
+    const roomType = await prisma.room_type.findUnique({
+      where: { id: roomTypeId },
+    });
+    if (!roomType) return { success: false, message: "Room type not found" };
+
+    const discountedPrice =
+      roomType.price_per_night -
+      roomType.price_per_night * (roomType.discount_percent / 100);
+    const totalPrice = roomCount * (discountedPrice * stayTime);
     const createdInvoice = await Invoice.createInvoice({
       data: {
         externalId: uuidv4(),

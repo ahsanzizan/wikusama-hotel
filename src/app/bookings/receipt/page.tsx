@@ -8,26 +8,27 @@ import ReceiptContainer from "./components/ReceiptContainer";
 export default async function ReceiptPrinting({
   searchParams,
 }: {
-  searchParams: { bookingId?: string };
+  searchParams: { bookingReceiptId?: string };
 }) {
-  const { bookingId } = searchParams;
-  if (!bookingId) return notFound();
+  const { bookingReceiptId } = searchParams;
+  if (!bookingReceiptId) return notFound();
 
   const session = await getServerSession();
 
-  const booking = await prisma.booking.findUnique({
-    where: { id: bookingId },
+  const bookingReceipt = await prisma.booking_receipt.findUnique({
+    where: { id: bookingReceiptId },
     include: {
-      room: { include: { room_type: true } },
+      booking: { include: { room: { include: { room_type: true } } } },
       user: { select: { name: true, email: true } },
     },
   });
-  if (!booking || booking.userId !== session?.user?.id) return notFound();
+  if (!bookingReceipt || bookingReceipt.userId !== session?.user?.id)
+    return notFound();
 
   return (
     <PageContainer>
       <DisableContextAndDevTools>
-        <ReceiptContainer booking={booking} />
+        <ReceiptContainer bookingReceipt={bookingReceipt} />
       </DisableContextAndDevTools>
     </PageContainer>
   );

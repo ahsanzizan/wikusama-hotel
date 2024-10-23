@@ -38,24 +38,26 @@ model user {
   city_of_residence  String?
   mobile_number      String?
 
-  bookings   booking[]
-  room_types room_type[]
-  rooms      room[]
+  bookings       booking[]
+  room_types     room_type[]
+  rooms          room[]
+  BookingReceipt booking_receipt[]
 
   @@map("users")
 }
 
 model room_type {
-  id              String   @id @default(uuid())
-  type_name       String   @unique
-  price_per_night Float
-  description     String   @db.Text
-  photo           String
-  created_at      DateTime @default(now())
-  created_by      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               String   @id @default(uuid())
+  type_name        String   @unique
+  price_per_night  Float
+  discount_percent Float    @default(0)
+  description      String   @db.Text
+  photo            String
+  created_at       DateTime @default(now())
 
-  rooms  room[]
-  userId String
+  rooms      room[]
+  created_by user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
 
   @@map("room_types")
 }
@@ -99,9 +101,25 @@ model booking {
   room   room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
   review review?
 
-  roomId String
+  roomId          String
+  booking_receipt booking_receipt?
 
   @@map("bookings")
+}
+
+// This model was created in purpose of saving the details that can change later on
+model booking_receipt {
+  id                    String @id @default(uuid())
+  room_type_name        String
+  room_number           Int
+  room_type_description String
+  price                 Float
+  discount              Float
+
+  user      user    @relation(fields: [userId], references: [id])
+  userId    String
+  booking   booking @relation(fields: [bookingId], references: [id])
+  bookingId String  @unique
 }
 
 model review {
