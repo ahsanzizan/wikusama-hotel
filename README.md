@@ -1,3 +1,5 @@
+![Logo Wikusama Hotel](/docs/logo.png)
+
 # Wikusama Hotel
 
 Welcome to **Wikusama Hotel**! This web application is designed to manage and display information for Wikusama Hotel, built using the latest technologies to ensure high performance and a great user experience. Includes room bookings and payment gateway.
@@ -53,6 +55,10 @@ Welcome to **Wikusama Hotel**! This web application is designed to manage and di
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+## Database Structure (ERD)
+
+![ERD](/docs/Entity%20Relational%20Diagram.png)
 
 ## Scripts
 
