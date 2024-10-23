@@ -83,7 +83,7 @@ export default async function Bookings() {
             Download receipt
           </Link>
           <Link
-            href={`/bookings/review?bookingId=${bookingReceipt.id}`}
+            href={`/bookings/review?bookingId=${bookingReceipt.bookingId}`}
             className={cn(
               buttonVariants({ variant: "outline" }),
               "w-full md:w-fit",

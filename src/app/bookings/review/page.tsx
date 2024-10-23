@@ -21,12 +21,12 @@ export default async function RateStay({
       where: { id: bookingId },
       include: {
         room: { include: { room_type: true } },
-        guest: { select: { name: true, email: true } },
+        user: { select: { name: true, email: true } },
       },
     }),
     prisma.review.findFirst({ where: { bookingId } }),
   ]);
-  if (!booking || booking.guestId !== session?.user?.id) return notFound();
+  if (!booking || booking.userId !== session?.user?.id) return notFound();
 
   return (
     <PageContainer>

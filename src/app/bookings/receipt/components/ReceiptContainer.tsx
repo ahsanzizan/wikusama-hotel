@@ -40,7 +40,7 @@ export default function ReceiptContainer({
           window.location.href = "/bookings";
         });
     }
-  }, [bookingReceipt]);
+  }, [bookingReceipt.booking.room.room_number, bookingReceipt.user.name]);
 
   useEffect(() => {
     downloadPdf();
