@@ -1,8 +1,8 @@
 "use client";
-import DownloadableReceipt from "@/components/utils/DownloadableReceipt";
 import { Prisma } from "@prisma/client";
 import html2pdf from "html2pdf.js";
 import { useCallback, useEffect, useRef } from "react";
+import DownloadableReceipt from "./DownloadableReceipt";
 
 interface ReceiptContainerProps {
   bookingReceipt: Prisma.booking_receiptGetPayload<{

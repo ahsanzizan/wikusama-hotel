@@ -1,5 +1,5 @@
 "use client";
-import { cn, getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
+import { getStayTimeInDays, stringifyDate, toIDR } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import React, { useMemo } from "react";
@@ -112,9 +112,31 @@ const DownloadableReceipt = React.forwardRef(
         <div className="mb-4">
           <h3 className="mb-2 text-xl font-semibold">Total Price</h3>
           <div className="flex w-full items-center justify-between border-b border-primary pb-2">
-            <p className={cn(discount > 0 && "line-through")}>
-              {toIDR(room_type.price_per_night)}
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <p
+                  style={{
+                    fontSize: discount > 0 ? "14px" : undefined,
+                    lineHeight: discount > 0 ? "20px" : undefined,
+                    textDecorationLine:
+                      discount > 0 ? "line-through" : undefined,
+                  }}
+                >
+                  {toIDR(room_type.price_per_night)}
+                </p>
+                <p className="rounded-lg bg-black px-2 py-1 text-xs text-white">
+                  {discount}% off
+                </p>
+              </div>
+              {discount > 0 && (
+                <p>
+                  {toIDR(
+                    room_type.price_per_night -
+                      room_type.price_per_night * (discount / 100),
+                  )}
+                </p>
+              )}
+            </div>
             <p>x{getStayTimeInDays(check_in_at, check_out_at)} day(s)</p>
           </div>
           <p className="text-lg font-bold text-gray-600">{toIDR(totalPrice)}</p>

@@ -10,14 +10,15 @@ import {
 import { Form } from "@/components/ui/form";
 import { useZodForm } from "@/hooks/useZodForm";
 import {
+  cn,
   getAllBookedDates,
   getAvailableRooms,
   getStayTimeInDays,
   toIDR,
 } from "@/lib/utils";
 import { roomsWithBookings } from "@/types/relations";
-import { BookingStatus } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { BookingStatus, room_type } from "@prisma/client";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import validator from "validator";
 import { z } from "zod";
@@ -49,7 +50,7 @@ export default function BookingForm({
   bookings,
   rooms,
 }: {
-  roomType: { id: string; type_name: string; price_per_night: number };
+  roomType: room_type;
   bookings: {
     check_in_at: Date;
     check_out_at: Date;
@@ -74,16 +75,28 @@ export default function BookingForm({
       : [],
   );
   const [step, setStep] = useState(0);
-  const forms = [
-    <EssentialsForm
-      key={0}
-      form={form}
-      availableRooms={availableRooms}
-      bookedDates={bookedDates}
-      price_per_night={roomType.price_per_night}
-    />,
-    <GuestForm key={1} form={form} />,
-  ];
+  const forms = useMemo(
+    () => [
+      <EssentialsForm
+        key={0}
+        form={form}
+        availableRooms={availableRooms}
+        bookedDates={bookedDates}
+        price_per_night={
+          roomType.price_per_night -
+          roomType.price_per_night * (roomType.discount_percent / 100)
+        }
+      />,
+      <GuestForm key={1} form={form} />,
+    ],
+    [
+      availableRooms,
+      bookedDates,
+      form,
+      roomType.discount_percent,
+      roomType.price_per_night,
+    ],
+  );
 
   const checkInDate = form.watch("check_in_at");
   const checkOutDate = form.watch("check_out_at");
@@ -130,7 +143,9 @@ export default function BookingForm({
 
     const result = await bookRooms({
       ...values,
-      roomIds: availableRooms!.map((room) => room.id),
+      roomIds: availableRooms!
+        .slice(0, Number(roomCount))
+        .map((room) => room.id),
       room_typeId: roomType.id,
     });
 
@@ -148,7 +163,29 @@ export default function BookingForm({
   return (
     <Card className="absolute left-1/2 top-10 w-full max-w-lg -translate-x-1/2 border-none">
       <CardHeader>
-        <h1 className="mb-4">{toIDR(roomType.price_per_night)}/night</h1>
+        <div className="flex items-center gap-2">
+          <h1
+            className={cn(
+              roomType.discount_percent > 0 && "text-xl line-through",
+            )}
+          >
+            {toIDR(roomType.price_per_night)}/night{" "}
+          </h1>
+          {roomType.discount_percent > 0 && (
+            <h1 className="rounded-lg bg-black px-2 py-1 text-xl text-white">
+              {roomType.discount_percent}% off
+            </h1>
+          )}
+        </div>
+        {roomType.discount_percent > 0 && (
+          <h1 className="mb-4">
+            {toIDR(
+              roomType.price_per_night -
+                roomType.price_per_night * (roomType.discount_percent / 100),
+            )}
+            /night
+          </h1>
+        )}
         <CardTitle className="mb-3">
           You&apos;re on your way to book the {roomType.type_name}
         </CardTitle>

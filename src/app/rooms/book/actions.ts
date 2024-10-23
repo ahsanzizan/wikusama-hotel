@@ -20,7 +20,7 @@ export async function bookRooms(data: {
   const {
     check_in_at: preset_checkInDate,
     check_out_at: preset_checkOutDate,
-    roomIds: availableRoomIds,
+    roomIds: desiredRoomIds,
     guest_address,
     guest_email,
     guest_full_name,
@@ -35,7 +35,7 @@ export async function bookRooms(data: {
     const session = await getServerSession();
     const currentUserId = session?.user?.id;
 
-    const payload = availableRoomIds.map((roomId) => ({
+    const payload = desiredRoomIds.map((roomId) => ({
       check_in_at: preset_checkInDate,
       check_out_at: preset_checkOutDate,
       guest_address,
@@ -50,7 +50,7 @@ export async function bookRooms(data: {
     await prisma.$transaction(async (prisma) => {
       const conflictingBookings = await prisma.booking.findMany({
         where: {
-          roomId: { in: availableRoomIds },
+          roomId: { in: desiredRoomIds },
           OR: [
             {
               check_in_at: { lte: preset_checkOutDate },
@@ -95,7 +95,7 @@ export async function bookRooms(data: {
     revalidatePath("/", "layout");
     return {
       success: true,
-      message: `Successfully booked ${availableRoomIds.length} rooms`,
+      message: `Successfully booked ${desiredRoomIds.length} rooms`,
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

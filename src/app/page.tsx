@@ -169,13 +169,20 @@ function Rooms({ roomTypes }: { roomTypes: roomTypesWithRoomsCount[] }) {
         <div className="p-5">
           <div className="mb-3 flex w-full flex-col items-start justify-between gap-1">
             <h3>{roomType.type_name}</h3>
-            <p
-              className={cn(
-                roomType.discount_percent > 0 && "text-xs line-through",
+            <div className="flex items-center gap-2">
+              <p
+                className={cn(
+                  roomType.discount_percent > 0 && "text-xs line-through",
+                )}
+              >
+                {toIDR(roomType.price_per_night)}/night
+              </p>
+              {roomType.discount_percent > 0 && (
+                <p className="rounded-lg bg-black px-2 py-1 text-xs">
+                  {roomType.discount_percent}% off
+                </p>
               )}
-            >
-              {toIDR(roomType.price_per_night)}/night
-            </p>
+            </div>
             {roomType.discount_percent > 0 && (
               <p>
                 {toIDR(

@@ -1,4 +1,5 @@
 import PageContainer from "@/components/layout/PageContainer";
+import PageHeading from "@/components/layout/PageHeading";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -30,7 +31,11 @@ export default async function BookRoom({
 
   return (
     <PageContainer>
-      <h1 className="mb-12">Booking {roomType.type_name}</h1>
+      <PageHeading
+        title={`Booking ${roomType.type_name}`}
+        description={`Facilities included: ${roomType.description}`}
+        backHref="/rooms"
+      />
       <div className="relative w-full pb-80">
         <Image
           src={roomType.photo}
