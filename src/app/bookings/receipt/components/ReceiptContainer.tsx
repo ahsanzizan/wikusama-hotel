@@ -8,7 +8,7 @@ interface ReceiptContainerProps {
   booking: Prisma.bookingGetPayload<{
     include: {
       room: { include: { room_type: true } };
-      guest: { select: { name: true; email: true } };
+      user: { select: { name: true; email: true } };
     };
   }>;
 }
@@ -19,7 +19,7 @@ export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
   const downloadPdf = useCallback(() => {
     const options = {
       margin: 0,
-      filename: `Receipt_${booking.guest.name}_Room${booking.room.room_number}.pdf`,
+      filename: `Receipt_${booking.user.name}_Room${booking.room.room_number}.pdf`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -31,7 +31,7 @@ export default function ReceiptContainer({ booking }: ReceiptContainerProps) {
         .from(element)
         .set(options)
         .save(
-          `Receipt_${booking.guest.name}_Room${booking.room.room_number}.pdf`,
+          `Receipt_${booking.user.name}_Room${booking.room.room_number}.pdf`,
         )
         .catch((err: string) => console.error(err))
         .then(() => {

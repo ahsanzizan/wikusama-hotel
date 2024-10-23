@@ -89,10 +89,15 @@ model booking {
   booking_status BookingStatus @default(PENDING)
   booked_at      DateTime      @default(now())
 
-  guest   user    @relation(fields: [guestId], references: [id], onDelete: Cascade)
-  guestId String
-  room    room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  review  review?
+  guest_full_name String
+  guest_email     String
+  guest_phone     String
+  guest_address   String
+
+  user   user    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  room   room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  review review?
 
   roomId String
 

@@ -11,11 +11,19 @@ export async function bookRooms(data: {
   check_in_at: Date;
   check_out_at: Date;
   roomIds: string[];
+  guest_full_name: string;
+  guest_email: string;
+  guest_phone_number: string;
+  guest_address: string;
 }): Promise<ServerActionResponse<undefined>> {
   const {
     check_in_at: preset_checkInDate,
     check_out_at: preset_checkOutDate,
     roomIds: availableRoomIds,
+    guest_address,
+    guest_email,
+    guest_full_name,
+    guest_phone_number,
   } = data;
 
   preset_checkInDate.setHours(12, 0, 0);
@@ -28,8 +36,12 @@ export async function bookRooms(data: {
     const payload = availableRoomIds.map((roomId) => ({
       check_in_at: preset_checkInDate,
       check_out_at: preset_checkOutDate,
-      guestId: currentUserId,
+      guest_address,
+      guest_email,
+      guest_full_name,
+      guest_phone: guest_phone_number,
       roomId,
+      userId: currentUserId,
     })) as unknown as Prisma.bookingCreateManyInput;
 
     // Uses $transaction to resolve race condition
@@ -64,6 +76,7 @@ export async function bookRooms(data: {
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    console.log(error);
     return {
       success: false,
       message: (error.message as string).includes("already booked")

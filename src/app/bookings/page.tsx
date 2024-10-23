@@ -11,7 +11,7 @@ import Link from "next/link";
 export default async function Bookings() {
   const session = await getServerSession();
   const bookings = await prisma.booking.findMany({
-    where: { guest: { id: session?.user?.id } },
+    where: { user: { id: session?.user?.id } },
     include: {
       room: {
         select: {
