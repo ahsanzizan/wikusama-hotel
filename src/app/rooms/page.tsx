@@ -35,7 +35,28 @@ export default async function Rooms() {
         <div className="p-5 text-center text-white">
           <div className="mb-3 flex w-full flex-col items-start justify-between gap-1">
             <h3>{roomType.type_name}</h3>
-            <p>{toIDR(roomType.price_per_night)}/night</p>
+            <div className="flex items-center gap-1">
+              <p
+                className={cn(
+                  roomType.discount_percent > 0 && "text-xs line-through",
+                )}
+              >
+                {toIDR(roomType.price_per_night)}/night{" "}
+              </p>
+              {roomType.discount_percent > 0 && (
+                <p className="text-xs">{roomType.discount_percent}% off</p>
+              )}
+            </div>
+            {roomType.discount_percent > 0 && (
+              <p>
+                {toIDR(
+                  roomType.price_per_night -
+                    roomType.price_per_night *
+                      (roomType.discount_percent / 100),
+                )}
+                /night
+              </p>
+            )}
           </div>
           <p className="mb-8 text-justify text-neutral-500">
             {roomType.description}
