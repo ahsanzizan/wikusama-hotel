@@ -40,7 +40,8 @@ export default function ReceiptContainer({
           window.location.href = "/bookings";
         });
     }
-  }, [bookingReceipt.booking.room.room_number, bookingReceipt.user.name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     downloadPdf();
