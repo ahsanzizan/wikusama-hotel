@@ -1,35 +1,38 @@
 import { generateHash } from "@/lib/encryption";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const adminCreationSchema = z.object({
   name: z.string().min(1, "name must be provided!"),
   email: z.string().email().min(1, "email must be provided!"),
   password: z.string().min(8, "password must be at least 8 characters!"),
-  adminCreationPassword: z
+  admin_creation_password: z
     .string()
     .min(1, "admin_creation_password must be provided!"),
 });
 
+type AdminCreateInput = z.infer<typeof adminCreationSchema>;
+
 // This route is only used once to create an
 // admin-privilleged user at the initial stage of the application
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const admin = {
-      name: formData.get("name") as string | undefined,
-      email: formData.get("email") as string | undefined,
-      password: formData.get("password") as string | undefined,
-      adminCreationPassword: formData.get("admin_creation_password") as
-        | string
-        | undefined,
-    };
+    const body = (await req.json()) as AdminCreateInput;
+    if (!body)
+      return NextResponse.json(
+        {
+          status: 403,
+          message: "Body must be provided!",
+        },
+        { status: 403 },
+      );
 
-    const { name, email, password, adminCreationPassword } =
-      adminCreationSchema.parse(admin);
+    console.log(body);
+    const { name, email, password, admin_creation_password } =
+      adminCreationSchema.parse(body);
 
-    if (!adminCreationPassword)
+    if (!admin_creation_password)
       return NextResponse.json(
         {
           status: 403,
@@ -38,7 +41,7 @@ export async function POST(req: Request) {
         { status: 403 },
       );
 
-    if (adminCreationPassword !== process.env.ADMIN_CREATION_PASSWORD)
+    if (admin_creation_password !== process.env.ADMIN_CREATION_PASSWORD)
       return NextResponse.json({
         status: 403,
         message:
@@ -57,13 +60,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       status: 201,
-      message: `An admin with email ${admin.email} has been created.`,
+      message: `An admin with email ${email} has been created.`,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
-      status: 403,
-      message:
-        "Admin creation password does not match the one provided in the environment variables.",
+      status: 500,
+      message: "Internal server error",
     });
   }
 }

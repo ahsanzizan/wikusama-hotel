@@ -13,6 +13,26 @@ import { Book, ChartArea, Hotel } from "lucide-react";
 import { ReactNode } from "react";
 import { FaMoneyBill } from "react-icons/fa6";
 
+function StatsCard({
+  icon,
+  title,
+  stats,
+}: {
+  icon: ReactNode;
+  title: string;
+  stats: string;
+}) {
+  return (
+    <div className="flex items-center gap-5 rounded-lg border border-neutral-600 p-4">
+      {icon}
+      <div>
+        <h3 className="mb-2">{title}</h3>
+        <p className="text-lg">{stats}</p>
+      </div>
+    </div>
+  );
+}
+
 export default async function AdminRoot() {
   const session = await getServerSession();
   const [bookings, rooms, users] = await prisma.$transaction([
@@ -106,26 +126,6 @@ export default async function AdminRoot() {
 
   const revenueGrowth = calculateRevenueGrowth(revenueData) * 100;
   const usersGrowth = calculateUserGrowth(users);
-
-  function StatsCard({
-    icon,
-    title,
-    stats,
-  }: {
-    icon: ReactNode;
-    title: string;
-    stats: string;
-  }) {
-    return (
-      <div className="flex items-center gap-5 rounded-lg border border-neutral-600 p-4">
-        {icon}
-        <div>
-          <h3 className="mb-2">{title}</h3>
-          <p className="text-lg">{stats}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

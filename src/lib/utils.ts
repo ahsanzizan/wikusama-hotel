@@ -248,10 +248,11 @@ export function calculateUserGrowth(users: { created_at: Date }[]) {
   const previousMonthUsers = users.filter(
     (user) => user.created_at.getMonth() === previousMonthIndex,
   );
+  console.log(currentMonthUsers);
 
   const usersGrowth =
     (currentMonthUsers.length - previousMonthUsers.length) /
-    (previousMonthUsers.length === 0 ? 0 : previousMonthUsers.length);
+    (previousMonthUsers.length === 0 ? 1 : previousMonthUsers.length);
 
   return usersGrowth;
 }
