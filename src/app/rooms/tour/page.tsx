@@ -2,33 +2,33 @@ import PageContainer from "@/components/layout/PageContainer";
 import PageHeading from "@/components/layout/PageHeading";
 import Image from "next/image";
 
-export default function Tour() {
-  function FacilityCard({
-    title,
-    description,
-    image,
-  }: {
-    title: string;
-    description: string;
-    image: string;
-  }) {
-    return (
-      <div className="relative h-[570px] w-full">
-        <Image
-          src={image}
-          width={1272}
-          height={570}
-          alt="Luxurious Rooms"
-          className="h-[570px] w-full min-w-full object-cover"
-        />
-        <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 rounded-md bg-white p-5 text-center text-black shadow-md">
-          <h2 className="mb-3">{title}</h2>
-          <p>{description}</p>
-        </div>
+function FacilityCard({
+  title,
+  description,
+  image,
+}: {
+  title: string;
+  description: string;
+  image: string;
+}) {
+  return (
+    <div className="relative h-[570px] w-full">
+      <Image
+        src={image}
+        width={1272}
+        height={570}
+        alt="Luxurious Rooms"
+        className="h-[570px] w-full min-w-full object-cover"
+      />
+      <div className="absolute -bottom-14 left-1/2 w-[90%] -translate-x-1/2 rounded-md border-t-[12px] border-black bg-white p-5 text-center text-black shadow-md md:w-[60%]">
+        <h2 className="mb-3">{title}</h2>
+        <p>{description}</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
+export default function Tour() {
   const facilities = [
     {
       title: "Luxurious Rooms",
