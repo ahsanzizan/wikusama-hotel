@@ -6,6 +6,20 @@ import { uploadImage } from "@/lib/utils-actions";
 import { ServerActionResponse } from "@/types/server-action";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const createRoomTypeSchema = z.object({
+  type_name: z.string(),
+  description: z.string(),
+  photo: z.string(),
+  price_per_night: z
+    .number()
+    .min(0, "Price per night must be a positive number"),
+  discount_percent: z
+    .number()
+    .min(0, "Discount percent must be a positive number")
+    .max(100, "Discount percent can't exceed 100"),
+});
 
 export async function upsertRoomType(
   formData: FormData,
@@ -48,20 +62,8 @@ export async function upsertRoomType(
     }
 
     if (!id) {
-      const {
-        type_name,
-        description,
-        photo,
-        price_per_night,
-        discount_percent,
-      } = payload;
-      if (
-        !type_name ||
-        !description ||
-        !photo ||
-        !price_per_night ||
-        !discount_percent
-      ) {
+      if (!createRoomTypeSchema.safeParse(payload).success) {
+        console.log(createRoomTypeSchema.safeParse(payload).error);
         return { success: false, message: "Bad request" };
       }
 
