@@ -283,8 +283,8 @@ function Testimonies({ reviews }: { reviews: review[] }) {
   return (
     <SectionContainer id="testimonies">
       <div className="mb-12 w-full text-center">
-        <h1 className="mb-3">Testimonies</h1>
-        <p>We made sure our clients satisfied with our service.</p>
+        <h1 className="mb-3">Our Guest Says</h1>
+        <p>We made sure our guests is satisfied with our service.</p>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
         {reviews.map((review) => (
@@ -296,6 +296,40 @@ function Testimonies({ reviews }: { reviews: review[] }) {
             rate={review.rate}
           />
         ))}
+      </div>
+      {reviews.length === 0 && (
+        <p className="w-full text-center">There is no testimonies yet...</p>
+      )}
+    </SectionContainer>
+  );
+}
+
+function CTA() {
+  return (
+    <SectionContainer id="cta">
+      <div className="relative flex w-full items-center justify-center px-10 py-20 text-white">
+        <div className="w-full max-w-xl text-center">
+          <h1 className="mb-4">
+            Plan an Unforgettable Experience in Wikusama Hotel Today!
+          </h1>
+          <p className="mb-8">
+            We can help you fit your stay and experience within your allotted
+            budget
+          </p>
+          <Link
+            href={"/rooms"}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            BOOK YOUR STAY
+          </Link>
+        </div>
+        <Image
+          src={"/room-sample.jpg"}
+          alt="CTA Image"
+          width={1168}
+          height={512}
+          className="absolute left-0 top-0 -z-10 h-full w-full object-cover opacity-30"
+        />
       </div>
     </SectionContainer>
   );
@@ -316,6 +350,7 @@ export default async function Home() {
       <Facilities />
       <Rooms roomTypes={roomTypes} />
       <Testimonies reviews={reviews} />
+      <CTA />
     </PageContainer>
   );
 }
