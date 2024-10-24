@@ -120,6 +120,8 @@ model booking_receipt {
   userId    String
   booking   booking @relation(fields: [bookingId], references: [id])
   bookingId String  @unique
+
+  @@map("booking_receipts")
 }
 
 model review {
@@ -131,4 +133,6 @@ model review {
   booking      booking  @relation(fields: [bookingId], references: [id])
 
   bookingId String @unique
+
+  @@map("reviews")
 }

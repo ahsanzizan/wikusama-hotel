@@ -12,7 +12,7 @@ export default async function Receptionist() {
           room_type: { select: { type_name: true, price_per_night: true } },
         },
       },
-      guest: { select: { name: true } },
+      user: { select: { name: true } },
     },
   });
 
