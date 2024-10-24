@@ -76,7 +76,7 @@ type bookingWithRoomAndRoomType = Prisma.bookingGetPayload<{
         room_type: { select: { type_name: true; price_per_night: true } };
       };
     };
-    guest: { select: { name: true } };
+    user: { select: { name: true } };
   };
 }>;
 
@@ -106,7 +106,7 @@ export default function BookingsTable({
     },
     {
       name: "Guest",
-      selector: (row) => row.guest.name,
+      selector: (row) => row.user.name,
       sortable: true,
     },
     {
