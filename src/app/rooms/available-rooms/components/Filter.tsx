@@ -20,8 +20,12 @@ type roomTypeWithRoomsAndBookings = Prisma.room_typeGetPayload<{
 
 function RoomTypeCard({
   roomType,
+  checkIn,
+  checkOut,
 }: {
   roomType: roomTypeWithRoomsAndBookings;
+  checkIn: Date;
+  checkOut: Date;
 }) {
   return (
     <div className="flex w-full flex-col items-center gap-5 overflow-hidden rounded-lg bg-white text-black md:flex-row">
@@ -69,7 +73,7 @@ function RoomTypeCard({
           </p>
         </div>
         <Link
-          href={`/rooms/book?typeId=${roomType.id}`}
+          href={`/rooms/book?typeId=${roomType.id}&check_in=${checkIn.toISOString()}&check_out=${checkOut.toISOString()}`}
           className={buttonVariants({
             variant: "default",
             className: "w-full",
@@ -85,11 +89,11 @@ function RoomTypeCard({
 export default function Filter({
   checkIn: presetCheckIn,
   checkOut: presetCheckOut,
-  availableRooms,
+  roomTypes,
 }: {
   checkIn: Date;
   checkOut: Date;
-  availableRooms: roomTypeWithRoomsAndBookings[];
+  roomTypes: roomTypeWithRoomsAndBookings[];
 }) {
   const [checkIn, setCheckIn] = useState<Date | undefined>(presetCheckIn);
   const [checkOut, setCheckOut] = useState<Date | undefined>(presetCheckOut);
@@ -99,7 +103,7 @@ export default function Filter({
 
   useEffect(() => {
     if (checkIn && checkOut) {
-      const roomsInRange = availableRooms.filter((roomType) =>
+      const roomsInRange = roomTypes.filter((roomType) =>
         roomType.rooms.some((room) => {
           return (
             room.is_available &&
@@ -129,7 +133,7 @@ export default function Filter({
         })),
       );
     }
-  }, [checkIn, checkOut, availableRooms]);
+  }, [checkIn, checkOut, roomTypes]);
 
   useEffect(() => {
     if (checkIn && checkOut) {
@@ -202,9 +206,19 @@ export default function Filter({
         </div>
       </div>
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-        {filteredRooms.map((roomType) => (
-          <RoomTypeCard key={roomType.id} roomType={roomType} />
-        ))}
+        {checkIn &&
+          checkOut &&
+          filteredRooms.map((roomType) => (
+            <RoomTypeCard
+              key={roomType.id}
+              roomType={roomType}
+              checkIn={checkIn}
+              checkOut={checkOut}
+            />
+          ))}
+        {filteredRooms.length === 0 && (
+          <p>There is currently no room available...</p>
+        )}
       </div>
     </div>
   );

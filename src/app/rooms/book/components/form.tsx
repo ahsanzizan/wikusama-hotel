@@ -49,6 +49,8 @@ export default function BookingForm({
   roomType,
   bookings,
   rooms,
+  checkIn,
+  checkOut,
 }: {
   roomType: room_type;
   bookings: {
@@ -59,10 +61,16 @@ export default function BookingForm({
     booking_status: BookingStatus;
   }[];
   rooms: roomsWithBookings[];
+  checkIn?: Date;
+  checkOut?: Date;
 }) {
   const [loading, setLoading] = useState(false);
   const form = useZodForm({
     schema: createBookingSchema(),
+    defaultValues: {
+      check_in_at: checkIn,
+      check_out_at: checkOut,
+    },
   });
   const [availableRooms, setAvailableRooms] = useState<roomsWithBookings[]>();
   const [bookedDates] = useState<Date[]>(

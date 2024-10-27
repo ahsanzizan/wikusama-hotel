@@ -5,37 +5,6 @@ import { isISODateString } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import Filter from "./components/Filter";
 
-async function getAvailableRoomTypes(checkIn: Date, checkOut: Date) {
-  const availableRoomTypes = await prisma.room_type.findMany({
-    where: {
-      rooms: {
-        some: {
-          is_available: true,
-          bookings: {
-            none: {
-              OR: [
-                {
-                  check_in_at: {
-                    lt: checkOut,
-                  },
-                  check_out_at: {
-                    gt: checkIn,
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    },
-    include: {
-      rooms: { include: { bookings: true } },
-    },
-  });
-
-  return availableRoomTypes;
-}
-
 export default async function AvailableRooms({
   searchParams,
 }: {
@@ -53,7 +22,11 @@ export default async function AvailableRooms({
   const checkInDate = new Date(check_in);
   const checkOutDate = new Date(check_out);
 
-  const availableRooms = await getAvailableRoomTypes(checkInDate, checkOutDate);
+  const roomTypes = await prisma.room_type.findMany({
+    include: {
+      rooms: { include: { bookings: true } },
+    },
+  });
 
   return (
     <PageContainer>
@@ -65,7 +38,7 @@ export default async function AvailableRooms({
       <Filter
         checkIn={checkInDate}
         checkOut={checkOutDate}
-        availableRooms={availableRooms}
+        roomTypes={roomTypes}
       />
     </PageContainer>
   );

@@ -4,14 +4,24 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import BookingForm from "./components/form";
+import { isISODateString } from "@/lib/utils";
 
 export default async function BookRoom({
   searchParams,
 }: {
-  searchParams: { typeId: string };
+  searchParams: { typeId: string; check_in?: string; check_out?: string };
 }) {
-  const { typeId } = searchParams;
+  const { typeId, check_in, check_out } = searchParams;
   if (!typeId) return notFound();
+
+  if (
+    (check_in && !isISODateString(check_in)) ||
+    (check_out && !isISODateString(check_out))
+  )
+    return notFound();
+
+  const checkInDate = check_in ? new Date(check_in) : undefined;
+  const checkOutDate = check_out ? new Date(check_out) : undefined;
 
   const [roomType, bookings, rooms] = await prisma.$transaction([
     prisma.room_type.findUnique({ where: { id: typeId } }),
@@ -45,7 +55,13 @@ export default async function BookRoom({
           unoptimized
           className="h-[512px] w-full rounded-lg object-cover"
         />
-        <BookingForm roomType={roomType} bookings={bookings} rooms={rooms} />
+        <BookingForm
+          roomType={roomType}
+          bookings={bookings}
+          rooms={rooms}
+          checkIn={checkInDate}
+          checkOut={checkOutDate}
+        />
       </div>
     </PageContainer>
   );
