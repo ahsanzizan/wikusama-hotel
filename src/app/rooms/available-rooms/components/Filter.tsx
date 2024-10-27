@@ -35,7 +35,7 @@ function RoomTypeCard({
         width={350}
         height={120}
         unoptimized
-        className="w-full md:h-full md:w-1/2"
+        className="w-full object-cover md:h-full md:w-1/2"
       />
       <div className="block p-4">
         <h2 className="mb-1">{roomType.type_name}</h2>
