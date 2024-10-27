@@ -124,9 +124,11 @@ const DownloadableReceipt = React.forwardRef(
                 >
                   {toIDR(room_type.price_per_night)}
                 </p>
-                <p className="rounded-lg bg-black px-2 py-1 text-xs text-white">
-                  {discount}% off
-                </p>
+                {discount > 0 && (
+                  <p className="rounded-lg bg-black px-2 py-1 text-xs text-white">
+                    {discount}% off
+                  </p>
+                )}
               </div>
               {discount > 0 && (
                 <p>
