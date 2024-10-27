@@ -216,8 +216,11 @@ export default function Filter({
               checkOut={checkOut}
             />
           ))}
-        {filteredRooms.length === 0 && (
+        {filteredRooms.length === 0 && checkIn && checkOut && (
           <p>There is currently no room available...</p>
+        )}
+        {filteredRooms.length === 0 && (!checkIn || !checkOut) && (
+          <p>Fill the date filter first!</p>
         )}
       </div>
     </div>
