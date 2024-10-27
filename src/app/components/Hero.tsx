@@ -38,10 +38,10 @@ export function Hero() {
             </Link>
             <Link
               href={"/rooms/tour"}
-              className={cn("group flex items-center gap-3")}
+              className={cn("group flex items-center gap-2")}
             >
-              <span className={cn("rounded-full")}>
-                <Play className="size-7" />
+              <span className={cn("rounded-full bg-white p-2")}>
+                <Play className="size-7" fill={"#000"} />
               </span>
               Take a tour
             </Link>
