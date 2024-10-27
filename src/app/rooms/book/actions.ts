@@ -146,8 +146,6 @@ export async function payBookings(
       },
     });
 
-    console.log(createdInvoice.invoiceUrl);
-
     return {
       success: true,
       message: "Successfully created an invoice.",
