@@ -92,6 +92,7 @@ function fillOneDayGaps(dates: Date[]) {
 
   const currentDate = new Date();
   if (
+    filledDates[0] &&
     currentDate.getTime() !== filledDates[0].getTime() &&
     currentDate.getTime() - filledDates[0].getTime() < dayInMs * 3
   ) {
@@ -186,7 +187,10 @@ export function getAvailableRooms({
   const bookedRoomIds = bookedRoomsBookings.map((booking) => booking.roomId);
 
   const availableRooms = rooms.filter(
-    (room) => room.room_typeId === typeId && !bookedRoomIds.includes(room.id),
+    (room) =>
+      room.room_typeId === typeId &&
+      !bookedRoomIds.includes(room.id) &&
+      room.is_available,
   );
 
   return availableRooms;

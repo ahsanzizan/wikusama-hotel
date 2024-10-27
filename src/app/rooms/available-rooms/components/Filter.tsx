@@ -69,7 +69,7 @@ function RoomTypeCard({
           </p>
         </div>
         <Link
-          href={`/rooms/book/typeId=${roomType.id}`}
+          href={`/rooms/book?typeId=${roomType.id}`}
           className={buttonVariants({
             variant: "default",
             className: "w-full",
