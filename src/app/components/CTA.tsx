@@ -12,11 +12,17 @@ import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function CTA() {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
+
+  useEffect(() => {
+    if (checkIn && checkOut) {
+      setCheckOut(checkIn >= checkOut ? addDays(checkIn, 1) : checkOut);
+    }
+  }, [checkIn, checkOut]);
 
   return (
     <SectionContainer id="cta">
@@ -25,12 +31,12 @@ export function CTA() {
           <h1 className="mb-4">
             Plan an Unforgettable Experience in Wikusama Hotel Today!
           </h1>
-          <p className="mb-6">
+          <p className="mb-12">
             We can help you fit your stay and experience within your allotted
             budget
           </p>
 
-          <div className="mb-8 flex w-full flex-col items-center justify-between gap-2 rounded-md bg-white p-4 text-black md:flex-row md:gap-0">
+          <div className="flex w-full flex-col items-center justify-between gap-2 rounded-md bg-white p-4 text-black md:flex-row md:gap-0">
             <div className="flex w-full items-center gap-1 md:w-[80%]">
               <div className="w-full md:w-[45%]">
                 <h5 className="mb-1 text-start">Check-in Date</h5>

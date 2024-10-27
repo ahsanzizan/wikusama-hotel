@@ -28,7 +28,7 @@ export async function upsertRoom(
 
     if (!id) {
       const { room_number, is_available } = payload;
-      if (!room_number || !is_available) {
+      if (!room_number || is_available === undefined) {
         return { success: false, message: "Bad request" };
       }
 

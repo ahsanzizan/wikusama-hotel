@@ -256,3 +256,12 @@ export function calculateUserGrowth(users: { created_at: Date }[]) {
 
   return usersGrowth;
 }
+
+export function isISODateString(str: string) {
+  const date = new Date(str);
+  return (
+    date instanceof Date &&
+    !isNaN(date as unknown as number) &&
+    str === date.toISOString()
+  );
+}
