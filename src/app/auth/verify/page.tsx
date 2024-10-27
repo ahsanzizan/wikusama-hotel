@@ -16,8 +16,6 @@ export default async function VerifyEmail({
     where: { verification_token: searchParams.token },
   });
 
-  console.log(searchParams.token);
-
   if (!user) return notFound();
   if (user.verified) return redirect("/dashboard");
 

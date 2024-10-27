@@ -63,7 +63,6 @@ export async function upsertRoomType(
 
     if (!id) {
       if (!createRoomTypeSchema.safeParse(payload).success) {
-        console.log(createRoomTypeSchema.safeParse(payload).error);
         return { success: false, message: "Bad request" };
       }
 
