@@ -5,6 +5,7 @@ import { Facilities } from "./components/Facilities";
 import { Hero } from "./components/Hero";
 import { Rooms } from "./components/Rooms";
 import { Testimonies } from "./components/Testimonies";
+import Pictures from "./components/Pictures";
 
 export default async function Home() {
   const [roomTypes, reviews] = await prisma.$transaction([
@@ -19,6 +20,7 @@ export default async function Home() {
     <PageContainer>
       <Hero />
       <Facilities />
+      <Pictures />
       <Rooms roomTypes={roomTypes} />
       <Testimonies reviews={reviews} />
       <CTA />
