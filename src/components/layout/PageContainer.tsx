@@ -184,7 +184,9 @@ function Footer() {
         </div>
       </div>
       <div className="mx-auto w-full max-w-[1169px] px-5 py-8">
-        <p className="text-center">&copy; Wikusama Hotel 2024</p>
+        <p className="text-center">
+          Copyright © 2024 Wikusama Hotel | Powered by ahsanzizan.xyz
+        </p>
       </div>
     </footer>
   );
